@@ -545,7 +545,7 @@ function onShareClicked(): void {
 	(<any>navigator).share({ url: location.href });
 }
 
-function onLoadedAutoplay() {
+function onLoadedAutoplay(): void {
 	// Custom
 	onTogglePlay();
 	event.preventDefault();
