@@ -591,9 +591,10 @@ renderZoomIcon();
 renderPlayButton();
 
 onToggleLoop();
-onLoadedAutoplay();
-onLoadedAutoplay();
-onLoadedAutoplay();
+//code before the pause
+setTimeout(function () {
+	onLoadedAutoplay();
+}, 5000);
 
 // When compiling synth.ts as a standalone module named "beepbox", expose these classes as members to JavaScript:
 export {Dictionary, DictionaryArray, EnvelopeType, InstrumentType, Transition, Chord, Envelope, Config, NotePin, Note, Pattern, Instrument, Channel, Synth};
