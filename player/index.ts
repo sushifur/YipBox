@@ -151,7 +151,7 @@ ColorConfig.setTheme("dark classic");
 
 let prevHash: string | null = null;
 let id: string = ((Math.random() * 0xffffffff) >>> 0).toString(16);
-let pauseButtonDisplayed: boolean = true;
+let pauseButtonDisplayed: boolean = false;
 let animationRequest: number | null;
 let zoomEnabled: boolean = false;
 let timelineWidth: number = 1;
@@ -163,7 +163,7 @@ let copyLink: HTMLAnchorElement = a({href: "javascript:void(0)", style: "margin:
 let shareLink: HTMLAnchorElement = a({href: "javascript:void(0)", style: "margin: 0 4px;"}, "⤳ Share");
 let fullscreenLink: HTMLAnchorElement = a({target: "_top", style: "margin: 0 4px;"}, "⇱ Fullscreen");
 
-let draggingPlayhead: boolean = false;
+let draggingPlayhead: boolean = true;
 const playButton: HTMLButtonElement = button({style: "width: 100%; height: 100%; max-height: 50px;"});
 const playButtonContainer: HTMLDivElement = div({style: "flex-shrink: 0; display: flex; padding: 2px; width: 80px; height: 100%; box-sizing: border-box; align-items: center;"},
 	playButton,
