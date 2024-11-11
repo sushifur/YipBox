@@ -585,7 +585,8 @@ renderZoomIcon();
 renderPlayButton();
 
 onToggleLoop();
-playButton.click();
+let clickEvent = new Event('click'); // we create the event
+playButton.dispatchEvent(clickEvent); // simulate the button click
 
 // When compiling synth.ts as a standalone module named "beepbox", expose these classes as members to JavaScript:
 export {Dictionary, DictionaryArray, EnvelopeType, InstrumentType, Transition, Chord, Envelope, Config, NotePin, Note, Pattern, Instrument, Channel, Synth};
