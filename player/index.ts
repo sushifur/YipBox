@@ -151,7 +151,7 @@ ColorConfig.setTheme("dark classic");
 
 let prevHash: string | null = null;
 let id: string = ((Math.random() * 0xffffffff) >>> 0).toString(16);
-let pauseButtonDisplayed: boolean = false;
+let pauseButtonDisplayed: boolean = true;
 let animationRequest: number | null;
 let zoomEnabled: boolean = false;
 let timelineWidth: number = 1;
@@ -591,7 +591,6 @@ renderZoomIcon();
 renderPlayButton();
 
 onToggleLoop();
-setTimeout(onLoadedAutoplay, 1000);
 
 // When compiling synth.ts as a standalone module named "beepbox", expose these classes as members to JavaScript:
 export {Dictionary, DictionaryArray, EnvelopeType, InstrumentType, Transition, Chord, Envelope, Config, NotePin, Note, Pattern, Instrument, Channel, Synth};
