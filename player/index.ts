@@ -545,12 +545,6 @@ function onShareClicked(): void {
 	(<any>navigator).share({ url: location.href });
 }
 
-function onLoadedAutoplay(): void {
-	// Custom
-	onTogglePlay();
-	event.preventDefault();
-}
-
 if ( top !== self ) {
 	// In an iframe.
 	copyLink.style.display = "none";
@@ -591,6 +585,7 @@ renderZoomIcon();
 renderPlayButton();
 
 onToggleLoop();
+playButton.dispatchEvent(new KeyboardEvent('keydown', { 'key': 'space' }));
 
 // When compiling synth.ts as a standalone module named "beepbox", expose these classes as members to JavaScript:
 export {Dictionary, DictionaryArray, EnvelopeType, InstrumentType, Transition, Chord, Envelope, Config, NotePin, Note, Pattern, Instrument, Channel, Synth};
