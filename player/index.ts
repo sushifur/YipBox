@@ -3,7 +3,8 @@
 import {Dictionary, DictionaryArray, EnvelopeType, InstrumentType, Transition, Chord, Envelope, Config} from "../synth/SynthConfig.js";
 import {ColorConfig} from "../editor/ColorConfig.js";
 import {NotePin, Note, Pattern, Instrument, Channel, Synth} from "../synth/synth.js";
-import {HTML, SVG} from "imperative-html/dist/esm/elements-strict.js";
+import { HTML, SVG } from "imperative-html/dist/esm/elements-strict.js";
+import { setTimeout } from "timers/promises";
 
 const {a, button, div, h1, input} = HTML;
 const {svg, circle, rect, path} = SVG;
