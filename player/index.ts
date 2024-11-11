@@ -546,10 +546,9 @@ function onShareClicked(): void {
 }
 
 function onLoadedAutoplay() {
-
-
 	// Custom
 	onTogglePlay();
+	event.preventDefault();
 }
 
 if ( top !== self ) {
