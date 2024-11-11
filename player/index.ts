@@ -551,12 +551,6 @@ function onLoadedAutoplay(): void {
 	event.preventDefault();
 }
 
-function timedAutoplay(): void {
-	setTimeout(function () {
-			onLoadedAutoplay();
-	}, 5000);
-}
-
 if ( top !== self ) {
 	// In an iframe.
 	copyLink.style.display = "none";
@@ -597,7 +591,7 @@ renderZoomIcon();
 renderPlayButton();
 
 onToggleLoop();
-timedAutoplay();
+setTimeout(onLoadedAutoplay, 1000);
 
 // When compiling synth.ts as a standalone module named "beepbox", expose these classes as members to JavaScript:
 export {Dictionary, DictionaryArray, EnvelopeType, InstrumentType, Transition, Chord, Envelope, Config, NotePin, Note, Pattern, Instrument, Channel, Synth};
