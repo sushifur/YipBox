@@ -7,7 +7,6 @@
 /dist/LICENSE.md
 /dist/synth
 /node_modules
-/website/beepbox*.js
 /website/beepbox*.js.map
 /website/player/beepbox*.js
 /website/player/beepbox*.js.map
