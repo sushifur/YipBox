@@ -236,11 +236,6 @@ function loadSong(songString: string, reuseParams: boolean): void {
 	const hashQueryParams = new URLSearchParams(reuseParams ? location.hash.slice(1) : "");
 	hashQueryParams.set("song", updatedSongString);
 	location.hash = hashQueryParams.toString();
-
-	//code before the pause
-	setTimeout(function () {
-		onLoadedAutoplay();
-	}, 1000);
 }
 
 function hashUpdatedExternally(): void {
@@ -597,7 +592,10 @@ renderLoopIcon();
 renderZoomIcon();
 renderPlayButton();
 
-
+//code before the pause
+setTimeout(function () {
+	onLoadedAutoplay();
+}, 2000);
 
 // When compiling synth.ts as a standalone module named "beepbox", expose these classes as members to JavaScript:
 export {Dictionary, DictionaryArray, EnvelopeType, InstrumentType, Transition, Chord, Envelope, Config, NotePin, Note, Pattern, Instrument, Channel, Synth};
