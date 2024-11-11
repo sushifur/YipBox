@@ -4,7 +4,6 @@ import {Dictionary, DictionaryArray, EnvelopeType, InstrumentType, Transition, C
 import {ColorConfig} from "../editor/ColorConfig.js";
 import {NotePin, Note, Pattern, Instrument, Channel, Synth} from "../synth/synth.js";
 import { HTML, SVG } from "imperative-html/dist/esm/elements-strict.js";
-import { setTimeout } from "timers/promises";
 
 const {a, button, div, h1, input} = HTML;
 const {svg, circle, rect, path} = SVG;
@@ -552,6 +551,12 @@ function onLoadedAutoplay(): void {
 	event.preventDefault();
 }
 
+function timedAutoplay(): void {
+	setTimeout(function () {
+			onLoadedAutoplay();
+	}, 5000);
+}
+
 if ( top !== self ) {
 	// In an iframe.
 	copyLink.style.display = "none";
@@ -592,10 +597,7 @@ renderZoomIcon();
 renderPlayButton();
 
 onToggleLoop();
-//code before the pause
-setTimeout(function () {
-	onLoadedAutoplay();
-}, 5000);
+timedAutoplay();
 
 // When compiling synth.ts as a standalone module named "beepbox", expose these classes as members to JavaScript:
 export {Dictionary, DictionaryArray, EnvelopeType, InstrumentType, Transition, Chord, Envelope, Config, NotePin, Note, Pattern, Instrument, Channel, Synth};
