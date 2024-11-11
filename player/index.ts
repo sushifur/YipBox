@@ -549,7 +549,6 @@ function onLoadedAutoplay() {
 
 
 	// Custom
-	onToggleLoop();
 	onTogglePlay();
 }
 
@@ -592,6 +591,7 @@ renderLoopIcon();
 renderZoomIcon();
 renderPlayButton();
 
+onToggleLoop();
 //code before the pause
 setTimeout(function () {
 	onLoadedAutoplay();
