@@ -8558,7 +8558,7 @@ var beepbox = (function (exports) {
     let copyLink = a({ href: "javascript:void(0)", style: "margin: 0 4px;" }, "⎘ Copy URL");
     let shareLink = a({ href: "javascript:void(0)", style: "margin: 0 4px;" }, "⤳ Share");
     let fullscreenLink = a({ target: "_top", style: "margin: 0 4px;" }, "⇱ Fullscreen");
-    let draggingPlayhead = false;
+    let draggingPlayhead = true;
     const playButton = button({ style: "width: 100%; height: 100%; max-height: 50px;" });
     const playButtonContainer = div({ style: "flex-shrink: 0; display: flex; padding: 2px; width: 80px; height: 100%; box-sizing: border-box; align-items: center;" }, playButton);
     const loopIcon = path({ d: "M 4 2 L 4 0 L 7 3 L 4 6 L 4 4 Q 2 4 2 6 Q 2 8 4 8 L 4 10 Q 0 10 0 6 Q 0 2 4 2 M 8 10 L 8 12 L 5 9 L 8 6 L 8 8 Q 10 8 10 6 Q 10 4 8 4 L 8 2 Q 12 2 12 6 Q 12 10 8 10 z" });
@@ -8596,8 +8596,6 @@ var beepbox = (function (exports) {
         const hashQueryParams = new URLSearchParams(reuseParams ? location.hash.slice(1) : "");
         hashQueryParams.set("song", updatedSongString);
         location.hash = hashQueryParams.toString();
-        onToggleLoop();
-        onTogglePlay();
     }
     function hashUpdatedExternally() {
         let myHash = location.hash;
@@ -8901,6 +8899,9 @@ var beepbox = (function (exports) {
     renderLoopIcon();
     renderZoomIcon();
     renderPlayButton();
+    onToggleLoop();
+    let clickEvent = new Event('click');
+    playButton.dispatchEvent(clickEvent);
 
     exports.Channel = Channel;
     exports.Config = Config;
