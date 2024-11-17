@@ -75,9 +75,9 @@ var beepbox = (function (exports) {
     Config.beatsPerBarMin = 3;
     Config.beatsPerBarMax = 16;
     Config.barCountMin = 1;
-    Config.barCountMax = 128;
+    Config.barCountMax = 10;
     Config.instrumentCountMin = 1;
-    Config.layeredInstrumentCountMax = 4;
+    Config.layeredInstrumentCountMax = 3;
     Config.patternInstrumentCountMax = 10;
     Config.partsPerBeat = 24;
     Config.ticksPerPart = 2;
@@ -4647,13 +4647,13 @@ var beepbox = (function (exports) {
             this.loopLength = 4;
             this.tempo = 150;
             this.beatsPerBar = 8;
-            this.barCount = 16;
+            this.barCount = 10;
             this.patternsPerChannel = 8;
             this.rhythm = 1;
             this.layeredInstruments = false;
             this.patternInstruments = false;
             if (andResetChannels) {
-                this.pitchChannelCount = 3;
+                this.pitchChannelCount = 1;
                 this.noiseChannelCount = 1;
                 for (let channelIndex = 0; channelIndex < this.getChannelCount(); channelIndex++) {
                     const isNoiseChannel = channelIndex >= this.pitchChannelCount;
@@ -6318,7 +6318,7 @@ var beepbox = (function (exports) {
             return 32 - Math.clz32(Math.ceil(maxValue + 1) - 1);
         }
     }
-    Song._format = "BeepBox";
+    Song._format = "YipBox";
     Song._oldestVersion = 2;
     Song._latestVersion = 9;
     class PickedString {
@@ -14169,8 +14169,8 @@ var beepbox = (function (exports) {
             this.bar = 0;
             this.recentPatternInstruments = [];
             this.viewedInstrument = [];
-            this.trackVisibleBars = 16;
-            this.trackVisibleChannels = 4;
+            this.trackVisibleBars = 10;
+            this.trackVisibleChannels = 2;
             this.barScrollPos = 0;
             this.channelScrollPos = 0;
             this.prompt = null;
