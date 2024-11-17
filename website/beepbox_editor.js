@@ -279,9 +279,9 @@ var beepbox = (function (exports) {
     Config.supersawSpreadMax = 12;
     Config.supersawShapeMax = 6;
     Config.pitchChannelCountMin = 1;
-    Config.pitchChannelCountMax = 10;
+    Config.pitchChannelCountMax = 2;
     Config.noiseChannelCountMin = 0;
-    Config.noiseChannelCountMax = 5;
+    Config.noiseChannelCountMax = 1;
     Config.noiseInterval = 6;
     Config.pitchesPerOctave = 12;
     Config.drumCount = 12;
@@ -533,6 +533,9 @@ var beepbox = (function (exports) {
                 { name: "pulse width", customType: 6 },
                 { name: "picked string", customType: 7 },
                 { name: "supersaw", customType: 8 },
+            ]) },
+        { name: "Retro Presets", presets: toNameMap([
+                { name: "chip noise", midiProgram: 116, isNoise: true, settings: { "type": "noise", "transition": "hard", "effects": "none", "chord": "arpeggio", "filterCutoffHz": 4000, "filterResonance": 0, "filterEnvelope": "steady", "wave": "retro" } },
             ]) },
         { name: "Brass Presets", presets: toNameMap([
                 { name: "trumpet", midiProgram: 56, generalMidi: true, settings: { "type": "FM", "effects": "reverb", "transition": "soft", "chord": "harmony", "filterCutoffHz": 2828, "filterResonance": 43, "filterEnvelope": "steady", "vibrato": "none", "algorithm": "1←(2 3 4)", "feedbackType": "1⟲", "feedbackAmplitude": 9, "feedbackEnvelope": "swell 1", "operators": [{ "frequency": "1×", "amplitude": 14, "envelope": "custom" }, { "frequency": "1×", "amplitude": 8, "envelope": "steady" }, { "frequency": "1×", "amplitude": 5, "envelope": "flare 2" }, { "frequency": "1×", "amplitude": 0, "envelope": "steady" }] } },
@@ -4647,7 +4650,7 @@ var beepbox = (function (exports) {
             this.loopLength = 4;
             this.tempo = 150;
             this.beatsPerBar = 8;
-            this.barCount = 10;
+            this.barCount = 8;
             this.patternsPerChannel = 8;
             this.rhythm = 1;
             this.layeredInstruments = false;
@@ -14533,7 +14536,7 @@ var beepbox = (function (exports) {
             return Math.max(0, Math.min(Config.pitchOctaves - visibleOctaveCount, Math.ceil(this.song.channels[channel].octave - visibleOctaveCount * 0.5)));
         }
     }
-    SongDocument._maximumUndoHistory = 100;
+    SongDocument._maximumUndoHistory = 50;
 
     const { button: button$b, div: div$b, p: p$4, h2: h2$a } = HTML;
     class TipPrompt {
@@ -18704,7 +18707,7 @@ var beepbox = (function (exports) {
             };
             this._patternsStepper.value = this._doc.song.patternsPerChannel + "";
             this._patternsStepper.min = "1";
-            this._patternsStepper.max = Config.barCountMax + "";
+            this._patternsStepper.max = "10";
             this._pitchChannelStepper.value = this._doc.song.pitchChannelCount + "";
             this._pitchChannelStepper.min = Config.pitchChannelCountMin + "";
             this._pitchChannelStepper.max = Config.pitchChannelCountMax + "";
