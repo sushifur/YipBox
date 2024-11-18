@@ -1839,8 +1839,8 @@ export class Song {
 		this.loopLength = 4;
 		this.tempo = 150;
 		this.beatsPerBar = 8;
-		this.barCount = 8;
-		this.patternsPerChannel = 8;
+		this.barCount = 4;
+		this.patternsPerChannel = 4;
 		this.rhythm = 1;
 		this.layeredInstruments = false;
 		this.patternInstruments = false;

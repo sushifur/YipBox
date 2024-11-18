@@ -4650,8 +4650,8 @@ var beepbox = (function (exports) {
             this.loopLength = 4;
             this.tempo = 150;
             this.beatsPerBar = 8;
-            this.barCount = 8;
-            this.patternsPerChannel = 8;
+            this.barCount = 4;
+            this.patternsPerChannel = 4;
             this.rhythm = 1;
             this.layeredInstruments = false;
             this.patternInstruments = false;
@@ -14536,7 +14536,7 @@ var beepbox = (function (exports) {
             return Math.max(0, Math.min(Config.pitchOctaves - visibleOctaveCount, Math.ceil(this.song.channels[channel].octave - visibleOctaveCount * 0.5)));
         }
     }
-    SongDocument._maximumUndoHistory = 50;
+    SongDocument._maximumUndoHistory = 25;
 
     const { button: button$b, div: div$b, p: p$4, h2: h2$a } = HTML;
     class TipPrompt {

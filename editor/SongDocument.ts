@@ -46,7 +46,7 @@ export class SongDocument {
 	public addedEnvelope: boolean = false;
 	public currentPatternIsDirty: boolean = false;
 	
-	private static readonly _maximumUndoHistory: number = 50;
+	private static readonly _maximumUndoHistory: number = 25;
 	private _recovery: SongRecovery = new SongRecovery();
 	private _recoveryUid: string;
 	private _recentChange: Change | null = null;
