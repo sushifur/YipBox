@@ -75,7 +75,7 @@ var beepbox = (function (exports) {
     Config.beatsPerBarMin = 3;
     Config.beatsPerBarMax = 16;
     Config.barCountMin = 1;
-    Config.barCountMax = 10;
+    Config.barCountMax = 12;
     Config.instrumentCountMin = 1;
     Config.layeredInstrumentCountMax = 3;
     Config.patternInstrumentCountMax = 10;
@@ -516,7 +516,7 @@ var beepbox = (function (exports) {
             return null;
         }
     }
-    EditorConfig.version = "4.2";
+    EditorConfig.version = "4.3";
     EditorConfig.versionDisplayName = "YipBox";
     EditorConfig.releaseNotesURL = "https://github.com/johnnesky/beepbox/releases/tag/v" + EditorConfig.version;
     EditorConfig.isOnMac = /^Mac/i.test(navigator.platform) || /Mac OS X/i.test(navigator.userAgent) || /^(iPhone|iPad|iPod)/i.test(navigator.platform) || /(iPhone|iPad|iPod)/i.test(navigator.userAgent);
@@ -535,7 +535,15 @@ var beepbox = (function (exports) {
                 { name: "supersaw", customType: 8 },
             ]) },
         { name: "Retro Presets", presets: toNameMap([
+                { name: "square wave", midiProgram: 80, settings: { "type": "chip", "eqFilter": [], "effects": [], "transition": "interrupt", "fadeInSeconds": 0, "fadeOutTicks": -1, "chord": "arpeggio", "wave": "square", "unison": "none", "envelopes": [] } },
+                { name: "triangle wave", midiProgram: 71, settings: { "type": "chip", "eqFilter": [], "effects": [], "transition": "interrupt", "fadeInSeconds": 0, "fadeOutTicks": -1, "chord": "arpeggio", "wave": "triangle", "unison": "none", "envelopes": [] } },
+                { name: "square lead", midiProgram: 80, generalMidi: true, settings: { "type": "chip", "eqFilter": [{ "type": "low-pass", "cutoffHz": 8000, "linearGain": 0.3536 }], "effects": [], "transition": "normal", "fadeInSeconds": 0, "fadeOutTicks": -3, "chord": "simultaneous", "wave": "square", "unison": "hum", "envelopes": [] } },
+                { name: "sawtooth lead 1", midiProgram: 81, generalMidi: true, settings: { "type": "chip", "eqFilter": [{ "type": "low-pass", "cutoffHz": 4000, "linearGain": 0.5 }], "effects": [], "transition": "normal", "fadeInSeconds": 0, "fadeOutTicks": -3, "chord": "simultaneous", "wave": "sawtooth", "unison": "shimmer", "envelopes": [] } },
+                { name: "sawtooth lead 2", midiProgram: 81, settings: { "type": "chip", "eqFilter": [{ "type": "low-pass", "cutoffHz": 6727.17, "linearGain": 1 }], "effects": ["vibrato"], "vibrato": "light", "transition": "normal", "fadeInSeconds": 0.0125, "fadeOutTicks": 72, "chord": "simultaneous", "wave": "sawtooth", "unison": "hum", "envelopes": [] } },
                 { name: "chip noise", midiProgram: 116, isNoise: true, settings: { "type": "noise", "transition": "hard", "effects": "none", "chord": "arpeggio", "filterCutoffHz": 4000, "filterResonance": 0, "filterEnvelope": "steady", "wave": "retro" } },
+                { name: "FM twang", midiProgram: 32, settings: { "type": "FM", "eqFilter": [], "effects": [], "transition": "normal", "fadeInSeconds": 0, "fadeOutTicks": -3, "chord": "simultaneous", "algorithm": "1←(2 3 4)", "feedbackType": "1⟲", "feedbackAmplitude": 0, "operators": [{ "frequency": "1×", "amplitude": 15 }, { "frequency": "1×", "amplitude": 15 }, { "frequency": "1×", "amplitude": 0 }, { "frequency": "1×", "amplitude": 0 }], "envelopes": [{ "target": "operatorAmplitude", "envelope": "twang 2", "index": 1 }] } },
+                { name: "FM bass", midiProgram: 36, settings: { "type": "FM", "eqFilter": [], "effects": [], "transition": "normal", "fadeInSeconds": 0, "fadeOutTicks": -3, "chord": "custom interval", "algorithm": "1←(2 3←4)", "feedbackType": "1⟲", "feedbackAmplitude": 0, "operators": [{ "frequency": "2×", "amplitude": 11 }, { "frequency": "1×", "amplitude": 7 }, { "frequency": "1×", "amplitude": 9 }, { "frequency": "20×", "amplitude": 3 }], "envelopes": [{ "target": "operatorAmplitude", "envelope": "twang 2", "index": 1 }, { "target": "operatorAmplitude", "envelope": "twang 3", "index": 2 }, { "target": "operatorAmplitude", "envelope": "twang 2", "index": 3 }] } },
+                { name: "supersaw lead", midiProgram: 81, settings: { "type": "supersaw", "eqFilter": [{ "type": "low-pass", "cutoffHz": 6727.17, "linearGain": 2 }], "effects": ["reverb"], "reverb": 67, "fadeInSeconds": 0, "fadeOutTicks": -6, "pulseWidth": 50, "dynamism": 100, "spread": 58, "shape": 0, "envelopes": [] } },
             ]) },
         { name: "Brass Presets", presets: toNameMap([
                 { name: "trumpet", midiProgram: 56, generalMidi: true, settings: { "type": "FM", "effects": "reverb", "transition": "soft", "chord": "harmony", "filterCutoffHz": 2828, "filterResonance": 43, "filterEnvelope": "steady", "vibrato": "none", "algorithm": "1←(2 3 4)", "feedbackType": "1⟲", "feedbackAmplitude": 9, "feedbackEnvelope": "swell 1", "operators": [{ "frequency": "1×", "amplitude": 14, "envelope": "custom" }, { "frequency": "1×", "amplitude": 8, "envelope": "steady" }, { "frequency": "1×", "amplitude": 5, "envelope": "flare 2" }, { "frequency": "1×", "amplitude": 0, "envelope": "steady" }] } },
@@ -11244,19 +11252,6 @@ var beepbox = (function (exports) {
             this._didSomething();
         }
     }
-    class ChangeTransition extends Change {
-        constructor(doc, newValue) {
-            super();
-            const instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
-            const oldValue = instrument.transition;
-            if (oldValue != newValue) {
-                this._didSomething();
-                instrument.transition = newValue;
-                instrument.preset = instrument.type;
-                doc.notifier.changed();
-            }
-        }
-    }
     class ChangeToggleEffects extends Change {
         constructor(doc, toggleFlag) {
             super();
@@ -11478,58 +11473,10 @@ var beepbox = (function (exports) {
             }
         }
     }
-    class ChangeUnison extends Change {
-        constructor(doc, newValue) {
-            super();
-            const instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
-            const oldValue = instrument.unison;
-            if (oldValue != newValue) {
-                this._didSomething();
-                instrument.unison = newValue;
-                instrument.preset = instrument.type;
-                doc.notifier.changed();
-            }
-        }
-    }
-    class ChangeChord extends Change {
-        constructor(doc, newValue) {
-            super();
-            const instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
-            const oldValue = instrument.chord;
-            if (oldValue != newValue) {
-                this._didSomething();
-                instrument.chord = newValue;
-                instrument.preset = instrument.type;
-                doc.notifier.changed();
-            }
-        }
-    }
-    class ChangeVibrato extends Change {
-        constructor(doc, newValue) {
-            super();
-            const instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
-            const oldValue = instrument.vibrato;
-            if (oldValue != newValue) {
-                instrument.vibrato = newValue;
-                instrument.preset = instrument.type;
-                doc.notifier.changed();
-                this._didSomething();
-            }
-        }
-    }
     class ChangeSpectrum extends Change {
         constructor(doc, instrument, spectrumWave) {
             super();
             spectrumWave.markCustomWaveDirty();
-            instrument.preset = instrument.type;
-            doc.notifier.changed();
-            this._didSomething();
-        }
-    }
-    class ChangeHarmonics extends Change {
-        constructor(doc, instrument, harmonicsWave) {
-            super();
-            harmonicsWave.markCustomWaveDirty();
             instrument.preset = instrument.type;
             doc.notifier.changed();
             this._didSomething();
@@ -11568,155 +11515,6 @@ var beepbox = (function (exports) {
             const oldValue = instrument.stringSustainType;
             if (oldValue != newValue) {
                 instrument.stringSustainType = newValue;
-                instrument.preset = instrument.type;
-                doc.notifier.changed();
-                this._didSomething();
-            }
-        }
-    }
-    class ChangeFilterAddPoint extends UndoableChange {
-        constructor(doc, filterSettings, point, index, isNoteFilter, deletion = false) {
-            super(deletion);
-            this._envelopeTargetsAdd = [];
-            this._envelopeIndicesAdd = [];
-            this._envelopeTargetsRemove = [];
-            this._envelopeIndicesRemove = [];
-            this._doc = doc;
-            this._instrument = this._doc.song.channels[this._doc.channel].instruments[this._doc.getCurrentInstrument()];
-            this._instrumentNextPreset = deletion ? this._instrument.preset : this._instrument.type;
-            this._instrumentPrevPreset = deletion ? this._instrument.type : this._instrument.preset;
-            this._filterSettings = filterSettings;
-            this._point = point;
-            this._index = index;
-            for (let envelopeIndex = 0; envelopeIndex < this._instrument.envelopeCount; envelopeIndex++) {
-                let target = this._instrument.envelopes[envelopeIndex].target;
-                let targetIndex = this._instrument.envelopes[envelopeIndex].index;
-                this._envelopeTargetsAdd.push(target);
-                this._envelopeIndicesAdd.push(targetIndex);
-                if (deletion) {
-                    const automationTarget = Config.instrumentAutomationTargets[target];
-                    if (automationTarget.isFilter && (automationTarget.effect == 5) == isNoteFilter) {
-                        if (automationTarget.maxCount == Config.filterMaxPoints) {
-                            if (targetIndex == index) {
-                                target = Config.instrumentAutomationTargets.dictionary["none"].index;
-                                targetIndex = 0;
-                            }
-                            else if (targetIndex > index) {
-                                targetIndex--;
-                            }
-                        }
-                        else {
-                            if (filterSettings.controlPointCount <= 1) {
-                                target = Config.instrumentAutomationTargets.dictionary["none"].index;
-                                targetIndex = 0;
-                            }
-                        }
-                    }
-                }
-                this._envelopeTargetsRemove.push(target);
-                this._envelopeIndicesRemove.push(targetIndex);
-            }
-            this._didSomething();
-            this.redo();
-        }
-        _doForwards() {
-            this._filterSettings.controlPoints.splice(this._index, 0, this._point);
-            this._filterSettings.controlPointCount++;
-            this._filterSettings.controlPoints.length = this._filterSettings.controlPointCount;
-            this._instrument.preset = this._instrumentNextPreset;
-            for (let envelopeIndex = 0; envelopeIndex < this._instrument.envelopeCount; envelopeIndex++) {
-                this._instrument.envelopes[envelopeIndex].target = this._envelopeTargetsAdd[envelopeIndex];
-                this._instrument.envelopes[envelopeIndex].index = this._envelopeIndicesAdd[envelopeIndex];
-            }
-            this._doc.notifier.changed();
-        }
-        _doBackwards() {
-            this._filterSettings.controlPoints.splice(this._index, 1);
-            this._filterSettings.controlPointCount--;
-            this._filterSettings.controlPoints.length = this._filterSettings.controlPointCount;
-            this._instrument.preset = this._instrumentPrevPreset;
-            for (let envelopeIndex = 0; envelopeIndex < this._instrument.envelopeCount; envelopeIndex++) {
-                this._instrument.envelopes[envelopeIndex].target = this._envelopeTargetsRemove[envelopeIndex];
-                this._instrument.envelopes[envelopeIndex].index = this._envelopeIndicesRemove[envelopeIndex];
-            }
-            this._doc.notifier.changed();
-        }
-    }
-    class ChangeFilterMovePoint extends UndoableChange {
-        constructor(doc, point, oldFreq, newFreq, oldGain, newGain) {
-            super(false);
-            this._doc = doc;
-            this._instrument = this._doc.song.channels[this._doc.channel].instruments[this._doc.getCurrentInstrument()];
-            this._instrumentNextPreset = this._instrument.type;
-            this._instrumentPrevPreset = this._instrument.preset;
-            this._point = point;
-            this._oldFreq = oldFreq;
-            this._newFreq = newFreq;
-            this._oldGain = oldGain;
-            this._newGain = newGain;
-            this._didSomething();
-            this.redo();
-        }
-        _doForwards() {
-            this._point.freq = this._newFreq;
-            this._point.gain = this._newGain;
-            this._instrument.preset = this._instrumentNextPreset;
-            this._doc.notifier.changed();
-        }
-        _doBackwards() {
-            this._point.freq = this._oldFreq;
-            this._point.gain = this._oldGain;
-            this._instrument.preset = this._instrumentPrevPreset;
-            this._doc.notifier.changed();
-        }
-    }
-    class ChangeFadeInOut extends UndoableChange {
-        constructor(doc, fadeIn, fadeOut) {
-            super(false);
-            this._doc = doc;
-            this._instrument = this._doc.song.channels[this._doc.channel].instruments[this._doc.getCurrentInstrument()];
-            this._instrumentNextPreset = this._instrument.type;
-            this._instrumentPrevPreset = this._instrument.preset;
-            this._oldFadeIn = this._instrument.fadeIn;
-            this._oldFadeOut = this._instrument.fadeOut;
-            this._newFadeIn = fadeIn;
-            this._newFadeOut = fadeOut;
-            this._didSomething();
-            this.redo();
-        }
-        _doForwards() {
-            this._instrument.fadeIn = this._newFadeIn;
-            this._instrument.fadeOut = this._newFadeOut;
-            this._instrument.preset = this._instrumentNextPreset;
-            this._doc.notifier.changed();
-        }
-        _doBackwards() {
-            this._instrument.fadeIn = this._oldFadeIn;
-            this._instrument.fadeOut = this._oldFadeOut;
-            this._instrument.preset = this._instrumentPrevPreset;
-            this._doc.notifier.changed();
-        }
-    }
-    class ChangeAlgorithm extends Change {
-        constructor(doc, newValue) {
-            super();
-            const instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
-            const oldValue = instrument.algorithm;
-            if (oldValue != newValue) {
-                instrument.algorithm = newValue;
-                instrument.preset = instrument.type;
-                doc.notifier.changed();
-                this._didSomething();
-            }
-        }
-    }
-    class ChangeFeedbackType extends Change {
-        constructor(doc, newValue) {
-            super();
-            const instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
-            const oldValue = instrument.feedbackType;
-            if (oldValue != newValue) {
-                instrument.feedbackType = newValue;
                 instrument.preset = instrument.type;
                 doc.notifier.changed();
                 this._didSomething();
@@ -11838,22 +11636,6 @@ var beepbox = (function (exports) {
             if (doc.song.key != newValue) {
                 doc.song.key = newValue;
                 doc.notifier.changed();
-                this._didSomething();
-            }
-        }
-    }
-    class ChangeLoop extends Change {
-        constructor(_doc, oldStart, oldLength, newStart, newLength) {
-            super();
-            this._doc = _doc;
-            this.oldStart = oldStart;
-            this.oldLength = oldLength;
-            this.newStart = newStart;
-            this.newLength = newLength;
-            this._doc.song.loopStart = this.newStart;
-            this._doc.song.loopLength = this.newLength;
-            this._doc.notifier.changed();
-            if (this.oldStart != this.newStart || this.oldLength != this.newLength) {
                 this._didSomething();
             }
         }
@@ -13108,30 +12890,6 @@ var beepbox = (function (exports) {
             this._doc.notifier.changed();
         }
     }
-    class ChangeChipWave extends Change {
-        constructor(doc, newValue) {
-            super();
-            const instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
-            if (instrument.chipWave != newValue) {
-                instrument.chipWave = newValue;
-                instrument.preset = instrument.type;
-                doc.notifier.changed();
-                this._didSomething();
-            }
-        }
-    }
-    class ChangeNoiseWave extends Change {
-        constructor(doc, newValue) {
-            super();
-            const instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
-            if (instrument.chipNoise != newValue) {
-                instrument.chipNoise = newValue;
-                instrument.preset = instrument.type;
-                doc.notifier.changed();
-                this._didSomething();
-            }
-        }
-    }
     class ChangeAddEnvelope extends Change {
         constructor(doc) {
             super();
@@ -14172,7 +13930,7 @@ var beepbox = (function (exports) {
             this.bar = 0;
             this.recentPatternInstruments = [];
             this.viewedInstrument = [];
-            this.trackVisibleBars = 10;
+            this.trackVisibleBars = 12;
             this.trackVisibleChannels = 2;
             this.barScrollPos = 0;
             this.channelScrollPos = 0;
@@ -15907,512 +15665,6 @@ var beepbox = (function (exports) {
         }
     }
 
-    class FadeInOutEditor {
-        constructor(_doc) {
-            this._doc = _doc;
-            this._editorWidth = 120;
-            this._editorHeight = 26;
-            this._fadeCurve = SVG.path({ fill: ColorConfig.uiWidgetBackground, "pointer-events": "none" });
-            this._dottedLinePath = SVG.path({ fill: "none", stroke: "currentColor", "stroke-width": 1, "stroke-dasharray": "3, 2", "pointer-events": "none" });
-            this._controlCurve = SVG.path({ fill: "none", stroke: "currentColor", "stroke-width": 2, "pointer-events": "none" });
-            this._svg = SVG.svg({ style: `background-color: ${ColorConfig.editorBackground}; touch-action: none; cursor: crosshair;`, width: "100%", height: "100%", viewBox: "0 0 " + this._editorWidth + " " + this._editorHeight, preserveAspectRatio: "none" }, this._fadeCurve, this._dottedLinePath, this._controlCurve);
-            this.container = HTML.div({ class: "fadeInOut", style: "height: 100%;" }, this._svg);
-            this._mouseX = 0;
-            this._mouseXStart = 0;
-            this._mouseDown = false;
-            this._mouseDragging = false;
-            this._draggingFadeIn = false;
-            this._dragChange = null;
-            this._renderedFadeIn = -1;
-            this._renderedFadeOut = -1;
-            this._whenMousePressed = (event) => {
-                event.preventDefault();
-                const boundingRect = this._svg.getBoundingClientRect();
-                this._mouseX = ((event.clientX || event.pageX) - boundingRect.left);
-                this._whenCursorPressed();
-            };
-            this._whenTouchPressed = (event) => {
-                event.preventDefault();
-                const boundingRect = this._svg.getBoundingClientRect();
-                this._mouseX = (event.touches[0].clientX - boundingRect.left);
-                this._whenCursorPressed();
-            };
-            this._whenMouseMoved = (event) => {
-                if (this.container.offsetParent == null)
-                    return;
-                const boundingRect = this._svg.getBoundingClientRect();
-                this._mouseX = ((event.clientX || event.pageX) - boundingRect.left);
-                if (isNaN(this._mouseX))
-                    this._mouseX = 0;
-                this._whenCursorMoved();
-            };
-            this._whenTouchMoved = (event) => {
-                if (this.container.offsetParent == null)
-                    return;
-                if (!this._mouseDown)
-                    return;
-                event.preventDefault();
-                const boundingRect = this._svg.getBoundingClientRect();
-                this._mouseX = (event.touches[0].clientX - boundingRect.left);
-                if (isNaN(this._mouseX))
-                    this._mouseX = 0;
-                this._whenCursorMoved();
-            };
-            this._whenCursorReleased = (event) => {
-                if (this.container.offsetParent == null)
-                    return;
-                if (this._mouseDown && this._doc.lastChangeWas(this._dragChange) && this._dragChange != null) {
-                    if (!this._mouseDragging) {
-                        const instrument = this._doc.song.channels[this._doc.channel].instruments[this._doc.getCurrentInstrument()];
-                        if (this._draggingFadeIn) {
-                            this._doc.record(new ChangeFadeInOut(this._doc, this._xToFadeIn(this._mouseX), instrument.fadeOut));
-                        }
-                        else {
-                            this._doc.record(new ChangeFadeInOut(this._doc, instrument.fadeIn, this._xToFadeOut(this._mouseX)));
-                        }
-                    }
-                    else {
-                        this._doc.record(this._dragChange);
-                    }
-                }
-                this._dragChange = null;
-                this._mouseDragging = false;
-                this._mouseDown = false;
-            };
-            const dottedLineX = this._fadeOutToX(Config.fadeOutNeutral);
-            this._dottedLinePath.setAttribute("d", `M ${dottedLineX} 0 L ${dottedLineX} ${this._editorHeight}`);
-            this.container.addEventListener("mousedown", this._whenMousePressed);
-            document.addEventListener("mousemove", this._whenMouseMoved);
-            document.addEventListener("mouseup", this._whenCursorReleased);
-            this.container.addEventListener("touchstart", this._whenTouchPressed);
-            this.container.addEventListener("touchmove", this._whenTouchMoved);
-            this.container.addEventListener("touchend", this._whenCursorReleased);
-            this.container.addEventListener("touchcancel", this._whenCursorReleased);
-        }
-        _fadeInToX(fadeIn) {
-            return 1.0 + (this._editorWidth - 2.0) * 0.4 * fadeIn / (Config.fadeInRange - 1);
-        }
-        _xToFadeIn(x) {
-            return clamp(0, Config.fadeInRange, Math.round((x - 1.0) * (Config.fadeInRange - 1) / (0.4 * this._editorWidth - 2.0)));
-        }
-        _fadeOutToX(fadeOut) {
-            return 1.0 + (this._editorWidth - 2.0) * (0.5 + 0.5 * fadeOut / (Config.fadeOutTicks.length - 1));
-        }
-        _xToFadeOut(x) {
-            return clamp(0, Config.fadeOutTicks.length, Math.round((Config.fadeOutTicks.length - 1) * ((x - 1.0) / (this._editorWidth - 2.0) - 0.5) / 0.5));
-        }
-        _whenCursorPressed() {
-            if (isNaN(this._mouseX))
-                this._mouseX = 0;
-            this._mouseXStart = this._mouseX;
-            this._mouseDown = true;
-            this._mouseDragging = false;
-            const instrument = this._doc.song.channels[this._doc.channel].instruments[this._doc.getCurrentInstrument()];
-            const fadeInX = this._fadeInToX(instrument.fadeIn);
-            const fadeOutX = this._fadeOutToX(instrument.fadeOut);
-            this._draggingFadeIn = this._mouseXStart < (fadeInX + fadeOutX) / 2.0;
-            this._dragChange = new ChangeSequence();
-            this._doc.setProspectiveChange(this._dragChange);
-        }
-        _whenCursorMoved() {
-            if (this._dragChange != null && this._doc.lastChangeWas(this._dragChange)) {
-                this._dragChange.undo();
-            }
-            else {
-                this._mouseDown = false;
-            }
-            this._dragChange = null;
-            if (this._mouseDown) {
-                const sequence = new ChangeSequence();
-                this._dragChange = sequence;
-                this._doc.setProspectiveChange(this._dragChange);
-                if (Math.abs(this._mouseX - this._mouseXStart) > 4.0) {
-                    this._mouseDragging = true;
-                }
-                if (this._mouseDragging) {
-                    const instrument = this._doc.song.channels[this._doc.channel].instruments[this._doc.getCurrentInstrument()];
-                    if (this._draggingFadeIn) {
-                        sequence.append(new ChangeFadeInOut(this._doc, this._xToFadeIn(this._fadeInToX(instrument.fadeIn) + this._mouseX - this._mouseXStart), instrument.fadeOut));
-                    }
-                    else {
-                        sequence.append(new ChangeFadeInOut(this._doc, instrument.fadeIn, this._xToFadeOut(this._fadeOutToX(instrument.fadeOut) + this._mouseX - this._mouseXStart)));
-                    }
-                }
-            }
-        }
-        render() {
-            const instrument = this._doc.song.channels[this._doc.channel].instruments[this._doc.getCurrentInstrument()];
-            if (this._renderedFadeIn == instrument.fadeIn && this._renderedFadeOut == instrument.fadeOut) {
-                return;
-            }
-            const fadeInX = this._fadeInToX(instrument.fadeIn);
-            const fadeOutX = this._fadeOutToX(instrument.fadeOut);
-            this._controlCurve.setAttribute("d", `M ${fadeInX} 0 L ${fadeInX} ${this._editorHeight} M ${fadeOutX} 0 L ${fadeOutX} ${this._editorHeight}`);
-            const dottedLineX = this._fadeOutToX(Config.fadeOutNeutral);
-            let fadePath = "";
-            fadePath += `M 0 ${this._editorHeight} `;
-            fadePath += `L ${fadeInX} 0 `;
-            if (Synth.fadeOutSettingToTicks(instrument.fadeOut) > 0) {
-                fadePath += `L ${dottedLineX} 0 `;
-                fadePath += `L ${fadeOutX} ${this._editorHeight} `;
-            }
-            else {
-                fadePath += `L ${fadeOutX} 0 `;
-                fadePath += `L ${dottedLineX} ${this._editorHeight} `;
-            }
-            fadePath += "z";
-            this._fadeCurve.setAttribute("d", fadePath);
-        }
-    }
-
-    class FilterEditor {
-        constructor(_doc, useNoteFilter = false) {
-            this._doc = _doc;
-            this._editorWidth = 120;
-            this._editorHeight = 26;
-            this._responsePath = SVG.path({ fill: ColorConfig.uiWidgetBackground, "pointer-events": "none" });
-            this._controlPointPath = SVG.path({ fill: "currentColor", "pointer-events": "none" });
-            this._dottedLinePath = SVG.path({ fill: "none", stroke: "currentColor", "stroke-width": 1, "stroke-dasharray": "3, 2", "pointer-events": "none" });
-            this._highlight = SVG.circle({ fill: "white", stroke: "none", "pointer-events": "none", r: 4 });
-            this._svg = SVG.svg({ style: `background-color: ${ColorConfig.editorBackground}; touch-action: none;`, width: "100%", height: "100%", viewBox: "0 0 " + this._editorWidth + " " + this._editorHeight, preserveAspectRatio: "none" }, this._responsePath, this._dottedLinePath, this._highlight, this._controlPointPath);
-            this._label = HTML.div({ style: "position: absolute; bottom: 0; left: 2px; font-size: 8px; line-height: 1; pointer-events: none;" });
-            this.container = HTML.div({ class: "filterEditor", style: "height: 100%; position: relative;" }, this._svg, this._label);
-            this._pointRadius = 2;
-            this._useNoteFilter = false;
-            this._touchMode = false;
-            this._mouseX = 0;
-            this._mouseY = 0;
-            this._mouseOver = false;
-            this._mouseDown = false;
-            this._mouseDragging = false;
-            this._addingPoint = false;
-            this._deletingPoint = false;
-            this._addedType = 2;
-            this._selectedIndex = 0;
-            this._freqStart = 0;
-            this._gainStart = 0;
-            this._dragChange = null;
-            this._renderedSelectedIndex = -1;
-            this._renderedPointCount = -1;
-            this._renderedPointTypes = -1;
-            this._renderedPointFreqs = -1;
-            this._renderedPointGains = -1;
-            this._whenMouseOver = (event) => {
-                this._mouseOver = true;
-            };
-            this._whenMouseOut = (event) => {
-                this._mouseOver = false;
-                this._updatePath();
-            };
-            this._whenMousePressed = (event) => {
-                event.preventDefault();
-                this._touchMode = false;
-                const boundingRect = this._svg.getBoundingClientRect();
-                this._mouseX = ((event.clientX || event.pageX) - boundingRect.left) * this._editorWidth / (boundingRect.right - boundingRect.left);
-                this._mouseY = ((event.clientY || event.pageY) - boundingRect.top) * this._editorHeight / (boundingRect.bottom - boundingRect.top);
-                if (isNaN(this._mouseX))
-                    this._mouseX = 0;
-                if (isNaN(this._mouseY))
-                    this._mouseY = 0;
-                this._whenCursorPressed();
-            };
-            this._whenTouchPressed = (event) => {
-                event.preventDefault();
-                this._touchMode = true;
-                const boundingRect = this._svg.getBoundingClientRect();
-                this._mouseX = (event.touches[0].clientX - boundingRect.left) * this._editorWidth / (boundingRect.right - boundingRect.left);
-                this._mouseY = (event.touches[0].clientY - boundingRect.top) * this._editorHeight / (boundingRect.bottom - boundingRect.top);
-                if (isNaN(this._mouseX))
-                    this._mouseX = 0;
-                if (isNaN(this._mouseY))
-                    this._mouseY = 0;
-                this._whenCursorPressed();
-            };
-            this._whenMouseMoved = (event) => {
-                if (this.container.offsetParent == null)
-                    return;
-                const boundingRect = this._svg.getBoundingClientRect();
-                this._mouseX = ((event.clientX || event.pageX) - boundingRect.left) * this._editorWidth / (boundingRect.right - boundingRect.left);
-                this._mouseY = ((event.clientY || event.pageY) - boundingRect.top) * this._editorHeight / (boundingRect.bottom - boundingRect.top);
-                if (isNaN(this._mouseX))
-                    this._mouseX = 0;
-                if (isNaN(this._mouseY))
-                    this._mouseY = 0;
-                if (!this._mouseDown)
-                    this._updateCursor();
-                this._whenCursorMoved();
-            };
-            this._whenTouchMoved = (event) => {
-                if (this.container.offsetParent == null)
-                    return;
-                if (this._mouseDown)
-                    event.preventDefault();
-                const boundingRect = this._svg.getBoundingClientRect();
-                this._mouseX = (event.touches[0].clientX - boundingRect.left) * this._editorWidth / (boundingRect.right - boundingRect.left);
-                this._mouseY = (event.touches[0].clientY - boundingRect.top) * this._editorHeight / (boundingRect.bottom - boundingRect.top);
-                if (isNaN(this._mouseX))
-                    this._mouseX = 0;
-                if (isNaN(this._mouseY))
-                    this._mouseY = 0;
-                if (!this._mouseDown)
-                    this._updateCursor();
-                this._whenCursorMoved();
-            };
-            this._whenCursorReleased = (event) => {
-                if (this.container.offsetParent == null)
-                    return;
-                if (this._mouseDown && this._doc.lastChangeWas(this._dragChange) && this._dragChange != null) {
-                    if (!this._addingPoint && !this._mouseDragging && !this._touchMode) {
-                        if (this._selectedIndex < this._filterSettings.controlPointCount && this._selectedIndex != -1) {
-                            const point = this._filterSettings.controlPoints[this._selectedIndex];
-                            this._doc.record(new ChangeFilterAddPoint(this._doc, this._filterSettings, point, this._selectedIndex, this._useNoteFilter, true));
-                        }
-                    }
-                    else {
-                        this._doc.record(this._dragChange);
-                    }
-                    this._updatePath();
-                }
-                this._dragChange = null;
-                this._mouseDragging = false;
-                this._deletingPoint = false;
-                this._mouseDown = false;
-                this._updateCursor();
-            };
-            this._useNoteFilter = useNoteFilter;
-            this.container.addEventListener("mousedown", this._whenMousePressed);
-            this.container.addEventListener("mouseover", this._whenMouseOver);
-            this.container.addEventListener("mouseout", this._whenMouseOut);
-            document.addEventListener("mousemove", this._whenMouseMoved);
-            document.addEventListener("mouseup", this._whenCursorReleased);
-            this.container.addEventListener("touchstart", this._whenTouchPressed);
-            this.container.addEventListener("touchmove", this._whenTouchMoved);
-            this.container.addEventListener("touchend", this._whenCursorReleased);
-            this.container.addEventListener("touchcancel", this._whenCursorReleased);
-        }
-        _xToFreq(x) {
-            return Config.filterFreqRange * x / this._editorWidth - 0.5;
-        }
-        _freqToX(freq) {
-            return this._editorWidth * (freq + 0.5) / Config.filterFreqRange;
-        }
-        _yToGain(y) {
-            return (Config.filterGainRange - 1) * (1 - (y - .5) / (this._editorHeight - 1));
-        }
-        _gainToY(gain) {
-            return (this._editorHeight - 1) * (1 - gain / (Config.filterGainRange - 1)) + .5;
-        }
-        _whenCursorPressed() {
-            this._mouseDown = true;
-            const sequence = new ChangeSequence();
-            this._dragChange = sequence;
-            this._doc.setProspectiveChange(this._dragChange);
-            this._updateCursor();
-            this._whenCursorMoved();
-        }
-        _updateCursor() {
-            this._freqStart = this._xToFreq(this._mouseX);
-            this._gainStart = this._yToGain(this._mouseY);
-            this._addingPoint = true;
-            this._selectedIndex = -1;
-            let nearestDistance = Number.POSITIVE_INFINITY;
-            for (let i = 0; i < this._filterSettings.controlPointCount; i++) {
-                const point = this._filterSettings.controlPoints[i];
-                const distance = Math.sqrt(Math.pow(this._freqToX(point.freq) - this._mouseX, 2) + Math.pow(this._gainToY(point.gain) - this._mouseY, 2));
-                if ((distance <= 13 || this._filterSettings.controlPointCount >= Config.filterMaxPoints) && distance < nearestDistance) {
-                    nearestDistance = distance;
-                    this._selectedIndex = i;
-                    this._addingPoint = false;
-                }
-            }
-            if (this._addingPoint) {
-                const ratio = this._mouseX / this._editorWidth;
-                if (ratio < 0.2) {
-                    this._addedType = 1;
-                }
-                else if (ratio < 0.8) {
-                    this._addedType = 2;
-                }
-                else {
-                    this._addedType = 0;
-                }
-            }
-        }
-        _whenCursorMoved() {
-            if (this._dragChange != null && this._doc.lastChangeWas(this._dragChange)) {
-                this._dragChange.undo();
-            }
-            else {
-                this._mouseDown = false;
-            }
-            this._dragChange = null;
-            this._deletingPoint = false;
-            if (this._mouseDown) {
-                const sequence = new ChangeSequence();
-                this._dragChange = sequence;
-                this._doc.setProspectiveChange(this._dragChange);
-                if (this._addingPoint) {
-                    const gain = Math.max(0, Math.min(Config.filterGainRange - 1, Math.round(this._yToGain(this._mouseY))));
-                    const freq = this._findNearestFreqSlot(this._filterSettings, this._xToFreq(this._mouseX), -1);
-                    if (freq >= 0 && freq < Config.filterFreqRange) {
-                        const point = new FilterControlPoint();
-                        point.type = this._addedType;
-                        point.freq = freq;
-                        point.gain = gain;
-                        sequence.append(new ChangeFilterAddPoint(this._doc, this._filterSettings, point, this._filterSettings.controlPointCount, this._useNoteFilter));
-                    }
-                    else {
-                        this._deletingPoint = true;
-                    }
-                }
-                else if (this._selectedIndex >= this._filterSettings.controlPointCount || this._selectedIndex == -1) {
-                    this._dragChange = null;
-                    this._mouseDown = false;
-                }
-                else {
-                    const freqDelta = this._xToFreq(this._mouseX) - this._freqStart;
-                    const gainDelta = this._yToGain(this._mouseY) - this._gainStart;
-                    const point = this._filterSettings.controlPoints[this._selectedIndex];
-                    const gain = Math.max(0, Math.min(Config.filterGainRange - 1, Math.round(point.gain + gainDelta)));
-                    const freq = this._findNearestFreqSlot(this._filterSettings, point.freq + freqDelta, this._selectedIndex);
-                    if (Math.round(freqDelta) != 0.0 || Math.round(gainDelta) != 0.0 || freq != point.freq || gain != point.gain) {
-                        this._mouseDragging = true;
-                    }
-                    if (freq >= 0 && freq < Config.filterFreqRange) {
-                        sequence.append(new ChangeFilterMovePoint(this._doc, point, point.freq, freq, point.gain, gain));
-                    }
-                    else {
-                        sequence.append(new ChangeFilterAddPoint(this._doc, this._filterSettings, point, this._selectedIndex, this._useNoteFilter, true));
-                        this._deletingPoint = true;
-                    }
-                }
-            }
-            if (this._mouseDown || this._mouseOver) {
-                this._updatePath();
-            }
-        }
-        _findNearestFreqSlot(filterSettings, targetFreq, ignoreIndex) {
-            const roundedFreq = Math.round(targetFreq);
-            let lowerFreq = roundedFreq;
-            let upperFreq = roundedFreq;
-            let tryingLower = (roundedFreq <= targetFreq);
-            while (true) {
-                let foundConflict = false;
-                const currentFreq = tryingLower ? lowerFreq : upperFreq;
-                for (let i = 0; i < filterSettings.controlPointCount; i++) {
-                    if (i == ignoreIndex)
-                        continue;
-                    if (filterSettings.controlPoints[i].freq == currentFreq) {
-                        foundConflict = true;
-                        break;
-                    }
-                }
-                if (!foundConflict)
-                    return currentFreq;
-                tryingLower = !tryingLower;
-                if (tryingLower)
-                    lowerFreq--;
-                if (!tryingLower)
-                    upperFreq++;
-            }
-        }
-        static _circlePath(cx, cy, radius, reverse = false) {
-            return `M ${cx - radius} ${cy} ` +
-                `a ${radius} ${radius} 0 1 ${reverse ? 1 : 0} ${radius * 2} 0 ` +
-                `a ${radius} ${radius} 0 1 ${reverse ? 1 : 0} ${-radius * 2} 0 `;
-        }
-        _updatePath() {
-            this._highlight.style.display = "none";
-            this._label.textContent = "";
-            let controlPointPath = "";
-            let dottedLinePath = "";
-            for (let i = 0; i < this._filterSettings.controlPointCount; i++) {
-                const point = this._filterSettings.controlPoints[i];
-                const pointX = this._freqToX(point.freq);
-                const pointY = this._gainToY(point.gain);
-                controlPointPath += FilterEditor._circlePath(pointX, pointY, this._pointRadius);
-                if (point.type == 1) {
-                    dottedLinePath += "M " + 0 + " " + pointY + " L " + pointX + " " + pointY + " ";
-                }
-                else if (point.type == 0) {
-                    dottedLinePath += "M " + this._editorWidth + " " + pointY + " L " + pointX + " " + pointY + " ";
-                }
-                if (this._selectedIndex == i && this._mouseOver && !this._mouseDown) {
-                    this._highlight.setAttribute("cx", String(pointX));
-                    this._highlight.setAttribute("cy", String(pointY));
-                    this._highlight.style.display = "";
-                }
-                if ((this._selectedIndex == i || (this._addingPoint && this._mouseDown && i == this._filterSettings.controlPointCount - 1)) && (this._mouseOver || this._mouseDown) && !this._deletingPoint) {
-                    this._label.textContent = (i + 1) + ": " + Config.filterTypeNames[point.type];
-                }
-            }
-            this._controlPointPath.setAttribute("d", controlPointPath);
-            this._dottedLinePath.setAttribute("d", dottedLinePath);
-            if (this._addingPoint && !this._mouseDown && this._mouseOver) {
-                this._label.textContent = "+ " + Config.filterTypeNames[this._addedType];
-            }
-            const standardSampleRate = 44800;
-            const filters = [];
-            for (let i = 0; i < this._filterSettings.controlPointCount; i++) {
-                const point = this._filterSettings.controlPoints[i];
-                const filter = new FilterCoefficients();
-                point.toCoefficients(filter, standardSampleRate);
-                filters.push(filter);
-            }
-            const response = new FrequencyResponse();
-            let responsePath = "M 0 " + this._editorHeight + " ";
-            for (let i = -1; i <= Config.filterFreqRange; i++) {
-                const hz = FilterControlPoint.getHzFromSettingValue(i);
-                const cornerRadiansPerSample = 2.0 * Math.PI * hz / standardSampleRate;
-                const real = Math.cos(cornerRadiansPerSample);
-                const imag = Math.sin(cornerRadiansPerSample);
-                let linearGain = 1.0;
-                for (const filter of filters) {
-                    response.analyzeComplex(filter, real, imag);
-                    linearGain *= response.magnitude();
-                }
-                const gainSetting = Math.log2(linearGain) / Config.filterGainStep + Config.filterGainCenter;
-                const y = this._gainToY(gainSetting);
-                const x = this._freqToX(i);
-                responsePath += "L " + prettyNumber(x) + " " + prettyNumber(y) + " ";
-            }
-            responsePath += "L " + this._editorWidth + " " + this._editorHeight + " L 0 " + this._editorHeight + " z ";
-            this._responsePath.setAttribute("d", responsePath);
-        }
-        render() {
-            const instrument = this._doc.song.channels[this._doc.channel].instruments[this._doc.getCurrentInstrument()];
-            const filterSettings = this._useNoteFilter ? instrument.noteFilter : instrument.eqFilter;
-            if (this._filterSettings != filterSettings) {
-                this._dragChange = null;
-                this._mouseDown = false;
-            }
-            this._filterSettings = filterSettings;
-            if (!this._mouseDown)
-                this._updateCursor();
-            let pointTypes = 0;
-            let pointFreqs = 0;
-            let pointGains = 0;
-            for (let i = 0; i < filterSettings.controlPointCount; i++) {
-                const point = filterSettings.controlPoints[i];
-                pointTypes = pointTypes * 3 + point.type;
-                pointFreqs = pointFreqs * Config.filterFreqRange + point.freq;
-                pointGains = pointGains * Config.filterGainRange + point.gain;
-            }
-            if (this._renderedSelectedIndex != this._selectedIndex ||
-                this._renderedPointCount != filterSettings.controlPointCount ||
-                this._renderedPointTypes != pointTypes ||
-                this._renderedPointFreqs != pointFreqs ||
-                this._renderedPointGains != pointGains) {
-                this._renderedSelectedIndex = this._selectedIndex;
-                this._renderedPointCount = filterSettings.controlPointCount;
-                this._renderedPointTypes = pointTypes;
-                this._renderedPointFreqs = pointFreqs;
-                this._renderedPointGains = pointGains;
-                this._updatePath();
-            }
-        }
-    }
-
     class Box {
         constructor(channel, color) {
             this._text = document.createTextNode("");
@@ -16847,261 +16099,6 @@ var beepbox = (function (exports) {
         }
     }
 
-    class LoopEditor {
-        constructor(_doc) {
-            this._doc = _doc;
-            this._editorHeight = 20;
-            this._startMode = 0;
-            this._endMode = 1;
-            this._bothMode = 2;
-            this._loop = SVG.path({ fill: "none", stroke: ColorConfig.loopAccent, "stroke-width": 4 });
-            this._highlight = SVG.path({ fill: ColorConfig.hoverPreview, "pointer-events": "none" });
-            this._svg = SVG.svg({ style: `touch-action: pan-y; position: absolute;`, height: this._editorHeight }, this._loop, this._highlight);
-            this.container = HTML.div({ class: "loopEditor" }, this._svg);
-            this._barWidth = 32;
-            this._change = null;
-            this._cursor = { startBar: -1, mode: -1 };
-            this._mouseX = 0;
-            this._clientStartX = 0;
-            this._clientStartY = 0;
-            this._startedScrolling = false;
-            this._draggingHorizontally = false;
-            this._mouseDown = false;
-            this._mouseOver = false;
-            this._renderedLoopStart = -1;
-            this._renderedLoopStop = -1;
-            this._renderedBarCount = 0;
-            this._renderedBarWidth = -1;
-            this._whenMouseOver = (event) => {
-                if (this._mouseOver)
-                    return;
-                this._mouseOver = true;
-                this._updatePreview();
-            };
-            this._whenMouseOut = (event) => {
-                if (!this._mouseOver)
-                    return;
-                this._mouseOver = false;
-                this._updatePreview();
-            };
-            this._whenMousePressed = (event) => {
-                event.preventDefault();
-                this._mouseDown = true;
-                const boundingRect = this._svg.getBoundingClientRect();
-                this._mouseX = (event.clientX || event.pageX) - boundingRect.left;
-                this._updateCursorStatus();
-                this._updatePreview();
-                this._whenMouseMoved(event);
-            };
-            this._whenTouchPressed = (event) => {
-                this._mouseDown = true;
-                const boundingRect = this._svg.getBoundingClientRect();
-                this._mouseX = event.touches[0].clientX - boundingRect.left;
-                this._updateCursorStatus();
-                this._updatePreview();
-                this._clientStartX = event.touches[0].clientX;
-                this._clientStartY = event.touches[0].clientY;
-                this._draggingHorizontally = false;
-                this._startedScrolling = false;
-            };
-            this._whenMouseMoved = (event) => {
-                const boundingRect = this._svg.getBoundingClientRect();
-                this._mouseX = (event.clientX || event.pageX) - boundingRect.left;
-                this._whenCursorMoved();
-            };
-            this._whenTouchMoved = (event) => {
-                if (!this._mouseDown)
-                    return;
-                const boundingRect = this._svg.getBoundingClientRect();
-                this._mouseX = event.touches[0].clientX - boundingRect.left;
-                if (!this._draggingHorizontally && !this._startedScrolling) {
-                    if (Math.abs(event.touches[0].clientY - this._clientStartY) > 10) {
-                        this._startedScrolling = true;
-                    }
-                    else if (Math.abs(event.touches[0].clientX - this._clientStartX) > 10) {
-                        this._draggingHorizontally = true;
-                    }
-                }
-                if (this._draggingHorizontally) {
-                    this._whenCursorMoved();
-                    event.preventDefault();
-                }
-            };
-            this._whenTouchReleased = (event) => {
-                event.preventDefault();
-                if (!this._startedScrolling) {
-                    this._whenCursorMoved();
-                    this._mouseOver = false;
-                    this._whenCursorReleased(event);
-                    this._updatePreview();
-                }
-                this._mouseDown = false;
-            };
-            this._whenCursorReleased = (event) => {
-                if (this._change != null)
-                    this._doc.record(this._change);
-                this._change = null;
-                this._mouseDown = false;
-                this._updateCursorStatus();
-                this._render();
-            };
-            this._documentChanged = () => {
-                this._render();
-            };
-            this._updateCursorStatus();
-            this._render();
-            this._doc.notifier.watch(this._documentChanged);
-            this.container.addEventListener("mousedown", this._whenMousePressed);
-            document.addEventListener("mousemove", this._whenMouseMoved);
-            document.addEventListener("mouseup", this._whenCursorReleased);
-            this.container.addEventListener("mouseover", this._whenMouseOver);
-            this.container.addEventListener("mouseout", this._whenMouseOut);
-            this.container.addEventListener("touchstart", this._whenTouchPressed);
-            this.container.addEventListener("touchmove", this._whenTouchMoved);
-            this.container.addEventListener("touchend", this._whenTouchReleased);
-            this.container.addEventListener("touchcancel", this._whenTouchReleased);
-        }
-        _updateCursorStatus() {
-            const bar = this._mouseX / this._barWidth;
-            this._cursor.startBar = bar;
-            if (bar > this._doc.song.loopStart - 0.25 && bar < this._doc.song.loopStart + this._doc.song.loopLength + 0.25) {
-                if (bar - this._doc.song.loopStart < this._doc.song.loopLength * 0.5) {
-                    this._cursor.mode = this._startMode;
-                }
-                else {
-                    this._cursor.mode = this._endMode;
-                }
-            }
-            else {
-                this._cursor.mode = this._bothMode;
-            }
-        }
-        _findEndPoints(middle) {
-            let start = Math.round(middle - this._doc.song.loopLength / 2);
-            let end = start + this._doc.song.loopLength;
-            if (start < 0) {
-                end -= start;
-                start = 0;
-            }
-            if (end > this._doc.song.barCount) {
-                start -= end - this._doc.song.barCount;
-                end = this._doc.song.barCount;
-            }
-            return { start: start, length: end - start };
-        }
-        _whenCursorMoved() {
-            if (this._mouseDown) {
-                let oldStart = this._doc.song.loopStart;
-                let oldEnd = this._doc.song.loopStart + this._doc.song.loopLength;
-                if (this._change != null && this._doc.lastChangeWas(this._change)) {
-                    oldStart = this._change.oldStart;
-                    oldEnd = oldStart + this._change.oldLength;
-                }
-                const bar = this._mouseX / this._barWidth;
-                let start;
-                let end;
-                let temp;
-                if (this._cursor.mode == this._startMode) {
-                    start = oldStart + Math.round(bar - this._cursor.startBar);
-                    end = oldEnd;
-                    if (start < 0)
-                        start = 0;
-                    if (start >= this._doc.song.barCount)
-                        start = this._doc.song.barCount;
-                    if (start == end) {
-                        start = end - 1;
-                    }
-                    else if (start > end) {
-                        temp = start;
-                        start = end;
-                        end = temp;
-                    }
-                    this._change = new ChangeLoop(this._doc, oldStart, oldEnd - oldStart, start, end - start);
-                }
-                else if (this._cursor.mode == this._endMode) {
-                    start = oldStart;
-                    end = oldEnd + Math.round(bar - this._cursor.startBar);
-                    if (end < 0)
-                        end = 0;
-                    if (end >= this._doc.song.barCount)
-                        end = this._doc.song.barCount;
-                    if (end == start) {
-                        end = start + 1;
-                    }
-                    else if (end < start) {
-                        temp = start;
-                        start = end;
-                        end = temp;
-                    }
-                    this._change = new ChangeLoop(this._doc, oldStart, oldEnd - oldStart, start, end - start);
-                }
-                else if (this._cursor.mode == this._bothMode) {
-                    const endPoints = this._findEndPoints(bar);
-                    this._change = new ChangeLoop(this._doc, oldStart, oldEnd - oldStart, endPoints.start, endPoints.length);
-                }
-                this._doc.synth.jumpIntoLoop();
-                if (this._doc.prefs.autoFollow) {
-                    new ChangeChannelBar(this._doc, this._doc.channel, Math.floor(this._doc.synth.playhead), true);
-                }
-                this._doc.setProspectiveChange(this._change);
-            }
-            else {
-                this._updateCursorStatus();
-                this._updatePreview();
-            }
-        }
-        _updatePreview() {
-            const showHighlight = this._mouseOver && !this._mouseDown;
-            this._highlight.style.visibility = showHighlight ? "visible" : "hidden";
-            if (showHighlight) {
-                const radius = this._editorHeight / 2;
-                let highlightStart = (this._doc.song.loopStart) * this._barWidth;
-                let highlightStop = (this._doc.song.loopStart + this._doc.song.loopLength) * this._barWidth;
-                if (this._cursor.mode == this._startMode) {
-                    highlightStop = (this._doc.song.loopStart) * this._barWidth + radius * 2;
-                }
-                else if (this._cursor.mode == this._endMode) {
-                    highlightStart = (this._doc.song.loopStart + this._doc.song.loopLength) * this._barWidth - radius * 2;
-                }
-                else {
-                    const endPoints = this._findEndPoints(this._cursor.startBar);
-                    highlightStart = (endPoints.start) * this._barWidth;
-                    highlightStop = (endPoints.start + endPoints.length) * this._barWidth;
-                }
-                this._highlight.setAttribute("d", `M ${highlightStart + radius} ${4} ` +
-                    `L ${highlightStop - radius} ${4} ` +
-                    `A ${radius - 4} ${radius - 4} ${0} ${0} ${1} ${highlightStop - radius} ${this._editorHeight - 4} ` +
-                    `L ${highlightStart + radius} ${this._editorHeight - 4} ` +
-                    `A ${radius - 4} ${radius - 4} ${0} ${0} ${1} ${highlightStart + radius} ${4} ` +
-                    `z`);
-            }
-        }
-        _render() {
-            this._barWidth = this._doc.getBarWidth();
-            const radius = this._editorHeight / 2;
-            const loopStart = (this._doc.song.loopStart) * this._barWidth;
-            const loopStop = (this._doc.song.loopStart + this._doc.song.loopLength) * this._barWidth;
-            if (this._renderedBarCount != this._doc.song.barCount || this._renderedBarWidth != this._barWidth) {
-                this._renderedBarCount = this._doc.song.barCount;
-                this._renderedBarWidth = this._barWidth;
-                const editorWidth = this._barWidth * this._doc.song.barCount;
-                this.container.style.width = editorWidth + "px";
-                this._svg.setAttribute("width", editorWidth + "");
-            }
-            if (this._renderedLoopStart != loopStart || this._renderedLoopStop != loopStop) {
-                this._renderedLoopStart = loopStart;
-                this._renderedLoopStop = loopStop;
-                this._loop.setAttribute("d", `M ${loopStart + radius} ${2} ` +
-                    `L ${loopStop - radius} ${2} ` +
-                    `A ${radius - 2} ${radius - 2} ${0} ${0} ${1} ${loopStop - radius} ${this._editorHeight - 2} ` +
-                    `L ${loopStart + radius} ${this._editorHeight - 2} ` +
-                    `A ${radius - 2} ${radius - 2} ${0} ${0} ${1} ${loopStart + radius} ${2} ` +
-                    `z`);
-            }
-            this._updatePreview();
-        }
-    }
-
     class SpectrumEditor {
         constructor(_doc, _spectrumIndex) {
             this._doc = _doc;
@@ -17258,169 +16255,6 @@ var beepbox = (function (exports) {
                 this._fill.setAttribute("d", path + "L " + this._editorWidth + " " + prettyNumber(lastHeight) + " L " + this._editorWidth + " " + prettyNumber(this._editorHeight) + " L 0 " + prettyNumber(this._editorHeight) + " z ");
                 this._arrow.setAttribute("d", "M " + this._editorWidth + " " + prettyNumber(lastHeight) + " L " + (this._editorWidth - 4) + " " + prettyNumber(lastHeight - 4) + " L " + (this._editorWidth - 4) + " " + prettyNumber(lastHeight + 4) + " z");
                 this._arrow.style.display = (lastValue > 0) ? "" : "none";
-            }
-            if (this._renderedFifths != this._doc.prefs.showFifth) {
-                this._renderedFifths = this._doc.prefs.showFifth;
-                this._fifths.style.display = this._doc.prefs.showFifth ? "" : "none";
-            }
-        }
-    }
-
-    class HarmonicsEditor {
-        constructor(_doc) {
-            this._doc = _doc;
-            this._editorWidth = 120;
-            this._editorHeight = 26;
-            this._octaves = SVG.svg({ "pointer-events": "none" });
-            this._fifths = SVG.svg({ "pointer-events": "none" });
-            this._curve = SVG.path({ fill: "none", stroke: "currentColor", "stroke-width": 2, "pointer-events": "none" });
-            this._lastControlPoints = [];
-            this._lastControlPointContainer = SVG.svg({ "pointer-events": "none" });
-            this._svg = SVG.svg({ style: `background-color: ${ColorConfig.editorBackground}; touch-action: none; cursor: crosshair;`, width: "100%", height: "100%", viewBox: "0 0 " + this._editorWidth + " " + this._editorHeight, preserveAspectRatio: "none" }, this._octaves, this._fifths, this._curve, this._lastControlPointContainer);
-            this.container = HTML.div({ class: "harmonics", style: "height: 100%;" }, this._svg);
-            this._mouseX = 0;
-            this._mouseY = 0;
-            this._freqPrev = 0;
-            this._ampPrev = 0;
-            this._mouseDown = false;
-            this._change = null;
-            this._renderedPath = "";
-            this._renderedFifths = true;
-            this._whenMousePressed = (event) => {
-                event.preventDefault();
-                this._mouseDown = true;
-                const boundingRect = this._svg.getBoundingClientRect();
-                this._mouseX = ((event.clientX || event.pageX) - boundingRect.left) * this._editorWidth / (boundingRect.right - boundingRect.left);
-                this._mouseY = ((event.clientY || event.pageY) - boundingRect.top) * this._editorHeight / (boundingRect.bottom - boundingRect.top);
-                if (isNaN(this._mouseX))
-                    this._mouseX = 0;
-                if (isNaN(this._mouseY))
-                    this._mouseY = 0;
-                this._freqPrev = this._xToFreq(this._mouseX);
-                this._ampPrev = this._yToAmp(this._mouseY);
-                this._whenCursorMoved();
-            };
-            this._whenTouchPressed = (event) => {
-                event.preventDefault();
-                this._mouseDown = true;
-                const boundingRect = this._svg.getBoundingClientRect();
-                this._mouseX = (event.touches[0].clientX - boundingRect.left) * this._editorWidth / (boundingRect.right - boundingRect.left);
-                this._mouseY = (event.touches[0].clientY - boundingRect.top) * this._editorHeight / (boundingRect.bottom - boundingRect.top);
-                if (isNaN(this._mouseX))
-                    this._mouseX = 0;
-                if (isNaN(this._mouseY))
-                    this._mouseY = 0;
-                this._freqPrev = this._xToFreq(this._mouseX);
-                this._ampPrev = this._yToAmp(this._mouseY);
-                this._whenCursorMoved();
-            };
-            this._whenMouseMoved = (event) => {
-                if (this.container.offsetParent == null)
-                    return;
-                const boundingRect = this._svg.getBoundingClientRect();
-                this._mouseX = ((event.clientX || event.pageX) - boundingRect.left) * this._editorWidth / (boundingRect.right - boundingRect.left);
-                this._mouseY = ((event.clientY || event.pageY) - boundingRect.top) * this._editorHeight / (boundingRect.bottom - boundingRect.top);
-                if (isNaN(this._mouseX))
-                    this._mouseX = 0;
-                if (isNaN(this._mouseY))
-                    this._mouseY = 0;
-                this._whenCursorMoved();
-            };
-            this._whenTouchMoved = (event) => {
-                if (this.container.offsetParent == null)
-                    return;
-                if (!this._mouseDown)
-                    return;
-                event.preventDefault();
-                const boundingRect = this._svg.getBoundingClientRect();
-                this._mouseX = (event.touches[0].clientX - boundingRect.left) * this._editorWidth / (boundingRect.right - boundingRect.left);
-                this._mouseY = (event.touches[0].clientY - boundingRect.top) * this._editorHeight / (boundingRect.bottom - boundingRect.top);
-                if (isNaN(this._mouseX))
-                    this._mouseX = 0;
-                if (isNaN(this._mouseY))
-                    this._mouseY = 0;
-                this._whenCursorMoved();
-            };
-            this._whenCursorReleased = (event) => {
-                if (this._mouseDown) {
-                    this._doc.record(this._change);
-                    this._change = null;
-                }
-                this._mouseDown = false;
-            };
-            for (let i = 1; i <= Config.harmonicsControlPoints; i = i * 2) {
-                this._octaves.appendChild(SVG.rect({ fill: ColorConfig.tonic, x: (i - 0.5) * (this._editorWidth - 8) / (Config.harmonicsControlPoints - 1) - 1, y: 0, width: 2, height: this._editorHeight }));
-            }
-            for (let i = 3; i <= Config.harmonicsControlPoints; i = i * 2) {
-                this._fifths.appendChild(SVG.rect({ fill: ColorConfig.fifthNote, x: (i - 0.5) * (this._editorWidth - 8) / (Config.harmonicsControlPoints - 1) - 1, y: 0, width: 2, height: this._editorHeight }));
-            }
-            for (let i = 0; i < 4; i++) {
-                const rect = SVG.rect({ fill: "currentColor", x: (this._editorWidth - i * 2 - 1), y: 0, width: 1, height: this._editorHeight });
-                this._lastControlPoints.push(rect);
-                this._lastControlPointContainer.appendChild(rect);
-            }
-            this.container.addEventListener("mousedown", this._whenMousePressed);
-            document.addEventListener("mousemove", this._whenMouseMoved);
-            document.addEventListener("mouseup", this._whenCursorReleased);
-            this.container.addEventListener("touchstart", this._whenTouchPressed);
-            this.container.addEventListener("touchmove", this._whenTouchMoved);
-            this.container.addEventListener("touchend", this._whenCursorReleased);
-            this.container.addEventListener("touchcancel", this._whenCursorReleased);
-        }
-        _xToFreq(x) {
-            return (Config.harmonicsControlPoints - 1) * x / (this._editorWidth - 8) - 0.5;
-        }
-        _yToAmp(y) {
-            return Config.harmonicsMax * (1 - y / this._editorHeight);
-        }
-        _whenCursorMoved() {
-            if (this._mouseDown) {
-                const freq = this._xToFreq(this._mouseX);
-                const amp = this._yToAmp(this._mouseY);
-                const instrument = this._doc.song.channels[this._doc.channel].instruments[this._doc.getCurrentInstrument()];
-                const harmonicsWave = instrument.harmonicsWave;
-                if (freq != this._freqPrev) {
-                    const slope = (amp - this._ampPrev) / (freq - this._freqPrev);
-                    const offset = this._ampPrev - this._freqPrev * slope;
-                    const lowerFreq = Math.ceil(Math.min(this._freqPrev, freq));
-                    const upperFreq = Math.floor(Math.max(this._freqPrev, freq));
-                    for (let i = lowerFreq; i <= upperFreq; i++) {
-                        if (i < 0 || i >= Config.harmonicsControlPoints)
-                            continue;
-                        harmonicsWave.harmonics[i] = Math.max(0, Math.min(Config.harmonicsMax, Math.round(i * slope + offset)));
-                    }
-                }
-                harmonicsWave.harmonics[Math.max(0, Math.min(Config.harmonicsControlPoints - 1, Math.round(freq)))] = Math.max(0, Math.min(Config.harmonicsMax, Math.round(amp)));
-                this._freqPrev = freq;
-                this._ampPrev = amp;
-                this._change = new ChangeHarmonics(this._doc, instrument, harmonicsWave);
-                this._doc.setProspectiveChange(this._change);
-            }
-        }
-        render() {
-            const instrument = this._doc.song.channels[this._doc.channel].instruments[this._doc.getCurrentInstrument()];
-            const harmonicsWave = instrument.harmonicsWave;
-            const controlPointToHeight = (point) => {
-                return (1 - (point / Config.harmonicsMax)) * this._editorHeight;
-            };
-            let bottom = prettyNumber(this._editorHeight);
-            let path = "";
-            for (let i = 0; i < Config.harmonicsControlPoints - 1; i++) {
-                if (harmonicsWave.harmonics[i] == 0)
-                    continue;
-                let xPos = prettyNumber((i + 0.5) * (this._editorWidth - 8) / (Config.harmonicsControlPoints - 1));
-                path += "M " + xPos + " " + bottom + " ";
-                path += "L " + xPos + " " + prettyNumber(controlPointToHeight(harmonicsWave.harmonics[i])) + " ";
-            }
-            const lastHeight = controlPointToHeight(harmonicsWave.harmonics[Config.harmonicsControlPoints - 1]);
-            for (let i = 0; i < 4; i++) {
-                const rect = this._lastControlPoints[i];
-                rect.setAttribute("y", prettyNumber(lastHeight));
-                rect.setAttribute("height", prettyNumber(this._editorHeight - lastHeight));
-            }
-            if (this._renderedPath != path) {
-                this._renderedPath = path;
-                this._curve.setAttribute("d", path);
             }
             if (this._renderedFifths != this._doc.prefs.showFifth) {
                 this._renderedFifths = this._doc.prefs.showFifth;
@@ -18707,7 +17541,7 @@ var beepbox = (function (exports) {
             };
             this._patternsStepper.value = this._doc.song.patternsPerChannel + "";
             this._patternsStepper.min = "1";
-            this._patternsStepper.max = "10";
+            this._patternsStepper.max = Config.barCountMax + "";
             this._pitchChannelStepper.value = this._doc.song.pitchChannelCount + "";
             this._pitchChannelStepper.min = Config.pitchChannelCountMin + "";
             this._pitchChannelStepper.max = Config.pitchChannelCountMax + "";
@@ -20519,7 +19353,6 @@ You should be redirected to the song at:<br /><br />
             this._patternEditorNext = new PatternEditor(this.doc, false, 1);
             this._muteEditor = new MuteEditor(this.doc);
             this._trackEditor = new TrackEditor(this.doc);
-            this._loopEditor = new LoopEditor(this.doc);
             this._octaveScrollBar = new OctaveScrollBar(this.doc);
             this._piano = new Piano(this.doc);
             this._playButton = button({ class: "playButton", type: "button", title: "Play (Space)" }, span("Play"));
@@ -20539,7 +19372,6 @@ You should be redirected to the song at:<br /><br />
             this._rhythmSelect = buildOptions(select(), Config.rhythms.map(rhythm => rhythm.name));
             this._pitchedPresetSelect = buildPresetOptions(false);
             this._drumPresetSelect = buildPresetOptions(true);
-            this._algorithmSelect = buildOptions(select(), Config.algorithms.map(algorithm => algorithm.name));
             this._instrumentButtons = [];
             this._instrumentAddButton = button({ type: "button", class: "add-instrument last-button" });
             this._instrumentRemoveButton = button({ type: "button", class: "remove-instrument" });
@@ -20550,20 +19382,8 @@ You should be redirected to the song at:<br /><br />
             this._instrumentCopyPasteRow = div({ class: "instrumentCopyPasteRow", style: "display: none;" }, this._instrumentCopyButton, this._instrumentPasteButton);
             this._instrumentVolumeSlider = new Slider(input({ style: "margin: 0;", type: "range", min: -(Config.volumeRange - 1), max: "0", value: "0", step: "1" }), this.doc, (oldValue, newValue) => new ChangeVolume(this.doc, oldValue, -newValue));
             this._instrumentVolumeSliderRow = div({ class: "selectRow" }, span({ class: "tip", onclick: () => this._openPrompt("instrumentVolume") }, "Volume:"), this._instrumentVolumeSlider.input);
-            this._chipWaveSelect = buildOptions(select(), Config.chipWaves.map(wave => wave.name));
-            this._chipNoiseSelect = buildOptions(select(), Config.chipNoises.map(wave => wave.name));
-            this._fadeInOutEditor = new FadeInOutEditor(this.doc);
-            this._transitionSelect = buildOptions(select(), Config.transitions.map(transition => transition.name));
             this._effectsSelect = select(option({ selected: true, disabled: true, hidden: false }));
-            this._eqFilterEditor = new FilterEditor(this.doc);
-            this._noteFilterEditor = new FilterEditor(this.doc, true);
-            this._unisonSelect = buildOptions(select(), Config.unisons.map(unison => unison.name));
-            this._chordSelect = buildOptions(select(), Config.chords.map(chord => chord.name));
-            this._vibratoSelect = buildOptions(select(), Config.vibratos.map(vibrato => vibrato.name));
             this._phaseModGroup = div({ class: "editor-controls" });
-            this._feedbackTypeSelect = buildOptions(select(), Config.feedbacks.map(feedback => feedback.name));
-            this._spectrumEditor = new SpectrumEditor(this.doc, null);
-            this._harmonicsEditor = new HarmonicsEditor(this.doc);
             this._drumsetGroup = div({ class: "editor-controls" });
             this._addEnvelopeButton = button({ type: "button", class: "add-envelope" });
             this._instrumentSettingsGroup = div({ class: "editor-controls" }, div({ style: `margin: 3px 0; text-align: center; color: ${ColorConfig.secondaryText};` }, "Instrument Settings"), this._instrumentsButtonRow, this._instrumentCopyPasteRow, this._instrumentVolumeSliderRow, div({ class: "selectRow" }, span({ class: "tip", onclick: () => this._openPrompt("instrumentType") }, "Type:"), div({ class: "selectContainer" }, this._pitchedPresetSelect, this._drumPresetSelect)));
@@ -20572,7 +19392,7 @@ You should be redirected to the song at:<br /><br />
             this._zoomOutButton = button({ class: "zoomOutButton", type: "button", title: "Zoom Out" });
             this._patternEditorRow = div({ style: "flex: 1; height: 100%; display: flex; overflow: hidden; justify-content: center;" }, this._patternEditorPrev.container, this._patternEditor.container, this._patternEditorNext.container);
             this._patternArea = div({ class: "pattern-area" }, this._piano.container, this._patternEditorRow, this._octaveScrollBar.container, this._zoomInButton, this._zoomOutButton);
-            this._trackContainer = div({ class: "trackContainer" }, this._trackEditor.container, this._loopEditor.container);
+            this._trackContainer = div({ class: "trackContainer" }, this._trackEditor.container);
             this._trackVisibleArea = div({ style: "position: absolute; width: 100%; height: 100%; pointer-events: none;" });
             this._trackAndMuteContainer = div({ class: "trackAndMuteContainer prefers-big-scrollbars" }, this._muteEditor.container, this._trackContainer, this._trackVisibleArea);
             this._barScrollBar = new BarScrollBar(this.doc);
@@ -20781,7 +19601,6 @@ You should be redirected to the song at:<br /><br />
                     this._instrumentsButtonRow.style.display = "none";
                 }
                 this._instrumentSettingsGroup.style.color = colors.primaryNote;
-                this._eqFilterEditor.render();
                 this._instrumentVolumeSlider.updateValue(-instrument.volume);
                 this._addEnvelopeButton.disabled = (instrument.envelopeCount >= Config.maxEnvelopeCount);
                 this._volumeSlider.value = String(prefs.volume);
@@ -20827,7 +19646,6 @@ You should be redirected to the song at:<br /><br />
                     this._octaveScrollBar.container.style.pointerEvents = "";
                     this._octaveScrollBar.container.style.opacity = "";
                     this._trackContainer.style.pointerEvents = "";
-                    this._loopEditor.container.style.opacity = "";
                     this._instrumentSettingsArea.style.pointerEvents = "";
                     this._instrumentSettingsArea.style.opacity = "";
                     this._menuArea.style.pointerEvents = "";
@@ -20842,7 +19660,6 @@ You should be redirected to the song at:<br /><br />
                         this._octaveScrollBar.container.style.pointerEvents = "none";
                         this._octaveScrollBar.container.style.opacity = "0.5";
                         this._trackContainer.style.pointerEvents = "none";
-                        this._loopEditor.container.style.opacity = "0.5";
                         this._instrumentSettingsArea.style.pointerEvents = "none";
                         this._instrumentSettingsArea.style.opacity = "0.5";
                         this._menuArea.style.pointerEvents = "none";
@@ -21418,12 +20235,6 @@ You should be redirected to the song at:<br /><br />
             this._whenSetDrumPreset = () => {
                 this._setPreset(this._drumPresetSelect.value);
             };
-            this._whenSetFeedbackType = () => {
-                this.doc.record(new ChangeFeedbackType(this.doc, this._feedbackTypeSelect.selectedIndex));
-            };
-            this._whenSetAlgorithm = () => {
-                this.doc.record(new ChangeAlgorithm(this.doc, this._algorithmSelect.selectedIndex));
-            };
             this._whenSelectInstrument = (event) => {
                 if (event.target == this._instrumentAddButton) {
                     this.doc.record(new ChangeAddChannelInstrument(this.doc));
@@ -21439,15 +20250,6 @@ You should be redirected to the song at:<br /><br />
                 }
                 this._refocusStage();
             };
-            this._whenSetChipWave = () => {
-                this.doc.record(new ChangeChipWave(this.doc, this._chipWaveSelect.selectedIndex));
-            };
-            this._whenSetNoiseWave = () => {
-                this.doc.record(new ChangeNoiseWave(this.doc, this._chipNoiseSelect.selectedIndex));
-            };
-            this._whenSetTransition = () => {
-                this.doc.record(new ChangeTransition(this.doc, this._transitionSelect.selectedIndex));
-            };
             this._whenSetEffects = () => {
                 const instrument = this.doc.song.channels[this.doc.channel].instruments[this.doc.getCurrentInstrument()];
                 const oldValue = instrument.effects;
@@ -21457,15 +20259,6 @@ You should be redirected to the song at:<br /><br />
                 if (instrument.effects > oldValue) {
                     this.doc.addedEffect = true;
                 }
-            };
-            this._whenSetVibrato = () => {
-                this.doc.record(new ChangeVibrato(this.doc, this._vibratoSelect.selectedIndex));
-            };
-            this._whenSetUnison = () => {
-                this.doc.record(new ChangeUnison(this.doc, this._unisonSelect.selectedIndex));
-            };
-            this._whenSetChord = () => {
-                this.doc.record(new ChangeChord(this.doc, this._chordSelect.selectedIndex));
             };
             this._addNewEnvelope = () => {
                 this.doc.record(new ChangeAddEnvelope(this.doc));
@@ -21684,18 +20477,10 @@ You should be redirected to the song at:<br /><br />
             this._rhythmSelect.addEventListener("change", this._whenSetRhythm);
             this._pitchedPresetSelect.addEventListener("change", this._whenSetPitchedPreset);
             this._drumPresetSelect.addEventListener("change", this._whenSetDrumPreset);
-            this._algorithmSelect.addEventListener("change", this._whenSetAlgorithm);
             this._instrumentsButtonBar.addEventListener("click", this._whenSelectInstrument);
             this._instrumentCopyButton.addEventListener("click", this._copyInstrument);
             this._instrumentPasteButton.addEventListener("click", this._pasteInstrument);
-            this._feedbackTypeSelect.addEventListener("change", this._whenSetFeedbackType);
-            this._chipWaveSelect.addEventListener("change", this._whenSetChipWave);
-            this._chipNoiseSelect.addEventListener("change", this._whenSetNoiseWave);
-            this._transitionSelect.addEventListener("change", this._whenSetTransition);
             this._effectsSelect.addEventListener("change", this._whenSetEffects);
-            this._unisonSelect.addEventListener("change", this._whenSetUnison);
-            this._chordSelect.addEventListener("change", this._whenSetChord);
-            this._vibratoSelect.addEventListener("change", this._whenSetVibrato);
             this._playButton.addEventListener("click", this._togglePlay);
             this._pauseButton.addEventListener("click", this._togglePlay);
             this._recordButton.addEventListener("click", this._toggleRecord);
@@ -21719,11 +20504,6 @@ You should be redirected to the song at:<br /><br />
             this._zoomOutButton.addEventListener("click", this._zoomOut);
             this._patternArea.addEventListener("mousedown", this._refocusStage);
             this._trackArea.addEventListener("mousedown", this._refocusStage);
-            this._fadeInOutEditor.container.addEventListener("mousedown", this._refocusStage);
-            this._spectrumEditor.container.addEventListener("mousedown", this._refocusStage);
-            this._eqFilterEditor.container.addEventListener("mousedown", this._refocusStage);
-            this._noteFilterEditor.container.addEventListener("mousedown", this._refocusStage);
-            this._harmonicsEditor.container.addEventListener("mousedown", this._refocusStage);
             this._tempoStepper.addEventListener("keydown", this._tempoStepperCaptureNumberKeys, false);
             this._addEnvelopeButton.addEventListener("click", this._addNewEnvelope);
             this._patternArea.addEventListener("contextmenu", this._disableCtrlContextMenu);

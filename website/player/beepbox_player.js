@@ -75,7 +75,7 @@ var beepbox = (function (exports) {
     Config.beatsPerBarMin = 3;
     Config.beatsPerBarMax = 16;
     Config.barCountMin = 1;
-    Config.barCountMax = 10;
+    Config.barCountMax = 12;
     Config.instrumentCountMin = 1;
     Config.layeredInstrumentCountMax = 3;
     Config.patternInstrumentCountMax = 10;
@@ -8900,8 +8900,7 @@ var beepbox = (function (exports) {
     renderZoomIcon();
     renderPlayButton();
     onToggleLoop();
-    let clickEvent = new Event('click');
-    playButton.dispatchEvent(clickEvent);
+    playButton.dispatchEvent(new Event('click'));
 
     exports.Channel = Channel;
     exports.Config = Config;
