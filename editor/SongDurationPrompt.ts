@@ -5,7 +5,7 @@ import {HTML} from "imperative-html/dist/esm/elements-strict.js";
 import {SongDocument} from "./SongDocument.js";
 import {Prompt} from "./Prompt.js";
 import {ChangeGroup} from "./Change.js";
-import {ChangeBarCount} from "./changes.js";
+import {ChangeBarCount, ChangeLoop} from "./changes.js";
 import {ColorConfig} from "./ColorConfig.js";
 
 const {button, div, span, h2, input, br, select, option} = HTML;
@@ -98,7 +98,9 @@ export class SongDurationPrompt implements Prompt {
 		window.localStorage.setItem("barCountPosition", this._positionSelect.value);
 		const group: ChangeGroup = new ChangeGroup();
 		group.append(new ChangeBarCount(this._doc, SongDurationPrompt._validate(this._barsStepper), this._positionSelect.value == "beginning"));
+		group.append(new ChangeLoop(this._doc, 0, SongDurationPrompt._validate(this._barsStepper), 0, SongDurationPrompt._validate(this._barsStepper)));
 		this._doc.prompt = null;
 		this._doc.record(group, true);
 	}
 }
+
