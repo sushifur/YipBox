@@ -3,7 +3,7 @@
 import {Dictionary, DictionaryArray, EnvelopeType, InstrumentType, Transition, Chord, Envelope, Config} from "../synth/SynthConfig.js";
 import {ColorConfig} from "../editor/ColorConfig.js";
 import {NotePin, Note, Pattern, Instrument, Channel, Synth} from "../synth/synth.js";
-import { HTML, SVG } from "imperative-html/dist/esm/elements-strict.js";
+import {HTML, SVG} from "imperative-html/dist/esm/elements-strict.js";
 
 const {a, button, div, h1, input} = HTML;
 const {svg, circle, rect, path} = SVG;
@@ -584,9 +584,9 @@ renderLoopIcon();
 renderZoomIcon();
 renderPlayButton();
 
+// Loop doot on page load
 onToggleLoop();
-let clickEvent = new Event('click'); // we create the event
-playButton.dispatchEvent(clickEvent); // simulate the button click
+playButton.dispatchEvent(new Event('click'));
 
 // When compiling synth.ts as a standalone module named "beepbox", expose these classes as members to JavaScript:
 export {Dictionary, DictionaryArray, EnvelopeType, InstrumentType, Transition, Chord, Envelope, Config, NotePin, Note, Pattern, Instrument, Channel, Synth};

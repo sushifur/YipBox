@@ -53,7 +53,7 @@ export class ChannelSettingsPrompt implements Prompt {
 	constructor(private _doc: SongDocument) {
 		this._patternsStepper.value = this._doc.song.patternsPerChannel + "";
 		this._patternsStepper.min = "1";
-		this._patternsStepper.max = "10";
+		this._patternsStepper.max = Config.barCountMax + "";
 		
 		this._pitchChannelStepper.value = this._doc.song.pitchChannelCount + "";
 		this._pitchChannelStepper.min = Config.pitchChannelCountMin + "";
