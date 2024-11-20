@@ -11640,6 +11640,22 @@ var beepbox = (function (exports) {
             }
         }
     }
+    class ChangeLoop extends Change {
+        constructor(_doc, oldStart, oldLength, newStart, newLength) {
+            super();
+            this._doc = _doc;
+            this.oldStart = oldStart;
+            this.oldLength = oldLength;
+            this.newStart = newStart;
+            this.newLength = newLength;
+            this._doc.song.loopStart = this.newStart;
+            this._doc.song.loopLength = this.newLength;
+            this._doc.notifier.changed();
+            if (this.oldStart != this.newStart || this.oldLength != this.newLength) {
+                this._didSomething();
+            }
+        }
+    }
     class ChangePitchAdded extends UndoableChange {
         constructor(doc, note, pitch, index, deletion = false) {
             super(deletion);
@@ -17420,6 +17436,7 @@ var beepbox = (function (exports) {
                 window.localStorage.setItem("barCountPosition", this._positionSelect.value);
                 const group = new ChangeGroup();
                 group.append(new ChangeBarCount(this._doc, SongDurationPrompt._validate(this._barsStepper), this._positionSelect.value == "beginning"));
+                group.append(new ChangeLoop(this._doc, 0, SongDurationPrompt._validate(this._barsStepper), 0, SongDurationPrompt._validate(this._barsStepper)));
                 this._doc.prompt = null;
                 this._doc.record(group, true);
             };
