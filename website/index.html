@@ -79,7 +79,7 @@
 
 		#codeField {
 			width: 100%;
-			height: 160px;
+			height: 240px;
 			position: relative;
 		}
 
@@ -96,6 +96,11 @@
 			margin: auto;
 			position: relative;
 			padding: 10px;
+			text-align:center;
+		}
+		#redeemLength{
+			color: lawngreen;
+			text-align: center;
 		}
 
 		/* wide screen */
@@ -160,11 +165,15 @@
 			</p>
 			<div id="codeField">
 				<input type="text" name="redeemCode" value="####" id="redeemCode" readonly>
+				<p id="redeemLength"></p>
 				<div class="buttonContainer">
 					<button id="redeemButton" onclick="copyCode()">Copy code</button>
+					<br><br>
+					(Experimental)
 					<button onclick="uploadCode()">Upload code</button>
+
 				</div>
-				<p id="redeemLength"></p>
+
 			</div>
 
 			<h1>
@@ -342,8 +351,10 @@
 				if (code.length > 500) {
 					button.setAttribute('disabled', 'disabled');
 					textbox.innerText += ' The song is too big!';
+                    document.getElementById("redeemLength").style.color = 'Red';
 				} else {
 					button.removeAttribute('disabled');
+                    document.getElementById("redeemLength").style.color = 'lawngreen';
 				}
 			}
 			var pushState = history.pushState;
