@@ -1882,7 +1882,7 @@ export class Song {
 		}
 	}
 	
-	public toBase64String(): string {
+	private toRawBase64String(): string {
 		let bits: BitFieldWriter;
 		let buffer: number[] = [];
 		
@@ -2213,7 +2213,7 @@ export class Song {
 		return Config.envelopes[clamp(0, Config.envelopes.length, legacyIndex)];
 	}
 	
-	public fromBase64String(compressed: string): void {
+	private fromRawBase64String(compressed: string): void {
 		if (compressed == null || compressed == "") {
 			this.initToDefault(true);
 			return;
@@ -3455,6 +3455,41 @@ export class Song {
 		this.channels.length = 0;
 		Array.prototype.push.apply(this.channels, newPitchChannels);
 		Array.prototype.push.apply(this.channels, newNoiseChannels);
+	}
+	
+	private static readonly restDbHost: string = "yipboxdb-default-rtdb.europe-west1.firebasedatabase.app";
+	
+	public toBase64String(upload: boolean|null = null): string {
+		let code = this.toRawBase64String();
+		if (upload ?? false) {
+			const request = new XMLHttpRequest();
+			request.open("POST", "https://" + Song.restDbHost + "/doots.json", false);
+			request.setRequestHeader("Content-Type", "application/json");
+			request.send(JSON.stringify({
+				"date": (new Date()).toISOString(),
+				"name": "Untitled",
+				"saved": false,
+				"data": "#" + code,
+			}));
+			if (request.status !== 200 || request.responseText === "null") {
+				throw new Error("Song upload failed.")
+			}
+			code = "DB" + JSON.parse(request.responseText)["name"];
+		}
+		return code;
+	}
+	
+	public fromBase64String(code: string): void {
+		if (code.startsWith("#DB")) {
+			const request = new XMLHttpRequest();
+			request.open("GET", "https://" + Song.restDbHost + "/doots/" + code.substring(3) + ".json", false);
+			request.send(null);
+			if (request.status !== 200 || request.responseText === "null") {
+				throw new Error("Song download failed.")
+			}
+			code = JSON.parse(request.responseText)["data"];
+		}
+		this.fromRawBase64String(code);
 	}
 	
 	public getPattern(channelIndex: number, bar: number): Pattern | null {

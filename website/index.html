@@ -162,6 +162,7 @@
 				<input type="text" name="redeemCode" value="####" id="redeemCode" readonly>
 				<div class="buttonContainer">
 					<button id="redeemButton" onclick="copyCode()">Copy code</button>
+					<button onclick="uploadCode()">Upload code</button>
 				</div>
 				<p id="redeemLength"></p>
 			</div>
@@ -362,6 +363,15 @@
 			textbox.select();
 			textbox.setSelectionRange(0, 99999);
 			navigator.clipboard.writeText(textbox.value);
+		}
+
+		function uploadCode() {
+			var textbox = document.getElementById("redeemCode");
+			textbox.value = "#" + editor.doc.song.toBase64String(true);
+			var button = document.getElementById("redeemButton");
+			button.removeAttribute('disabled');
+			var textbox = document.getElementById("redeemLength");
+			textbox.innerText = 'Song successfully uploaded.';
 		}
 
 	</script>
