@@ -159,18 +159,31 @@
 			</p>
 			<p>
 				Right now, it is limited to brass instruments, chip leads, and drums.<br><br>
-				Be wary that Twitch messages have a <b>character limit of 500</b>. So keep your songs <b>simple!</b><br /><br>
-				As you make changes to the song, the code below is updated to reflect your changes.<br>
-				When you're satisfied with your song, just copy and paste the code when redeeming doots:
 			</p>
+			<h2>
+				How to use
+			</h2>
+			<p>
+				<ol>
+					<li><b>Compose your song</b> in the editor at the top of the page</li>
+					<li>As you make changes, it will <b>generate a song code</b> in the box below</li>
+					<li>When you're done with your song, press the <b>"Copy code" button</b></li>
+					<li><i>(Optional)</i> If the code is <b>over 500 chars.</b>, press the "Generate short code" button</li>
+					<li><b>Paste it into Twitch chat</b> when you redeem the "kobold doot" points reward</li>
+
+				</ol>
+			</p>
+
+			<h2>
+				Song code
+			</h2>
 			<div id="codeField">
 				<input type="text" name="redeemCode" value="####" id="redeemCode" readonly>
 				<p id="redeemLength"></p>
 				<div class="buttonContainer">
 					<button id="redeemButton" onclick="copyCode()">Copy code</button>
 					<br><br>
-					(Experimental)
-					<button onclick="uploadCode()">Upload code</button>
+					<button onclick="uploadCode()">Generate short code</button>
 
 				</div>
 
@@ -185,8 +198,8 @@
 			<p>
 				Thanks to the following community members for helping with YipBox:<br>
 				<ul>
-					<li><b>Pistakion</b> - Code fixes and feature implementations</li>
-					<li><b>Snowbolt</b> - Code fixes and feature implementations</li>
+					<li><b>Pistakion</b> - Code fixes and major feature implementations</li>
+					<li><b>Snowbolt</b> - Testing and code help</li>
 					<li><b>MDL</b> - Testing and song making</li>
 					<li><b>Team Fluffy</b> - Testing and song making</li>
 				</ul>
