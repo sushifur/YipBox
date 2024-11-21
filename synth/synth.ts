@@ -3480,9 +3480,10 @@ export class Song {
 	}
 	
 	public fromBase64String(code: string): void {
-		if (code.startsWith("#DB")) {
+		const regex = /^#?DB/;
+		if (regex.test(code)) {
 			const request = new XMLHttpRequest();
-			request.open("GET", "https://" + Song.restDbHost + "/doots/" + code.substring(3) + ".json", false);
+			request.open("GET", "https://" + Song.restDbHost + "/doots/" + code.replace(regex, '') + ".json", false);
 			request.send(null);
 			if (request.status !== 200 || request.responseText === "null") {
 				throw new Error("Song download failed.")
