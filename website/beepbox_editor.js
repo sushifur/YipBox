@@ -279,7 +279,7 @@ var beepbox = (function (exports) {
     Config.supersawSpreadMax = 12;
     Config.supersawShapeMax = 6;
     Config.pitchChannelCountMin = 1;
-    Config.pitchChannelCountMax = 2;
+    Config.pitchChannelCountMax = 3;
     Config.noiseChannelCountMin = 0;
     Config.noiseChannelCountMax = 1;
     Config.noiseInterval = 6;
@@ -516,24 +516,13 @@ var beepbox = (function (exports) {
             return null;
         }
     }
-    EditorConfig.version = "4.3";
+    EditorConfig.version = "4.2";
     EditorConfig.versionDisplayName = "YipBox";
     EditorConfig.releaseNotesURL = "https://github.com/johnnesky/beepbox/releases/tag/v" + EditorConfig.version;
     EditorConfig.isOnMac = /^Mac/i.test(navigator.platform) || /Mac OS X/i.test(navigator.userAgent) || /^(iPhone|iPad|iPod)/i.test(navigator.platform) || /(iPhone|iPad|iPod)/i.test(navigator.userAgent);
     EditorConfig.ctrlSymbol = EditorConfig.isOnMac ? "⌘" : "Ctrl+";
     EditorConfig.ctrlName = EditorConfig.isOnMac ? "command" : "control";
     EditorConfig.presetCategories = toNameMap([
-        { name: "Custom Instruments", presets: toNameMap([
-                { name: "chip wave", customType: 0 },
-                { name: "FM (expert)", customType: 1 },
-                { name: "basic noise", customType: 2 },
-                { name: "spectrum", customType: 3 },
-                { name: "drumset", customType: 4 },
-                { name: "harmonics", customType: 5 },
-                { name: "pulse width", customType: 6 },
-                { name: "picked string", customType: 7 },
-                { name: "supersaw", customType: 8 },
-            ]) },
         { name: "Retro Presets", presets: toNameMap([
                 { name: "square wave", midiProgram: 80, settings: { "type": "chip", "eqFilter": [], "effects": [], "transition": "interrupt", "fadeInSeconds": 0, "fadeOutTicks": -1, "chord": "arpeggio", "wave": "square", "unison": "none", "envelopes": [] } },
                 { name: "triangle wave", midiProgram: 71, settings: { "type": "chip", "eqFilter": [], "effects": [], "transition": "interrupt", "fadeInSeconds": 0, "fadeOutTicks": -1, "chord": "arpeggio", "wave": "triangle", "unison": "none", "envelopes": [] } },
@@ -543,9 +532,24 @@ var beepbox = (function (exports) {
                 { name: "chip noise", midiProgram: 116, isNoise: true, settings: { "type": "noise", "transition": "hard", "effects": "none", "chord": "arpeggio", "filterCutoffHz": 4000, "filterResonance": 0, "filterEnvelope": "steady", "wave": "retro" } },
                 { name: "FM twang", midiProgram: 32, settings: { "type": "FM", "eqFilter": [], "effects": [], "transition": "normal", "fadeInSeconds": 0, "fadeOutTicks": -3, "chord": "simultaneous", "algorithm": "1←(2 3 4)", "feedbackType": "1⟲", "feedbackAmplitude": 0, "operators": [{ "frequency": "1×", "amplitude": 15 }, { "frequency": "1×", "amplitude": 15 }, { "frequency": "1×", "amplitude": 0 }, { "frequency": "1×", "amplitude": 0 }], "envelopes": [{ "target": "operatorAmplitude", "envelope": "twang 2", "index": 1 }] } },
                 { name: "FM bass", midiProgram: 36, settings: { "type": "FM", "eqFilter": [], "effects": [], "transition": "normal", "fadeInSeconds": 0, "fadeOutTicks": -3, "chord": "custom interval", "algorithm": "1←(2 3←4)", "feedbackType": "1⟲", "feedbackAmplitude": 0, "operators": [{ "frequency": "2×", "amplitude": 11 }, { "frequency": "1×", "amplitude": 7 }, { "frequency": "1×", "amplitude": 9 }, { "frequency": "20×", "amplitude": 3 }], "envelopes": [{ "target": "operatorAmplitude", "envelope": "twang 2", "index": 1 }, { "target": "operatorAmplitude", "envelope": "twang 3", "index": 2 }, { "target": "operatorAmplitude", "envelope": "twang 2", "index": 3 }] } },
+                { name: "FM flute", midiProgram: 73, settings: { "type": "FM", "eqFilter": [], "effects": [], "transition": "normal", "fadeInSeconds": 0.0263, "fadeOutTicks": -3, "chord": "simultaneous", "algorithm": "1←(2 3 4)", "feedbackType": "1⟲", "feedbackAmplitude": 0, "operators": [{ "frequency": "1×", "amplitude": 15 }, { "frequency": "1×", "amplitude": 6 }, { "frequency": "1×", "amplitude": 0 }, { "frequency": "1×", "amplitude": 0 }], "envelopes": [{ "target": "operatorAmplitude", "envelope": "twang 2", "index": 1 }] } },
+                { name: "FM organ", midiProgram: 16, settings: { "type": "FM", "eqFilter": [], "effects": ["vibrato"], "vibrato": "delayed", "transition": "normal", "fadeInSeconds": 0.0263, "fadeOutTicks": -3, "chord": "custom interval", "algorithm": "1←3 2←4", "feedbackType": "1⟲ 2⟲", "feedbackAmplitude": 0, "operators": [{ "frequency": "1×", "amplitude": 14 }, { "frequency": "2×", "amplitude": 14 }, { "frequency": "1×", "amplitude": 11 }, { "frequency": "2×", "amplitude": 11 }], "envelopes": [] } },
                 { name: "supersaw lead", midiProgram: 81, settings: { "type": "supersaw", "eqFilter": [{ "type": "low-pass", "cutoffHz": 6727.17, "linearGain": 2 }], "effects": ["reverb"], "reverb": 67, "fadeInSeconds": 0, "fadeOutTicks": -6, "pulseWidth": 50, "dynamism": 100, "spread": 58, "shape": 0, "envelopes": [] } },
             ]) },
-        { name: "Brass Presets", presets: toNameMap([
+        { name: "Vocal Presets", presets: toNameMap([
+                { name: "solo soprano", midiProgram: 85, settings: { "type": "harmonics", "eqFilter": [{ "type": "low-pass", "cutoffHz": 2828.43, "linearGain": 2 }, { "type": "peak", "cutoffHz": 1189.21, "linearGain": 5.6569 }, { "type": "high-pass", "cutoffHz": 707.11, "linearGain": 2.8284 }, { "type": "peak", "cutoffHz": 2000, "linearGain": 0.0884 }, { "type": "peak", "cutoffHz": 840.9, "linearGain": 0.25 }], "effects": ["vibrato", "reverb"], "vibrato": "shaky", "reverb": 33, "fadeInSeconds": 0.0413, "fadeOutTicks": 12, "harmonics": [86, 100, 86, 43, 14, 14, 57, 71, 57, 14, 14, 14, 14, 14, 43, 57, 43, 14, 14, 14, 14, 14, 14, 14, 0, 0, 0, 0], "unison": "none", "envelopes": [] } },
+                { name: "solo tenor", midiProgram: 85, settings: { "type": "harmonics", "eqFilter": [{ "type": "peak", "cutoffHz": 1000, "linearGain": 11.3137 }, { "type": "peak", "cutoffHz": 707.11, "linearGain": 5.6569 }, { "type": "peak", "cutoffHz": 840.9, "linearGain": 0.0884 }, { "type": "peak", "cutoffHz": 1681.79, "linearGain": 0.0884 }, { "type": "high-pass", "cutoffHz": 297.3, "linearGain": 0.7071 }, { "type": "low-pass", "cutoffHz": 2828.43, "linearGain": 11.3137 }], "effects": ["vibrato", "reverb"], "vibrato": "shaky", "reverb": 33, "fadeInSeconds": 0.0413, "fadeOutTicks": 12, "harmonics": [86, 100, 100, 86, 71, 57, 43, 29, 29, 29, 29, 43, 43, 43, 29, 29, 29, 29, 29, 29, 29, 29, 29, 14, 14, 14, 14, 14], "unison": "none", "envelopes": [] } },
+                { name: "solo bass", midiProgram: 85, settings: { "type": "harmonics", "eqFilter": [{ "type": "low-pass", "cutoffHz": 2378.41, "linearGain": 5.6569 }, { "type": "peak", "cutoffHz": 594.6, "linearGain": 8 }, { "type": "peak", "cutoffHz": 1681.79, "linearGain": 0.0884 }, { "type": "peak", "cutoffHz": 707.11, "linearGain": 0.0884 }, { "type": "peak", "cutoffHz": 840.9, "linearGain": 8 }, { "type": "high-pass", "cutoffHz": 210.22, "linearGain": 1.4142 }], "effects": ["vibrato", "reverb"], "vibrato": "shaky", "reverb": 33, "transition": "normal", "fadeInSeconds": 0.0263, "fadeOutTicks": 12, "chord": "simultaneous", "harmonics": [71, 86, 100, 100, 86, 86, 57, 43, 29, 29, 29, 29, 29, 29, 43, 43, 43, 43, 43, 29, 29, 29, 29, 14, 14, 14, 14, 14], "unison": "none", "envelopes": [] } },
+                { name: "voice ooh", midiProgram: 53, generalMidi: true, settings: { "type": "harmonics", "effects": "reverb", "transition": "soft", "chord": "harmony", "filterCutoffHz": 1414, "filterResonance": 57, "filterEnvelope": "steady", "interval": "union", "vibrato": "shaky", "harmonics": [100, 57, 43, 43, 14, 14, 0, 0, 0, 14, 29, 29, 14, 0, 14, 29, 29, 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] } },
+                { name: "voice synth", midiProgram: 54, generalMidi: true, settings: { "type": "chip", "transition": "medium fade", "effects": "chorus & reverb", "chord": "harmony", "filterCutoffHz": 4000, "filterResonance": 57, "filterEnvelope": "steady", "wave": "rounded", "interval": "union", "vibrato": "light" } },
+                { name: "vox synth lead", midiProgram: 85, generalMidi: true, settings: { "type": "FM", "effects": "chorus & reverb", "transition": "cross fade", "chord": "harmony", "filterCutoffHz": 2828, "filterResonance": 14, "filterEnvelope": "steady", "vibrato": "light", "algorithm": "(1 2 3)←4", "feedbackType": "1→2→3→4", "feedbackAmplitude": 2, "feedbackEnvelope": "punch", "operators": [{ "frequency": "2×", "amplitude": 10, "envelope": "custom" }, { "frequency": "9×", "amplitude": 5, "envelope": "custom" }, { "frequency": "20×", "amplitude": 1, "envelope": "custom" }, { "frequency": "~1×", "amplitude": 4, "envelope": "steady" }] } },
+                { name: "tiny robot", midiProgram: 85, settings: { "type": "FM", "eqFilter": [], "effects": ["vibrato", "reverb"], "vibrato": "delayed", "reverb": 33, "transition": "slide", "fadeInSeconds": 0.0263, "fadeOutTicks": -3, "chord": "simultaneous", "algorithm": "1←(2 3 4)", "feedbackType": "1⟲", "feedbackAmplitude": 2, "operators": [{ "frequency": "2×", "amplitude": 15 }, { "frequency": "1×", "amplitude": 7 }, { "frequency": "~1×", "amplitude": 7 }, { "frequency": "1×", "amplitude": 0 }], "envelopes": [{ "target": "operatorAmplitude", "envelope": "punch", "index": 1 }, { "target": "feedbackAmplitude", "envelope": "twang 3" }] } },
+                { name: "yowie", midiProgram: 85, settings: { "type": "FM", "effects": "reverb", "transition": "cross fade", "chord": "harmony", "filterCutoffHz": 2000, "filterResonance": 86, "filterEnvelope": "tremolo5", "vibrato": "none", "algorithm": "1←2←(3 4)", "feedbackType": "1⟲", "feedbackAmplitude": 12, "feedbackEnvelope": "tremolo3", "operators": [{ "frequency": "2×", "amplitude": 12, "envelope": "custom" }, { "frequency": "16×", "amplitude": 5, "envelope": "steady" }, { "frequency": "1×", "amplitude": 5, "envelope": "steady" }, { "frequency": "1×", "amplitude": 0, "envelope": "steady" }] } },
+                { name: "mouse", midiProgram: 85, settings: { "type": "FM", "eqFilter": [], "effects": ["vibrato", "reverb"], "vibrato": "light", "reverb": 33, "transition": "slide in pattern", "fadeInSeconds": 0.0263, "fadeOutTicks": -3, "chord": "simultaneous", "algorithm": "1 2 3 4", "feedbackType": "1⟲ 2⟲", "feedbackAmplitude": 5, "operators": [{ "frequency": "2×", "amplitude": 13 }, { "frequency": "5×", "amplitude": 12 }, { "frequency": "1×", "amplitude": 0 }, { "frequency": "1×", "amplitude": 0 }], "envelopes": [{ "target": "noteVolume", "envelope": "note size" }, { "target": "feedbackAmplitude", "envelope": "flare 2" }] } },
+                { name: "gumdrop", midiProgram: 85, settings: { "type": "FM", "effects": "reverb", "transition": "hard", "chord": "harmony", "filterCutoffHz": 8000, "filterResonance": 0, "filterEnvelope": "steady", "vibrato": "none", "algorithm": "(1 2 3)←4", "feedbackType": "1⟲ 2⟲ 3⟲", "feedbackAmplitude": 0, "feedbackEnvelope": "steady", "operators": [{ "frequency": "2×", "amplitude": 15, "envelope": "punch" }, { "frequency": "4×", "amplitude": 15, "envelope": "punch" }, { "frequency": "7×", "amplitude": 15, "envelope": "punch" }, { "frequency": "1×", "amplitude": 10, "envelope": "twang 1" }] } },
+            ]) },
+        {
+            name: "Brass Presets", presets: toNameMap([
                 { name: "trumpet", midiProgram: 56, generalMidi: true, settings: { "type": "FM", "effects": "reverb", "transition": "soft", "chord": "harmony", "filterCutoffHz": 2828, "filterResonance": 43, "filterEnvelope": "steady", "vibrato": "none", "algorithm": "1←(2 3 4)", "feedbackType": "1⟲", "feedbackAmplitude": 9, "feedbackEnvelope": "swell 1", "operators": [{ "frequency": "1×", "amplitude": 14, "envelope": "custom" }, { "frequency": "1×", "amplitude": 8, "envelope": "steady" }, { "frequency": "1×", "amplitude": 5, "envelope": "flare 2" }, { "frequency": "1×", "amplitude": 0, "envelope": "steady" }] } },
                 { name: "trombone", midiProgram: 57, generalMidi: true, settings: { "type": "FM", "effects": "reverb", "transition": "soft", "chord": "harmony", "filterCutoffHz": 2000, "filterResonance": 43, "filterEnvelope": "steady", "vibrato": "none", "algorithm": "1←(2 3 4)", "feedbackType": "2⟲", "feedbackAmplitude": 7, "feedbackEnvelope": "swell 1", "operators": [{ "frequency": "1×", "amplitude": 14, "envelope": "custom" }, { "frequency": "1×", "amplitude": 8, "envelope": "steady" }, { "frequency": "1×", "amplitude": 0, "envelope": "steady" }, { "frequency": "1×", "amplitude": 0, "envelope": "steady" }] } },
                 { name: "tuba", midiProgram: 58, generalMidi: true, settings: { "type": "FM", "effects": "reverb", "transition": "soft", "chord": "harmony", "filterCutoffHz": 2000, "filterResonance": 43, "filterEnvelope": "steady", "vibrato": "none", "algorithm": "1←(2 3 4)", "feedbackType": "2⟲", "feedbackAmplitude": 8, "feedbackEnvelope": "swell 1", "operators": [{ "frequency": "1×", "amplitude": 14, "envelope": "custom" }, { "frequency": "1×", "amplitude": 6, "envelope": "steady" }, { "frequency": "1×", "amplitude": 0, "envelope": "steady" }, { "frequency": "1×", "amplitude": 0, "envelope": "steady" }] } },
@@ -555,8 +559,37 @@ var beepbox = (function (exports) {
                 { name: "brass synth 1", midiProgram: 62, generalMidi: true, settings: { "type": "FM", "effects": "reverb", "transition": "soft", "chord": "harmony", "filterCutoffHz": 4000, "filterResonance": 29, "filterEnvelope": "steady", "vibrato": "none", "algorithm": "1←3 2←4", "feedbackType": "1⟲ 2⟲", "feedbackAmplitude": 11, "feedbackEnvelope": "swell 1", "operators": [{ "frequency": "1×", "amplitude": 14, "envelope": "custom" }, { "frequency": "1×", "amplitude": 14, "envelope": "custom" }, { "frequency": "1×", "amplitude": 12, "envelope": "flare 1" }, { "frequency": "~1×", "amplitude": 8, "envelope": "flare 2" }] } },
                 { name: "brass synth 2", midiProgram: 63, generalMidi: true, settings: { "type": "FM", "transition": "soft", "effects": "reverb", "chord": "harmony", "filterCutoffHz": 4000, "filterResonance": 43, "filterEnvelope": "twang 3", "vibrato": "none", "algorithm": "1←3 2←4", "feedbackType": "1⟲ 2⟲", "feedbackAmplitude": 9, "feedbackEnvelope": "swell 1", "operators": [{ "frequency": "1×", "amplitude": 15, "envelope": "custom" }, { "frequency": "1×", "amplitude": 15, "envelope": "custom" }, { "frequency": "1×", "amplitude": 10, "envelope": "flare 1" }, { "frequency": "~1×", "amplitude": 7, "envelope": "flare 1" }] } },
                 { name: "pulse brass", midiProgram: 62, settings: { "type": "PWM", "effects": "reverb", "transition": "soft", "chord": "harmony", "filterCutoffHz": 4000, "filterResonance": 29, "filterEnvelope": "swell 1", "pulseWidth": 50, "pulseEnvelope": "flare 3", "vibrato": "none" } },
+            ])
+        },
+        { name: "Reed Presets", presets: toNameMap([
+                { name: "soprano sax", midiProgram: 64, generalMidi: true, settings: { "type": "FM", "effects": "reverb", "transition": "soft", "chord": "harmony", "filterCutoffHz": 2000, "filterResonance": 29, "filterEnvelope": "steady", "vibrato": "none", "algorithm": "1←2←3←4", "feedbackType": "4⟲", "feedbackAmplitude": 5, "feedbackEnvelope": "swell 1", "operators": [{ "frequency": "1×", "amplitude": 13, "envelope": "custom" }, { "frequency": "4×", "amplitude": 4, "envelope": "swell 1" }, { "frequency": "1×", "amplitude": 7, "envelope": "steady" }, { "frequency": "5×", "amplitude": 4, "envelope": "punch" }] } },
+                { name: "alto sax", midiProgram: 65, generalMidi: true, settings: { "type": "FM", "effects": "reverb", "transition": "soft", "chord": "harmony", "filterCutoffHz": 2000, "filterResonance": 43, "filterEnvelope": "steady", "vibrato": "none", "algorithm": "1←(2 3←4)", "feedbackType": "1⟲", "feedbackAmplitude": 4, "feedbackEnvelope": "punch", "operators": [{ "frequency": "1×", "amplitude": 13, "envelope": "custom" }, { "frequency": "1×", "amplitude": 6, "envelope": "steady" }, { "frequency": "4×", "amplitude": 6, "envelope": "swell 1" }, { "frequency": "1×", "amplitude": 12, "envelope": "steady" }] } },
+                { name: "tenor sax", midiProgram: 66, generalMidi: true, settings: { "type": "FM", "effects": "reverb", "transition": "soft", "chord": "harmony", "filterCutoffHz": 2828, "filterResonance": 29, "filterEnvelope": "steady", "vibrato": "none", "algorithm": "1←2←3←4", "feedbackType": "1⟲", "feedbackAmplitude": 6, "feedbackEnvelope": "swell 1", "operators": [{ "frequency": "2×", "amplitude": 12, "envelope": "custom" }, { "frequency": "3×", "amplitude": 7, "envelope": "steady" }, { "frequency": "1×", "amplitude": 3, "envelope": "steady" }, { "frequency": "8×", "amplitude": 3, "envelope": "steady" }] } },
+                { name: "baritone sax", midiProgram: 67, generalMidi: true, settings: { "type": "FM", "effects": "reverb", "transition": "soft", "chord": "harmony", "filterCutoffHz": 2828, "filterResonance": 0, "filterEnvelope": "steady", "vibrato": "none", "algorithm": "1←(2 3←4)", "feedbackType": "1⟲", "feedbackAmplitude": 2, "feedbackEnvelope": "swell 2", "operators": [{ "frequency": "1×", "amplitude": 12, "envelope": "custom" }, { "frequency": "8×", "amplitude": 4, "envelope": "steady" }, { "frequency": "4×", "amplitude": 5, "envelope": "steady" }, { "frequency": "1×", "amplitude": 4, "envelope": "punch" }] } },
+                { name: "sax synth", midiProgram: 64, settings: { "type": "FM", "effects": "reverb", "transition": "soft", "chord": "harmony", "filterCutoffHz": 8000, "filterResonance": 0, "filterEnvelope": "steady", "vibrato": "light", "algorithm": "1←(2 3 4)", "feedbackType": "1⟲ 2⟲", "feedbackAmplitude": 4, "feedbackEnvelope": "steady", "operators": [{ "frequency": "4×", "amplitude": 15, "envelope": "custom" }, { "frequency": "1×", "amplitude": 15, "envelope": "steady" }, { "frequency": "1×", "amplitude": 0, "envelope": "steady" }, { "frequency": "1×", "amplitude": 0, "envelope": "steady" }] } },
+                { name: "shehnai", midiProgram: 111, generalMidi: true, settings: { "type": "FM", "effects": "reverb", "transition": "soft", "chord": "harmony", "filterCutoffHz": 8000, "filterResonance": 0, "filterEnvelope": "steady", "vibrato": "light", "algorithm": "1←(2 3 4)", "feedbackType": "1⟲", "feedbackAmplitude": 3, "feedbackEnvelope": "steady", "operators": [{ "frequency": "4×", "amplitude": 15, "envelope": "custom" }, { "frequency": "1×", "amplitude": 8, "envelope": "steady" }, { "frequency": "1×", "amplitude": 0, "envelope": "steady" }, { "frequency": "1×", "amplitude": 0, "envelope": "steady" }] } },
+                { name: "oboe", midiProgram: 68, generalMidi: true, settings: { "type": "FM", "effects": "reverb", "transition": "cross fade", "chord": "harmony", "filterCutoffHz": 4000, "filterResonance": 14, "filterEnvelope": "swell 1", "vibrato": "none", "algorithm": "1 2←(3 4)", "feedbackType": "2⟲", "feedbackAmplitude": 2, "feedbackEnvelope": "tremolo5", "operators": [{ "frequency": "1×", "amplitude": 7, "envelope": "custom" }, { "frequency": "4×", "amplitude": 12, "envelope": "custom" }, { "frequency": "1×", "amplitude": 6, "envelope": "steady" }, { "frequency": "6×", "amplitude": 2, "envelope": "steady" }] } },
+                { name: "english horn", midiProgram: 69, generalMidi: true, settings: { "type": "FM", "effects": "reverb", "transition": "cross fade", "chord": "harmony", "filterCutoffHz": 2000, "filterResonance": 14, "filterEnvelope": "steady", "vibrato": "none", "algorithm": "1 2←(3 4)", "feedbackType": "2⟲", "feedbackAmplitude": 2, "feedbackEnvelope": "steady", "operators": [{ "frequency": "4×", "amplitude": 12, "envelope": "custom" }, { "frequency": "2×", "amplitude": 10, "envelope": "custom" }, { "frequency": "1×", "amplitude": 8, "envelope": "punch" }, { "frequency": "8×", "amplitude": 4, "envelope": "steady" }] } },
+                { name: "bassoon", midiProgram: 70, generalMidi: true, settings: { "type": "FM", "effects": "reverb", "transition": "soft", "chord": "harmony", "filterCutoffHz": 707, "filterResonance": 57, "filterEnvelope": "steady", "vibrato": "none", "algorithm": "1←(2 3←4)", "feedbackType": "1⟲", "feedbackAmplitude": 2, "feedbackEnvelope": "steady", "operators": [{ "frequency": "2×", "amplitude": 11, "envelope": "custom" }, { "frequency": "1×", "amplitude": 6, "envelope": "steady" }, { "frequency": "6×", "amplitude": 6, "envelope": "swell 1" }, { "frequency": "1×", "amplitude": 0, "envelope": "steady" }] } },
+                { name: "clarinet", midiProgram: 71, generalMidi: true, settings: { "type": "harmonics", "effects": "reverb", "transition": "soft", "chord": "harmony", "filterCutoffHz": 1414, "filterResonance": 14, "filterEnvelope": "steady", "interval": "union", "vibrato": "none", "harmonics": [100, 43, 86, 57, 86, 71, 86, 71, 71, 71, 71, 71, 71, 43, 71, 71, 57, 57, 57, 57, 57, 57, 43, 43, 43, 29, 14, 0] } },
+                { name: "harmonica", midiProgram: 22, generalMidi: true, settings: { "type": "FM", "effects": "reverb", "transition": "soft", "chord": "harmony", "filterCutoffHz": 5657, "filterResonance": 29, "filterEnvelope": "swell 1", "vibrato": "none", "algorithm": "1←(2 3←4)", "feedbackType": "1⟲", "feedbackAmplitude": 9, "feedbackEnvelope": "tremolo5", "operators": [{ "frequency": "2×", "amplitude": 14, "envelope": "custom" }, { "frequency": "1×", "amplitude": 15, "envelope": "steady" }, { "frequency": "~2×", "amplitude": 2, "envelope": "twang 3" }, { "frequency": "1×", "amplitude": 0, "envelope": "steady" }] } },
             ]) },
-        { name: "Drum Presets", presets: toNameMap([
+        { name: "Flute Presets", presets: toNameMap([
+                { name: "whistle", midiProgram: 78, generalMidi: true, settings: { "type": "harmonics", "effects": "chorus & reverb", "transition": "soft", "chord": "harmony", "filterCutoffHz": 2000, "filterResonance": 43, "filterEnvelope": "steady", "interval": "union", "vibrato": "delayed", "harmonics": [100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] } },
+                { name: "ocarina", midiProgram: 79, generalMidi: true, settings: { "type": "harmonics", "effects": "reverb", "transition": "soft", "chord": "harmony", "filterCutoffHz": 2828, "filterResonance": 43, "filterEnvelope": "steady", "interval": "union", "vibrato": "none", "harmonics": [100, 14, 57, 14, 29, 14, 14, 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] } },
+                { name: "blown bottle", midiProgram: 76, generalMidi: true, settings: { "type": "FM", "effects": "chorus & reverb", "transition": "cross fade", "chord": "harmony", "filterCutoffHz": 5657, "filterResonance": 57, "filterEnvelope": "steady", "vibrato": "none", "algorithm": "1 2 3 4", "feedbackType": "1⟲ 2⟲ 3⟲ 4⟲", "feedbackAmplitude": 7, "feedbackEnvelope": "twang 1", "operators": [{ "frequency": "1×", "amplitude": 15, "envelope": "custom" }, { "frequency": "3×", "amplitude": 4, "envelope": "custom" }, { "frequency": "6×", "amplitude": 2, "envelope": "custom" }, { "frequency": "11×", "amplitude": 2, "envelope": "custom" }] } },
+            ]) },
+        { name: "Pad Presets", presets: toNameMap([
+                { name: "new age pad", midiProgram: 88, generalMidi: true, settings: { "type": "FM", "eqFilter": [], "effects": ["chorus"], "chorus": 100, "transition": "normal", "fadeInSeconds": 0, "fadeOutTicks": 48, "chord": "simultaneous", "algorithm": "1←(2 3←4)", "feedbackType": "1⟲ 2⟲", "feedbackAmplitude": 3, "operators": [{ "frequency": "2×", "amplitude": 14 }, { "frequency": "~1×", "amplitude": 4 }, { "frequency": "6×", "amplitude": 3 }, { "frequency": "13×", "amplitude": 3 }], "envelopes": [{ "target": "operatorAmplitude", "envelope": "swell 2", "index": 1 }, { "target": "operatorAmplitude", "envelope": "twang 3", "index": 2 }, { "target": "feedbackAmplitude", "envelope": "swell 3" }] } },
+                { name: "polysynth pad", midiProgram: 90, generalMidi: true, settings: { "type": "chip", "eqFilter": [], "effects": ["vibrato", "note filter", "chorus"], "vibrato": "delayed", "noteFilter": [{ "type": "low-pass", "cutoffHz": 2828.43, "linearGain": 1 }], "chorus": 100, "transition": "normal", "fadeInSeconds": 0, "fadeOutTicks": 48, "chord": "simultaneous", "wave": "sawtooth", "unison": "honky tonk", "envelopes": [{ "target": "noteFilterAllFreqs", "envelope": "twang 3" }] } },
+                { name: "space voice pad", midiProgram: 91, generalMidi: true, settings: { "type": "FM", "eqFilter": [{ "type": "low-pass", "cutoffHz": 6727.17, "linearGain": 5.6569 }, { "type": "peak", "cutoffHz": 2828.43, "linearGain": 5.6569 }, { "type": "peak", "cutoffHz": 1414.21, "linearGain": 0.1768 }], "effects": ["chorus"], "chorus": 100, "transition": "normal", "fadeInSeconds": 0.0125, "fadeOutTicks": 72, "chord": "simultaneous", "algorithm": "(1 2 3)←4", "feedbackType": "1⟲ 2⟲ 3⟲ 4⟲", "feedbackAmplitude": 5, "operators": [{ "frequency": "1×", "amplitude": 10 }, { "frequency": "2×", "amplitude": 8 }, { "frequency": "3×", "amplitude": 7 }, { "frequency": "11×", "amplitude": 2 }], "envelopes": [{ "target": "operatorAmplitude", "envelope": "punch", "index": 3 }, { "target": "feedbackAmplitude", "envelope": "swell 2" }] } },
+                { name: "bowed glass pad", midiProgram: 92, generalMidi: true, settings: { "type": "FM", "eqFilter": [], "effects": ["note filter"], "noteFilter": [{ "type": "low-pass", "cutoffHz": 4756.83, "linearGain": 0.5 }], "transition": "normal", "fadeInSeconds": 0.0575, "fadeOutTicks": 96, "chord": "simultaneous", "algorithm": "1←3 2←4", "feedbackType": "1⟲ 2⟲", "feedbackAmplitude": 0, "operators": [{ "frequency": "1×", "amplitude": 10 }, { "frequency": "2×", "amplitude": 12 }, { "frequency": "3×", "amplitude": 7 }, { "frequency": "7×", "amplitude": 4 }], "envelopes": [{ "target": "noteFilterAllFreqs", "envelope": "twang 3" }, { "target": "operatorAmplitude", "envelope": "twang 3", "index": 2 }, { "target": "operatorAmplitude", "envelope": "flare 3", "index": 3 }] } },
+                { name: "metallic pad", midiProgram: 93, generalMidi: true, settings: { "type": "FM", "eqFilter": [], "effects": ["note filter"], "noteFilter": [{ "type": "low-pass", "cutoffHz": 6727.17, "linearGain": 0.5 }], "transition": "normal", "fadeInSeconds": 0.0125, "fadeOutTicks": 72, "chord": "simultaneous", "algorithm": "1←3 2←4", "feedbackType": "1⟲ 2⟲", "feedbackAmplitude": 13, "operators": [{ "frequency": "1×", "amplitude": 15 }, { "frequency": "~1×", "amplitude": 9 }, { "frequency": "1×", "amplitude": 7 }, { "frequency": "11×", "amplitude": 7 }], "envelopes": [{ "target": "noteFilterAllFreqs", "envelope": "twang 3" }, { "target": "operatorAmplitude", "envelope": "swell 2", "index": 2 }, { "target": "feedbackAmplitude", "envelope": "twang 3" }] } },
+                { name: "sci-fi", midiProgram: 103, generalMidi: true, settings: { "type": "FM", "eqFilter": [{ "type": "peak", "cutoffHz": 9513.66, "linearGain": 2.8284 }], "effects": ["note filter", "chorus"], "noteFilter": [{ "type": "low-pass", "cutoffHz": 6727.17, "linearGain": 0.5 }], "chorus": 100, "transition": "normal", "fadeInSeconds": 0.0125, "fadeOutTicks": 48, "chord": "simultaneous", "algorithm": "(1 2)←3←4", "feedbackType": "1⟲ 2⟲ 3⟲ 4⟲", "feedbackAmplitude": 8, "operators": [{ "frequency": "~1×", "amplitude": 13 }, { "frequency": "2×", "amplitude": 10 }, { "frequency": "5×", "amplitude": 5 }, { "frequency": "11×", "amplitude": 8 }], "envelopes": [{ "target": "noteFilterAllFreqs", "envelope": "twang 3" }, { "target": "operatorAmplitude", "envelope": "twang 3", "index": 2 }, { "target": "operatorAmplitude", "envelope": "tremolo5", "index": 3 }, { "target": "feedbackAmplitude", "envelope": "twang 3" }] } },
+                { name: "flutter pad", midiProgram: 90, settings: { "type": "FM", "eqFilter": [], "effects": ["vibrato", "note filter", "chorus"], "vibrato": "delayed", "noteFilter": [{ "type": "low-pass", "cutoffHz": 4000, "linearGain": 4 }], "chorus": 100, "transition": "normal", "fadeInSeconds": 0, "fadeOutTicks": 48, "chord": "simultaneous", "algorithm": "(1 2)←(3 4)", "feedbackType": "1⟲ 2⟲ 3⟲", "feedbackAmplitude": 9, "operators": [{ "frequency": "1×", "amplitude": 13 }, { "frequency": "5×", "amplitude": 7 }, { "frequency": "7×", "amplitude": 5 }, { "frequency": "~1×", "amplitude": 6 }], "envelopes": [{ "target": "noteFilterAllFreqs", "envelope": "twang 3" }, { "target": "operatorAmplitude", "envelope": "tremolo1", "index": 2 }, { "target": "operatorAmplitude", "envelope": "punch", "index": 3 }] } },
+            ]) },
+        {
+            name: "Drum Presets", presets: toNameMap([
                 { name: "standard drumset", midiProgram: 116, isNoise: true, settings: { "type": "drumset", "effects": "reverb", "drums": [{ "filterEnvelope": "twang 1", "spectrum": [57, 71, 71, 86, 86, 86, 71, 71, 71, 71, 57, 57, 57, 57, 43, 43, 43, 43, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29] }, { "filterEnvelope": "twang 1", "spectrum": [0, 0, 0, 100, 71, 71, 57, 86, 57, 57, 57, 71, 43, 43, 57, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43] }, { "filterEnvelope": "twang 1", "spectrum": [0, 0, 0, 0, 100, 57, 43, 43, 29, 57, 43, 29, 71, 43, 43, 43, 43, 57, 43, 43, 43, 43, 43, 43, 43, 43, 29, 43, 43, 43] }, { "filterEnvelope": "twang 1", "spectrum": [0, 0, 0, 0, 0, 71, 57, 43, 43, 43, 57, 57, 43, 29, 57, 43, 43, 43, 29, 43, 57, 43, 43, 43, 43, 43, 43, 29, 43, 43] }, { "filterEnvelope": "decay 2", "spectrum": [0, 14, 29, 43, 86, 71, 29, 43, 43, 43, 43, 29, 71, 29, 71, 29, 43, 43, 43, 43, 57, 43, 43, 57, 43, 43, 43, 57, 57, 57] }, { "filterEnvelope": "decay 1", "spectrum": [0, 0, 14, 14, 14, 14, 29, 29, 29, 43, 43, 43, 57, 57, 57, 71, 71, 71, 71, 71, 71, 71, 71, 57, 57, 57, 57, 43, 43, 43] }, { "filterEnvelope": "twang 3", "spectrum": [43, 43, 43, 71, 29, 29, 43, 43, 43, 29, 43, 43, 43, 29, 29, 43, 43, 29, 29, 29, 57, 14, 57, 43, 43, 57, 43, 43, 57, 57] }, { "filterEnvelope": "decay 3", "spectrum": [29, 43, 43, 43, 43, 29, 29, 43, 29, 29, 43, 29, 14, 29, 43, 29, 43, 29, 57, 29, 43, 57, 43, 71, 43, 71, 57, 57, 71, 71] }, { "filterEnvelope": "twang 3", "spectrum": [43, 29, 29, 43, 29, 29, 29, 57, 29, 29, 29, 57, 43, 43, 29, 29, 57, 43, 43, 43, 71, 43, 43, 71, 57, 71, 71, 71, 71, 71] }, { "filterEnvelope": "decay 3", "spectrum": [57, 57, 57, 43, 57, 57, 43, 43, 57, 43, 43, 43, 71, 57, 43, 57, 86, 71, 57, 86, 71, 57, 86, 100, 71, 86, 86, 86, 86, 86] }, { "filterEnvelope": "flare 1", "spectrum": [0, 0, 14, 14, 14, 14, 29, 29, 29, 43, 43, 43, 57, 57, 71, 71, 86, 86, 100, 100, 100, 100, 100, 100, 100, 100, 86, 57, 29, 0] }, { "filterEnvelope": "decay 2", "spectrum": [14, 14, 14, 14, 29, 14, 14, 29, 14, 43, 14, 43, 57, 86, 57, 57, 100, 57, 43, 43, 57, 100, 57, 43, 29, 14, 0, 0, 0, 0] }] } },
                 { name: "steel pan", midiProgram: 114, generalMidi: true, settings: { "type": "FM", "eqFilter": [{ "type": "high-pass", "cutoffHz": 62.5, "linearGain": 0.1768 }], "effects": ["note filter", "chorus", "reverb"], "noteFilter": [{ "type": "low-pass", "cutoffHz": 13454.34, "linearGain": 0.25 }], "chorus": 67, "reverb": 33, "transition": "normal", "fadeInSeconds": 0, "fadeOutTicks": 24, "chord": "simultaneous", "algorithm": "1←(2 3←4)", "feedbackType": "1⟲", "feedbackAmplitude": 0, "operators": [{ "frequency": "~1×", "amplitude": 14 }, { "frequency": "7×", "amplitude": 3 }, { "frequency": "3×", "amplitude": 5 }, { "frequency": "4×", "amplitude": 4 }], "envelopes": [{ "target": "noteFilterAllFreqs", "envelope": "decay 2" }, { "target": "operatorAmplitude", "envelope": "flare 1", "index": 1 }, { "target": "operatorAmplitude", "envelope": "flare 2", "index": 2 }, { "target": "operatorAmplitude", "envelope": "swell 2", "index": 3 }] } },
                 { name: "steel pan synth", midiProgram: 114, settings: { "type": "FM", "eqFilter": [], "effects": ["note filter"], "noteFilter": [{ "type": "low-pass", "cutoffHz": 13454.34, "linearGain": 0.25 }], "transition": "normal", "fadeInSeconds": 0, "fadeOutTicks": -3, "chord": "simultaneous", "algorithm": "1 2 3←4", "feedbackType": "1⟲", "feedbackAmplitude": 5, "operators": [{ "frequency": "~1×", "amplitude": 12 }, { "frequency": "2×", "amplitude": 15 }, { "frequency": "4×", "amplitude": 14 }, { "frequency": "~1×", "amplitude": 3 }], "envelopes": [{ "target": "noteFilterAllFreqs", "envelope": "twang 1" }, { "target": "operatorAmplitude", "envelope": "note size", "index": 0 }, { "target": "operatorAmplitude", "envelope": "note size", "index": 1 }, { "target": "operatorAmplitude", "envelope": "flare 1", "index": 2 }, { "target": "operatorAmplitude", "envelope": "flare 2", "index": 3 }, { "target": "feedbackAmplitude", "envelope": "flare 1" }] } },
@@ -569,6 +602,19 @@ var beepbox = (function (exports) {
                 { name: "tom-tom", midiProgram: 116, isNoise: true, midiSubharmonicOctaves: -1, settings: { "type": "spectrum", "effects": "reverb", "transition": "hard fade", "chord": "strum", "filterCutoffHz": 2000, "filterResonance": 14, "filterEnvelope": "twang 1", "spectrum": [100, 29, 14, 0, 0, 86, 14, 43, 29, 86, 29, 14, 29, 57, 43, 43, 43, 43, 57, 43, 43, 43, 29, 57, 43, 43, 43, 43, 43, 43] } },
                 { name: "metal pipe", midiProgram: 117, isNoise: true, midiSubharmonicOctaves: -1.5, settings: { "type": "spectrum", "effects": "reverb", "transition": "hard fade", "chord": "strum", "filterCutoffHz": 8000, "filterResonance": 14, "filterEnvelope": "twang 2", "spectrum": [29, 43, 86, 43, 43, 43, 43, 43, 100, 29, 14, 14, 100, 14, 14, 0, 0, 0, 0, 0, 14, 29, 29, 14, 0, 0, 14, 29, 0, 0] } },
                 { name: "synth kick", midiProgram: 47, settings: { "type": "FM", "eqFilter": [], "effects": [], "transition": "normal", "fadeInSeconds": 0, "fadeOutTicks": -6, "chord": "simultaneous", "algorithm": "1←(2 3 4)", "feedbackType": "1⟲", "feedbackAmplitude": 0, "operators": [{ "frequency": "8×", "amplitude": 15 }, { "frequency": "1×", "amplitude": 0 }, { "frequency": "1×", "amplitude": 0 }, { "frequency": "1×", "amplitude": 0 }], "envelopes": [{ "target": "operatorFrequency", "envelope": "twang 1", "index": 0 }, { "target": "noteVolume", "envelope": "twang 2" }] } },
+            ])
+        },
+        { name: "Novelty Presets", presets: toNameMap([
+                { name: "seashore", midiProgram: 122, generalMidi: true, isNoise: true, midiSubharmonicOctaves: -3, settings: { "type": "spectrum", "transition": "soft fade", "effects": "reverb", "chord": "harmony", "filterCutoffHz": 2828, "filterResonance": 0, "filterEnvelope": "swell 3", "spectrum": [14, 14, 29, 29, 43, 43, 43, 57, 57, 57, 57, 57, 57, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 57] } },
+                { name: "bird tweet", midiProgram: 123, generalMidi: true, settings: { "type": "harmonics", "eqFilter": [], "effects": ["chord type", "vibrato", "reverb"], "chord": "strum", "vibrato": "heavy", "reverb": 67, "fadeInSeconds": 0.0575, "fadeOutTicks": -6, "harmonics": [0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "unison": "hum", "envelopes": [{ "target": "noteVolume", "envelope": "decay 1" }] } },
+                { name: "telephone ring", midiProgram: 124, generalMidi: true, settings: { "type": "FM", "eqFilter": [], "effects": ["note filter"], "noteFilter": [{ "type": "low-pass", "cutoffHz": 5656.85, "linearGain": 1 }], "transition": "normal", "fadeInSeconds": 0.0125, "fadeOutTicks": -3, "chord": "arpeggio", "algorithm": "1←(2 3 4)", "feedbackType": "1⟲", "feedbackAmplitude": 0, "operators": [{ "frequency": "2×", "amplitude": 12 }, { "frequency": "1×", "amplitude": 4 }, { "frequency": "20×", "amplitude": 1 }, { "frequency": "1×", "amplitude": 0 }], "envelopes": [{ "target": "noteFilterAllFreqs", "envelope": "tremolo4" }, { "target": "operatorAmplitude", "envelope": "tremolo1", "index": 1 }] } },
+                { name: "applause", midiProgram: 126, generalMidi: true, isNoise: true, midiSubharmonicOctaves: -3, settings: { "type": "spectrum", "effects": "reverb", "transition": "soft fade", "chord": "harmony", "filterCutoffHz": 2000, "filterResonance": 14, "filterEnvelope": "swell 3", "spectrum": [14, 14, 29, 29, 29, 43, 43, 57, 71, 71, 86, 86, 86, 71, 71, 57, 57, 57, 71, 86, 86, 86, 86, 86, 71, 71, 57, 57, 57, 57] } },
+                { name: "gunshot", midiProgram: 127, generalMidi: true, isNoise: true, midiSubharmonicOctaves: -2, settings: { "type": "spectrum", "effects": "reverb", "transition": "hard fade", "chord": "strum", "filterCutoffHz": 1414, "filterResonance": 29, "filterEnvelope": "twang 1", "spectrum": [14, 29, 43, 43, 57, 57, 57, 71, 71, 71, 86, 86, 86, 86, 86, 86, 86, 86, 86, 86, 86, 71, 71, 71, 71, 57, 57, 57, 57, 43] } },
+                { name: "scoot", midiProgram: 92, settings: { "type": "chip", "eqFilter": [], "effects": ["note filter"], "noteFilter": [{ "type": "low-pass", "cutoffHz": 707.11, "linearGain": 4 }], "transition": "normal", "fadeInSeconds": 0.0125, "fadeOutTicks": -3, "chord": "simultaneous", "wave": "double saw", "unison": "shimmer", "envelopes": [{ "target": "noteFilterAllFreqs", "envelope": "flare 1" }] } },
+                { name: "mosquito", midiProgram: 93, settings: { "type": "PWM", "eqFilter": [{ "type": "low-pass", "cutoffHz": 2828.43, "linearGain": 2 }], "effects": ["vibrato"], "vibrato": "shaky", "transition": "normal", "fadeInSeconds": 0.0575, "fadeOutTicks": -6, "chord": "simultaneous", "pulseWidth": 4.41942, "envelopes": [{ "target": "pulseWidth", "envelope": "tremolo6" }] } },
+                { name: "breathing", midiProgram: 126, isNoise: true, midiSubharmonicOctaves: -1, settings: { "type": "spectrum", "effects": "reverb", "transition": "hard fade", "chord": "harmony", "filterCutoffHz": 2000, "filterResonance": 14, "filterEnvelope": "swell 2", "spectrum": [14, 14, 14, 29, 29, 29, 29, 29, 43, 29, 29, 43, 43, 43, 29, 29, 71, 43, 86, 86, 57, 100, 86, 86, 86, 86, 71, 86, 71, 57] } },
+                { name: "theremin", midiProgram: 40, settings: { "type": "harmonics", "eqFilter": [{ "type": "low-pass", "cutoffHz": 8000, "linearGain": 0.7071 }], "effects": ["vibrato", "reverb"], "vibrato": "heavy", "reverb": 33, "transition": "slide in pattern", "fadeInSeconds": 0.0263, "fadeOutTicks": -6, "chord": "simultaneous", "harmonics": [100, 71, 57, 43, 29, 29, 14, 14, 14, 14, 14, 14, 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "unison": "none", "envelopes": [] } },
+                { name: "sonar ping", midiProgram: 121, settings: { "type": "spectrum", "eqFilter": [], "effects": ["note filter", "reverb"], "noteFilter": [{ "type": "low-pass", "cutoffHz": 1681.79, "linearGain": 0.5 }], "reverb": 33, "transition": "normal", "fadeInSeconds": 0.0125, "fadeOutTicks": 72, "chord": "simultaneous", "spectrum": [100, 43, 29, 29, 14, 14, 14, 14, 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "envelopes": [{ "target": "noteFilterAllFreqs", "envelope": "twang 2" }] } },
             ]) },
     ]);
 
@@ -4697,7 +4743,7 @@ var beepbox = (function (exports) {
                 this.channels.length = this.getChannelCount();
             }
         }
-        toBase64String() {
+        toRawBase64String() {
             let bits;
             let buffer = [];
             buffer.push(base64IntToCharCode[Song._latestVersion]);
@@ -5021,7 +5067,7 @@ var beepbox = (function (exports) {
                 legacyIndex = 0;
             return Config.envelopes[clamp(0, Config.envelopes.length, legacyIndex)];
         }
-        fromBase64String(compressed) {
+        fromRawBase64String(compressed) {
             if (compressed == null || compressed == "") {
                 this.initToDefault(true);
                 return;
@@ -6314,6 +6360,38 @@ var beepbox = (function (exports) {
             Array.prototype.push.apply(this.channels, newPitchChannels);
             Array.prototype.push.apply(this.channels, newNoiseChannels);
         }
+        toBase64String(upload = null) {
+            let code = this.toRawBase64String();
+            if (upload !== null && upload !== void 0 ? upload : false) {
+                const request = new XMLHttpRequest();
+                request.open("POST", "https://" + Song.restDbHost + "/doots.json", false);
+                request.setRequestHeader("Content-Type", "application/json");
+                request.send(JSON.stringify({
+                    "date": (new Date()).toISOString(),
+                    "name": "Untitled",
+                    "saved": false,
+                    "data": "#" + code,
+                }));
+                if (request.status !== 200 || request.responseText === "null") {
+                    throw new Error("Song upload failed.");
+                }
+                code = "DB" + JSON.parse(request.responseText)["name"];
+            }
+            return code;
+        }
+        fromBase64String(code) {
+            const regex = /^#?DB/;
+            if (regex.test(code)) {
+                const request = new XMLHttpRequest();
+                request.open("GET", "https://" + Song.restDbHost + "/doots/" + code.replace(regex, '') + ".json", false);
+                request.send(null);
+                if (request.status !== 200 || request.responseText === "null") {
+                    throw new Error("Song download failed.");
+                }
+                code = JSON.parse(request.responseText)["data"];
+            }
+            this.fromRawBase64String(code);
+        }
         getPattern(channelIndex, bar) {
             if (bar < 0 || bar >= this.barCount)
                 return null;
@@ -6332,6 +6410,7 @@ var beepbox = (function (exports) {
     Song._format = "YipBox";
     Song._oldestVersion = 2;
     Song._latestVersion = 9;
+    Song.restDbHost = "yipboxdb-default-rtdb.europe-west1.firebasedatabase.app";
     class PickedString {
         constructor() {
             this.delayLine = null;
@@ -10667,6 +10746,17 @@ var beepbox = (function (exports) {
                 this._doc.notifier.changed();
         }
     }
+    class ChangeCustomizeInstrument extends Change {
+        constructor(doc) {
+            super();
+            const instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
+            if (instrument.preset != instrument.type) {
+                instrument.preset = instrument.type;
+                doc.notifier.changed();
+                this._didSomething();
+            }
+        }
+    }
     class ChangePreset extends Change {
         constructor(doc, newValue) {
             super();
@@ -11252,6 +11342,19 @@ var beepbox = (function (exports) {
             this._didSomething();
         }
     }
+    class ChangeTransition extends Change {
+        constructor(doc, newValue) {
+            super();
+            const instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
+            const oldValue = instrument.transition;
+            if (oldValue != newValue) {
+                this._didSomething();
+                instrument.transition = newValue;
+                instrument.preset = instrument.type;
+                doc.notifier.changed();
+            }
+        }
+    }
     class ChangeToggleEffects extends Change {
         constructor(doc, toggleFlag) {
             super();
@@ -11473,10 +11576,58 @@ var beepbox = (function (exports) {
             }
         }
     }
+    class ChangeUnison extends Change {
+        constructor(doc, newValue) {
+            super();
+            const instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
+            const oldValue = instrument.unison;
+            if (oldValue != newValue) {
+                this._didSomething();
+                instrument.unison = newValue;
+                instrument.preset = instrument.type;
+                doc.notifier.changed();
+            }
+        }
+    }
+    class ChangeChord extends Change {
+        constructor(doc, newValue) {
+            super();
+            const instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
+            const oldValue = instrument.chord;
+            if (oldValue != newValue) {
+                this._didSomething();
+                instrument.chord = newValue;
+                instrument.preset = instrument.type;
+                doc.notifier.changed();
+            }
+        }
+    }
+    class ChangeVibrato extends Change {
+        constructor(doc, newValue) {
+            super();
+            const instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
+            const oldValue = instrument.vibrato;
+            if (oldValue != newValue) {
+                instrument.vibrato = newValue;
+                instrument.preset = instrument.type;
+                doc.notifier.changed();
+                this._didSomething();
+            }
+        }
+    }
     class ChangeSpectrum extends Change {
         constructor(doc, instrument, spectrumWave) {
             super();
             spectrumWave.markCustomWaveDirty();
+            instrument.preset = instrument.type;
+            doc.notifier.changed();
+            this._didSomething();
+        }
+    }
+    class ChangeHarmonics extends Change {
+        constructor(doc, instrument, harmonicsWave) {
+            super();
+            harmonicsWave.markCustomWaveDirty();
             instrument.preset = instrument.type;
             doc.notifier.changed();
             this._didSomething();
@@ -11508,6 +11659,96 @@ var beepbox = (function (exports) {
             }
         }
     }
+    class ChangePulseWidth extends ChangeInstrumentSlider {
+        constructor(doc, oldValue, newValue) {
+            super(doc);
+            this._instrument.pulseWidth = newValue;
+            doc.notifier.changed();
+            if (oldValue != newValue)
+                this._didSomething();
+        }
+    }
+    class ChangeSupersawDynamism extends ChangeInstrumentSlider {
+        constructor(doc, oldValue, newValue) {
+            super(doc);
+            this._instrument.supersawDynamism = newValue;
+            doc.notifier.changed();
+            if (oldValue != newValue)
+                this._didSomething();
+        }
+    }
+    class ChangeSupersawSpread extends ChangeInstrumentSlider {
+        constructor(doc, oldValue, newValue) {
+            super(doc);
+            this._instrument.supersawSpread = newValue;
+            doc.notifier.changed();
+            if (oldValue != newValue)
+                this._didSomething();
+        }
+    }
+    class ChangeSupersawShape extends ChangeInstrumentSlider {
+        constructor(doc, oldValue, newValue) {
+            super(doc);
+            this._instrument.supersawShape = newValue;
+            doc.notifier.changed();
+            if (oldValue != newValue)
+                this._didSomething();
+        }
+    }
+    class ChangePitchShift extends ChangeInstrumentSlider {
+        constructor(doc, oldValue, newValue) {
+            super(doc);
+            this._instrument.pitchShift = newValue;
+            doc.notifier.changed();
+            if (oldValue != newValue)
+                this._didSomething();
+        }
+    }
+    class ChangeDetune extends ChangeInstrumentSlider {
+        constructor(doc, oldValue, newValue) {
+            super(doc);
+            this._instrument.detune = newValue;
+            doc.notifier.changed();
+            if (oldValue != newValue)
+                this._didSomething();
+        }
+    }
+    class ChangeDistortion extends ChangeInstrumentSlider {
+        constructor(doc, oldValue, newValue) {
+            super(doc);
+            this._instrument.distortion = newValue;
+            doc.notifier.changed();
+            if (oldValue != newValue)
+                this._didSomething();
+        }
+    }
+    class ChangeBitcrusherFreq extends ChangeInstrumentSlider {
+        constructor(doc, oldValue, newValue) {
+            super(doc);
+            this._instrument.bitcrusherFreq = newValue;
+            doc.notifier.changed();
+            if (oldValue != newValue)
+                this._didSomething();
+        }
+    }
+    class ChangeBitcrusherQuantization extends ChangeInstrumentSlider {
+        constructor(doc, oldValue, newValue) {
+            super(doc);
+            this._instrument.bitcrusherQuantization = newValue;
+            doc.notifier.changed();
+            if (oldValue != newValue)
+                this._didSomething();
+        }
+    }
+    class ChangeStringSustain extends ChangeInstrumentSlider {
+        constructor(doc, oldValue, newValue) {
+            super(doc);
+            this._instrument.stringSustain = newValue;
+            doc.notifier.changed();
+            if (oldValue != newValue)
+                this._didSomething();
+        }
+    }
     class ChangeStringSustainType extends Change {
         constructor(doc, newValue) {
             super();
@@ -11515,6 +11756,155 @@ var beepbox = (function (exports) {
             const oldValue = instrument.stringSustainType;
             if (oldValue != newValue) {
                 instrument.stringSustainType = newValue;
+                instrument.preset = instrument.type;
+                doc.notifier.changed();
+                this._didSomething();
+            }
+        }
+    }
+    class ChangeFilterAddPoint extends UndoableChange {
+        constructor(doc, filterSettings, point, index, isNoteFilter, deletion = false) {
+            super(deletion);
+            this._envelopeTargetsAdd = [];
+            this._envelopeIndicesAdd = [];
+            this._envelopeTargetsRemove = [];
+            this._envelopeIndicesRemove = [];
+            this._doc = doc;
+            this._instrument = this._doc.song.channels[this._doc.channel].instruments[this._doc.getCurrentInstrument()];
+            this._instrumentNextPreset = deletion ? this._instrument.preset : this._instrument.type;
+            this._instrumentPrevPreset = deletion ? this._instrument.type : this._instrument.preset;
+            this._filterSettings = filterSettings;
+            this._point = point;
+            this._index = index;
+            for (let envelopeIndex = 0; envelopeIndex < this._instrument.envelopeCount; envelopeIndex++) {
+                let target = this._instrument.envelopes[envelopeIndex].target;
+                let targetIndex = this._instrument.envelopes[envelopeIndex].index;
+                this._envelopeTargetsAdd.push(target);
+                this._envelopeIndicesAdd.push(targetIndex);
+                if (deletion) {
+                    const automationTarget = Config.instrumentAutomationTargets[target];
+                    if (automationTarget.isFilter && (automationTarget.effect == 5) == isNoteFilter) {
+                        if (automationTarget.maxCount == Config.filterMaxPoints) {
+                            if (targetIndex == index) {
+                                target = Config.instrumentAutomationTargets.dictionary["none"].index;
+                                targetIndex = 0;
+                            }
+                            else if (targetIndex > index) {
+                                targetIndex--;
+                            }
+                        }
+                        else {
+                            if (filterSettings.controlPointCount <= 1) {
+                                target = Config.instrumentAutomationTargets.dictionary["none"].index;
+                                targetIndex = 0;
+                            }
+                        }
+                    }
+                }
+                this._envelopeTargetsRemove.push(target);
+                this._envelopeIndicesRemove.push(targetIndex);
+            }
+            this._didSomething();
+            this.redo();
+        }
+        _doForwards() {
+            this._filterSettings.controlPoints.splice(this._index, 0, this._point);
+            this._filterSettings.controlPointCount++;
+            this._filterSettings.controlPoints.length = this._filterSettings.controlPointCount;
+            this._instrument.preset = this._instrumentNextPreset;
+            for (let envelopeIndex = 0; envelopeIndex < this._instrument.envelopeCount; envelopeIndex++) {
+                this._instrument.envelopes[envelopeIndex].target = this._envelopeTargetsAdd[envelopeIndex];
+                this._instrument.envelopes[envelopeIndex].index = this._envelopeIndicesAdd[envelopeIndex];
+            }
+            this._doc.notifier.changed();
+        }
+        _doBackwards() {
+            this._filterSettings.controlPoints.splice(this._index, 1);
+            this._filterSettings.controlPointCount--;
+            this._filterSettings.controlPoints.length = this._filterSettings.controlPointCount;
+            this._instrument.preset = this._instrumentPrevPreset;
+            for (let envelopeIndex = 0; envelopeIndex < this._instrument.envelopeCount; envelopeIndex++) {
+                this._instrument.envelopes[envelopeIndex].target = this._envelopeTargetsRemove[envelopeIndex];
+                this._instrument.envelopes[envelopeIndex].index = this._envelopeIndicesRemove[envelopeIndex];
+            }
+            this._doc.notifier.changed();
+        }
+    }
+    class ChangeFilterMovePoint extends UndoableChange {
+        constructor(doc, point, oldFreq, newFreq, oldGain, newGain) {
+            super(false);
+            this._doc = doc;
+            this._instrument = this._doc.song.channels[this._doc.channel].instruments[this._doc.getCurrentInstrument()];
+            this._instrumentNextPreset = this._instrument.type;
+            this._instrumentPrevPreset = this._instrument.preset;
+            this._point = point;
+            this._oldFreq = oldFreq;
+            this._newFreq = newFreq;
+            this._oldGain = oldGain;
+            this._newGain = newGain;
+            this._didSomething();
+            this.redo();
+        }
+        _doForwards() {
+            this._point.freq = this._newFreq;
+            this._point.gain = this._newGain;
+            this._instrument.preset = this._instrumentNextPreset;
+            this._doc.notifier.changed();
+        }
+        _doBackwards() {
+            this._point.freq = this._oldFreq;
+            this._point.gain = this._oldGain;
+            this._instrument.preset = this._instrumentPrevPreset;
+            this._doc.notifier.changed();
+        }
+    }
+    class ChangeFadeInOut extends UndoableChange {
+        constructor(doc, fadeIn, fadeOut) {
+            super(false);
+            this._doc = doc;
+            this._instrument = this._doc.song.channels[this._doc.channel].instruments[this._doc.getCurrentInstrument()];
+            this._instrumentNextPreset = this._instrument.type;
+            this._instrumentPrevPreset = this._instrument.preset;
+            this._oldFadeIn = this._instrument.fadeIn;
+            this._oldFadeOut = this._instrument.fadeOut;
+            this._newFadeIn = fadeIn;
+            this._newFadeOut = fadeOut;
+            this._didSomething();
+            this.redo();
+        }
+        _doForwards() {
+            this._instrument.fadeIn = this._newFadeIn;
+            this._instrument.fadeOut = this._newFadeOut;
+            this._instrument.preset = this._instrumentNextPreset;
+            this._doc.notifier.changed();
+        }
+        _doBackwards() {
+            this._instrument.fadeIn = this._oldFadeIn;
+            this._instrument.fadeOut = this._oldFadeOut;
+            this._instrument.preset = this._instrumentPrevPreset;
+            this._doc.notifier.changed();
+        }
+    }
+    class ChangeAlgorithm extends Change {
+        constructor(doc, newValue) {
+            super();
+            const instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
+            const oldValue = instrument.algorithm;
+            if (oldValue != newValue) {
+                instrument.algorithm = newValue;
+                instrument.preset = instrument.type;
+                doc.notifier.changed();
+                this._didSomething();
+            }
+        }
+    }
+    class ChangeFeedbackType extends Change {
+        constructor(doc, newValue) {
+            super();
+            const instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
+            const oldValue = instrument.feedbackType;
+            if (oldValue != newValue) {
+                instrument.feedbackType = newValue;
                 instrument.preset = instrument.type;
                 doc.notifier.changed();
                 this._didSomething();
@@ -11538,6 +11928,15 @@ var beepbox = (function (exports) {
         constructor(doc, operatorIndex, oldValue, newValue) {
             super(doc);
             this._instrument.operators[operatorIndex].amplitude = newValue;
+            doc.notifier.changed();
+            if (oldValue != newValue)
+                this._didSomething();
+        }
+    }
+    class ChangeFeedbackAmplitude extends ChangeInstrumentSlider {
+        constructor(doc, oldValue, newValue) {
+            super(doc);
+            this._instrument.feedbackAmplitude = newValue;
             doc.notifier.changed();
             if (oldValue != newValue)
                 this._didSomething();
@@ -12405,6 +12804,42 @@ var beepbox = (function (exports) {
                 this._didSomething();
         }
     }
+    class ChangeEchoDelay extends ChangeInstrumentSlider {
+        constructor(doc, oldValue, newValue) {
+            super(doc);
+            this._instrument.echoDelay = newValue;
+            doc.notifier.changed();
+            if (oldValue != newValue)
+                this._didSomething();
+        }
+    }
+    class ChangeEchoSustain extends ChangeInstrumentSlider {
+        constructor(doc, oldValue, newValue) {
+            super(doc);
+            this._instrument.echoSustain = newValue;
+            doc.notifier.changed();
+            if (oldValue != newValue)
+                this._didSomething();
+        }
+    }
+    class ChangeChorus extends ChangeInstrumentSlider {
+        constructor(doc, oldValue, newValue) {
+            super(doc);
+            this._instrument.chorus = newValue;
+            doc.notifier.changed();
+            if (oldValue != newValue)
+                this._didSomething();
+        }
+    }
+    class ChangeReverb extends ChangeInstrumentSlider {
+        constructor(doc, oldValue, newValue) {
+            super(doc);
+            this._instrument.reverb = newValue;
+            doc.notifier.changed();
+            if (oldValue != newValue)
+                this._didSomething();
+        }
+    }
     class ChangeNoteAdded extends UndoableChange {
         constructor(doc, pattern, note, index, deletion = false) {
             super(deletion);
@@ -12859,6 +13294,15 @@ var beepbox = (function (exports) {
                 this._didSomething();
         }
     }
+    class ChangePan extends Change {
+        constructor(doc, oldValue, newValue) {
+            super();
+            doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()].pan = newValue;
+            doc.notifier.changed();
+            if (oldValue != newValue)
+                this._didSomething();
+        }
+    }
     class ChangeSizeBend extends UndoableChange {
         constructor(doc, note, bendPart, bendSize, bendInterval, uniformSize) {
             super(false);
@@ -12906,6 +13350,30 @@ var beepbox = (function (exports) {
             this._doc.notifier.changed();
         }
     }
+    class ChangeChipWave extends Change {
+        constructor(doc, newValue) {
+            super();
+            const instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
+            if (instrument.chipWave != newValue) {
+                instrument.chipWave = newValue;
+                instrument.preset = instrument.type;
+                doc.notifier.changed();
+                this._didSomething();
+            }
+        }
+    }
+    class ChangeNoiseWave extends Change {
+        constructor(doc, newValue) {
+            super();
+            const instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
+            if (instrument.chipNoise != newValue) {
+                instrument.chipNoise = newValue;
+                instrument.preset = instrument.type;
+                doc.notifier.changed();
+                this._didSomething();
+            }
+        }
+    }
     class ChangeAddEnvelope extends Change {
         constructor(doc) {
             super();
@@ -12914,6 +13382,49 @@ var beepbox = (function (exports) {
             instrument.preset = instrument.type;
             doc.notifier.changed();
             this._didSomething();
+        }
+    }
+    class ChangeRemoveEnvelope extends Change {
+        constructor(doc, index) {
+            super();
+            const instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
+            instrument.envelopeCount--;
+            for (let i = index; i < instrument.envelopeCount; i++) {
+                instrument.envelopes[i].target = instrument.envelopes[i + 1].target;
+                instrument.envelopes[i].index = instrument.envelopes[i + 1].index;
+                instrument.envelopes[i].envelope = instrument.envelopes[i + 1].envelope;
+            }
+            instrument.preset = instrument.type;
+            doc.notifier.changed();
+            this._didSomething();
+        }
+    }
+    class ChangeSetEnvelopeTarget extends Change {
+        constructor(doc, envelopeIndex, target, targetIndex) {
+            super();
+            const instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
+            const oldTarget = instrument.envelopes[envelopeIndex].target;
+            const oldIndex = instrument.envelopes[envelopeIndex].index;
+            if (oldTarget != target || oldIndex != targetIndex) {
+                instrument.envelopes[envelopeIndex].target = target;
+                instrument.envelopes[envelopeIndex].index = targetIndex;
+                instrument.preset = instrument.type;
+                doc.notifier.changed();
+                this._didSomething();
+            }
+        }
+    }
+    class ChangeSetEnvelopeType extends Change {
+        constructor(doc, envelopeIndex, newValue) {
+            super();
+            const instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
+            const oldValue = instrument.envelopes[envelopeIndex].envelope;
+            if (oldValue != newValue) {
+                instrument.envelopes[envelopeIndex].envelope = newValue;
+                instrument.preset = instrument.type;
+                doc.notifier.changed();
+                this._didSomething();
+            }
         }
     }
 
@@ -15681,6 +16192,623 @@ var beepbox = (function (exports) {
         }
     }
 
+    class EnvelopeEditor {
+        constructor(_doc) {
+            this._doc = _doc;
+            this.container = HTML.div({ class: "envelopeEditor" });
+            this._rows = [];
+            this._targetSelects = [];
+            this._envelopeSelects = [];
+            this._deleteButtons = [];
+            this._renderedEnvelopeCount = 0;
+            this._renderedEqFilterCount = -1;
+            this._renderedNoteFilterCount = -1;
+            this._renderedEffects = 0;
+            this._onChange = (event) => {
+                const targetSelectIndex = this._targetSelects.indexOf(event.target);
+                const envelopeSelectIndex = this._envelopeSelects.indexOf(event.target);
+                if (targetSelectIndex != -1) {
+                    const combinedValue = parseInt(this._targetSelects[targetSelectIndex].value);
+                    const target = combinedValue % Config.instrumentAutomationTargets.length;
+                    const index = (combinedValue / Config.instrumentAutomationTargets.length) >>> 0;
+                    this._doc.record(new ChangeSetEnvelopeTarget(this._doc, targetSelectIndex, target, index));
+                }
+                else if (envelopeSelectIndex != -1) {
+                    this._doc.record(new ChangeSetEnvelopeType(this._doc, envelopeSelectIndex, this._envelopeSelects[envelopeSelectIndex].selectedIndex));
+                }
+            };
+            this._onClick = (event) => {
+                const index = this._deleteButtons.indexOf(event.target);
+                if (index != -1) {
+                    this._doc.record(new ChangeRemoveEnvelope(this._doc, index));
+                }
+            };
+            this.container.addEventListener("change", this._onChange);
+            this.container.addEventListener("click", this._onClick);
+        }
+        _makeOption(target, index) {
+            let displayName = Config.instrumentAutomationTargets[target].displayName;
+            if (Config.instrumentAutomationTargets[target].maxCount > 1) {
+                if (displayName.indexOf("#") != -1) {
+                    displayName = displayName.replace("#", String(index + 1));
+                }
+                else {
+                    displayName += " " + (index + 1);
+                }
+            }
+            return HTML.option({ value: target + index * Config.instrumentAutomationTargets.length }, displayName);
+        }
+        _updateTargetOptionVisibility(menu, instrument) {
+            for (let optionIndex = 0; optionIndex < menu.childElementCount; optionIndex++) {
+                const option = menu.children[optionIndex];
+                const combinedValue = parseInt(option.value);
+                const target = combinedValue % Config.instrumentAutomationTargets.length;
+                const index = (combinedValue / Config.instrumentAutomationTargets.length) >>> 0;
+                option.hidden = !instrument.supportsEnvelopeTarget(target, index);
+            }
+        }
+        render() {
+            const instrument = this._doc.song.channels[this._doc.channel].instruments[this._doc.getCurrentInstrument()];
+            if (!this._doc.prefs.alwaysShowSettings && instrument.preset != instrument.type)
+                return;
+            for (let envelopeIndex = this._rows.length; envelopeIndex < instrument.envelopeCount; envelopeIndex++) {
+                const targetSelect = HTML.select();
+                for (let target = 0; target < Config.instrumentAutomationTargets.length; target++) {
+                    const interleaved = (Config.instrumentAutomationTargets[target].interleave);
+                    for (let index = 0; index < Config.instrumentAutomationTargets[target].maxCount; index++) {
+                        targetSelect.appendChild(this._makeOption(target, index));
+                        if (interleaved) {
+                            targetSelect.appendChild(this._makeOption(target + 1, index));
+                        }
+                    }
+                    if (interleaved)
+                        target++;
+                }
+                const envelopeSelect = HTML.select();
+                for (let envelope = 0; envelope < Config.envelopes.length; envelope++) {
+                    envelopeSelect.appendChild(HTML.option({ value: envelope }, Config.envelopes[envelope].name));
+                }
+                const deleteButton = HTML.button({ type: "button", class: "delete-envelope" });
+                const row = HTML.div({ class: "envelope-row" }, HTML.div({ class: "selectContainer", style: "width: 0; flex: 1;" }, targetSelect), HTML.div({ class: "selectContainer", style: "width: 0; flex: 0.7;" }, envelopeSelect), deleteButton);
+                this.container.appendChild(row);
+                this._rows[envelopeIndex] = row;
+                this._targetSelects[envelopeIndex] = targetSelect;
+                this._envelopeSelects[envelopeIndex] = envelopeSelect;
+                this._deleteButtons[envelopeIndex] = deleteButton;
+            }
+            for (let envelopeIndex = this._renderedEnvelopeCount; envelopeIndex < instrument.envelopeCount; envelopeIndex++) {
+                this._rows[envelopeIndex].style.display = "";
+                this._updateTargetOptionVisibility(this._targetSelects[envelopeIndex], instrument);
+            }
+            for (let envelopeIndex = instrument.envelopeCount; envelopeIndex < this._renderedEnvelopeCount; envelopeIndex++) {
+                this._rows[envelopeIndex].style.display = "none";
+            }
+            if (this._renderedEqFilterCount != instrument.eqFilter.controlPointCount ||
+                this._renderedNoteFilterCount != instrument.noteFilter.controlPointCount ||
+                this._renderedInstrumentType != instrument.type ||
+                this._renderedEffects != instrument.effects) {
+                for (let envelopeIndex = 0; envelopeIndex < this._renderedEnvelopeCount; envelopeIndex++) {
+                    this._updateTargetOptionVisibility(this._targetSelects[envelopeIndex], instrument);
+                }
+            }
+            for (let envelopeIndex = 0; envelopeIndex < instrument.envelopeCount; envelopeIndex++) {
+                this._targetSelects[envelopeIndex].value = String(instrument.envelopes[envelopeIndex].target + instrument.envelopes[envelopeIndex].index * Config.instrumentAutomationTargets.length);
+                this._envelopeSelects[envelopeIndex].selectedIndex = instrument.envelopes[envelopeIndex].envelope;
+            }
+            this._renderedEnvelopeCount = instrument.envelopeCount;
+            this._renderedEqFilterCount = instrument.eqFilter.controlPointCount;
+            this._renderedNoteFilterCount = instrument.noteFilter.controlPointCount;
+            this._renderedInstrumentType = instrument.type;
+            this._renderedEffects = instrument.effects;
+        }
+    }
+
+    class FadeInOutEditor {
+        constructor(_doc) {
+            this._doc = _doc;
+            this._editorWidth = 120;
+            this._editorHeight = 26;
+            this._fadeCurve = SVG.path({ fill: ColorConfig.uiWidgetBackground, "pointer-events": "none" });
+            this._dottedLinePath = SVG.path({ fill: "none", stroke: "currentColor", "stroke-width": 1, "stroke-dasharray": "3, 2", "pointer-events": "none" });
+            this._controlCurve = SVG.path({ fill: "none", stroke: "currentColor", "stroke-width": 2, "pointer-events": "none" });
+            this._svg = SVG.svg({ style: `background-color: ${ColorConfig.editorBackground}; touch-action: none; cursor: crosshair;`, width: "100%", height: "100%", viewBox: "0 0 " + this._editorWidth + " " + this._editorHeight, preserveAspectRatio: "none" }, this._fadeCurve, this._dottedLinePath, this._controlCurve);
+            this.container = HTML.div({ class: "fadeInOut", style: "height: 100%;" }, this._svg);
+            this._mouseX = 0;
+            this._mouseXStart = 0;
+            this._mouseDown = false;
+            this._mouseDragging = false;
+            this._draggingFadeIn = false;
+            this._dragChange = null;
+            this._renderedFadeIn = -1;
+            this._renderedFadeOut = -1;
+            this._whenMousePressed = (event) => {
+                event.preventDefault();
+                const boundingRect = this._svg.getBoundingClientRect();
+                this._mouseX = ((event.clientX || event.pageX) - boundingRect.left);
+                this._whenCursorPressed();
+            };
+            this._whenTouchPressed = (event) => {
+                event.preventDefault();
+                const boundingRect = this._svg.getBoundingClientRect();
+                this._mouseX = (event.touches[0].clientX - boundingRect.left);
+                this._whenCursorPressed();
+            };
+            this._whenMouseMoved = (event) => {
+                if (this.container.offsetParent == null)
+                    return;
+                const boundingRect = this._svg.getBoundingClientRect();
+                this._mouseX = ((event.clientX || event.pageX) - boundingRect.left);
+                if (isNaN(this._mouseX))
+                    this._mouseX = 0;
+                this._whenCursorMoved();
+            };
+            this._whenTouchMoved = (event) => {
+                if (this.container.offsetParent == null)
+                    return;
+                if (!this._mouseDown)
+                    return;
+                event.preventDefault();
+                const boundingRect = this._svg.getBoundingClientRect();
+                this._mouseX = (event.touches[0].clientX - boundingRect.left);
+                if (isNaN(this._mouseX))
+                    this._mouseX = 0;
+                this._whenCursorMoved();
+            };
+            this._whenCursorReleased = (event) => {
+                if (this.container.offsetParent == null)
+                    return;
+                if (this._mouseDown && this._doc.lastChangeWas(this._dragChange) && this._dragChange != null) {
+                    if (!this._mouseDragging) {
+                        const instrument = this._doc.song.channels[this._doc.channel].instruments[this._doc.getCurrentInstrument()];
+                        if (this._draggingFadeIn) {
+                            this._doc.record(new ChangeFadeInOut(this._doc, this._xToFadeIn(this._mouseX), instrument.fadeOut));
+                        }
+                        else {
+                            this._doc.record(new ChangeFadeInOut(this._doc, instrument.fadeIn, this._xToFadeOut(this._mouseX)));
+                        }
+                    }
+                    else {
+                        this._doc.record(this._dragChange);
+                    }
+                }
+                this._dragChange = null;
+                this._mouseDragging = false;
+                this._mouseDown = false;
+            };
+            const dottedLineX = this._fadeOutToX(Config.fadeOutNeutral);
+            this._dottedLinePath.setAttribute("d", `M ${dottedLineX} 0 L ${dottedLineX} ${this._editorHeight}`);
+            this.container.addEventListener("mousedown", this._whenMousePressed);
+            document.addEventListener("mousemove", this._whenMouseMoved);
+            document.addEventListener("mouseup", this._whenCursorReleased);
+            this.container.addEventListener("touchstart", this._whenTouchPressed);
+            this.container.addEventListener("touchmove", this._whenTouchMoved);
+            this.container.addEventListener("touchend", this._whenCursorReleased);
+            this.container.addEventListener("touchcancel", this._whenCursorReleased);
+        }
+        _fadeInToX(fadeIn) {
+            return 1.0 + (this._editorWidth - 2.0) * 0.4 * fadeIn / (Config.fadeInRange - 1);
+        }
+        _xToFadeIn(x) {
+            return clamp(0, Config.fadeInRange, Math.round((x - 1.0) * (Config.fadeInRange - 1) / (0.4 * this._editorWidth - 2.0)));
+        }
+        _fadeOutToX(fadeOut) {
+            return 1.0 + (this._editorWidth - 2.0) * (0.5 + 0.5 * fadeOut / (Config.fadeOutTicks.length - 1));
+        }
+        _xToFadeOut(x) {
+            return clamp(0, Config.fadeOutTicks.length, Math.round((Config.fadeOutTicks.length - 1) * ((x - 1.0) / (this._editorWidth - 2.0) - 0.5) / 0.5));
+        }
+        _whenCursorPressed() {
+            if (isNaN(this._mouseX))
+                this._mouseX = 0;
+            this._mouseXStart = this._mouseX;
+            this._mouseDown = true;
+            this._mouseDragging = false;
+            const instrument = this._doc.song.channels[this._doc.channel].instruments[this._doc.getCurrentInstrument()];
+            const fadeInX = this._fadeInToX(instrument.fadeIn);
+            const fadeOutX = this._fadeOutToX(instrument.fadeOut);
+            this._draggingFadeIn = this._mouseXStart < (fadeInX + fadeOutX) / 2.0;
+            this._dragChange = new ChangeSequence();
+            this._doc.setProspectiveChange(this._dragChange);
+        }
+        _whenCursorMoved() {
+            if (this._dragChange != null && this._doc.lastChangeWas(this._dragChange)) {
+                this._dragChange.undo();
+            }
+            else {
+                this._mouseDown = false;
+            }
+            this._dragChange = null;
+            if (this._mouseDown) {
+                const sequence = new ChangeSequence();
+                this._dragChange = sequence;
+                this._doc.setProspectiveChange(this._dragChange);
+                if (Math.abs(this._mouseX - this._mouseXStart) > 4.0) {
+                    this._mouseDragging = true;
+                }
+                if (this._mouseDragging) {
+                    const instrument = this._doc.song.channels[this._doc.channel].instruments[this._doc.getCurrentInstrument()];
+                    if (this._draggingFadeIn) {
+                        sequence.append(new ChangeFadeInOut(this._doc, this._xToFadeIn(this._fadeInToX(instrument.fadeIn) + this._mouseX - this._mouseXStart), instrument.fadeOut));
+                    }
+                    else {
+                        sequence.append(new ChangeFadeInOut(this._doc, instrument.fadeIn, this._xToFadeOut(this._fadeOutToX(instrument.fadeOut) + this._mouseX - this._mouseXStart)));
+                    }
+                }
+            }
+        }
+        render() {
+            const instrument = this._doc.song.channels[this._doc.channel].instruments[this._doc.getCurrentInstrument()];
+            if (this._renderedFadeIn == instrument.fadeIn && this._renderedFadeOut == instrument.fadeOut) {
+                return;
+            }
+            const fadeInX = this._fadeInToX(instrument.fadeIn);
+            const fadeOutX = this._fadeOutToX(instrument.fadeOut);
+            this._controlCurve.setAttribute("d", `M ${fadeInX} 0 L ${fadeInX} ${this._editorHeight} M ${fadeOutX} 0 L ${fadeOutX} ${this._editorHeight}`);
+            const dottedLineX = this._fadeOutToX(Config.fadeOutNeutral);
+            let fadePath = "";
+            fadePath += `M 0 ${this._editorHeight} `;
+            fadePath += `L ${fadeInX} 0 `;
+            if (Synth.fadeOutSettingToTicks(instrument.fadeOut) > 0) {
+                fadePath += `L ${dottedLineX} 0 `;
+                fadePath += `L ${fadeOutX} ${this._editorHeight} `;
+            }
+            else {
+                fadePath += `L ${fadeOutX} 0 `;
+                fadePath += `L ${dottedLineX} ${this._editorHeight} `;
+            }
+            fadePath += "z";
+            this._fadeCurve.setAttribute("d", fadePath);
+        }
+    }
+
+    class FilterEditor {
+        constructor(_doc, useNoteFilter = false) {
+            this._doc = _doc;
+            this._editorWidth = 120;
+            this._editorHeight = 26;
+            this._responsePath = SVG.path({ fill: ColorConfig.uiWidgetBackground, "pointer-events": "none" });
+            this._controlPointPath = SVG.path({ fill: "currentColor", "pointer-events": "none" });
+            this._dottedLinePath = SVG.path({ fill: "none", stroke: "currentColor", "stroke-width": 1, "stroke-dasharray": "3, 2", "pointer-events": "none" });
+            this._highlight = SVG.circle({ fill: "white", stroke: "none", "pointer-events": "none", r: 4 });
+            this._svg = SVG.svg({ style: `background-color: ${ColorConfig.editorBackground}; touch-action: none;`, width: "100%", height: "100%", viewBox: "0 0 " + this._editorWidth + " " + this._editorHeight, preserveAspectRatio: "none" }, this._responsePath, this._dottedLinePath, this._highlight, this._controlPointPath);
+            this._label = HTML.div({ style: "position: absolute; bottom: 0; left: 2px; font-size: 8px; line-height: 1; pointer-events: none;" });
+            this.container = HTML.div({ class: "filterEditor", style: "height: 100%; position: relative;" }, this._svg, this._label);
+            this._pointRadius = 2;
+            this._useNoteFilter = false;
+            this._touchMode = false;
+            this._mouseX = 0;
+            this._mouseY = 0;
+            this._mouseOver = false;
+            this._mouseDown = false;
+            this._mouseDragging = false;
+            this._addingPoint = false;
+            this._deletingPoint = false;
+            this._addedType = 2;
+            this._selectedIndex = 0;
+            this._freqStart = 0;
+            this._gainStart = 0;
+            this._dragChange = null;
+            this._renderedSelectedIndex = -1;
+            this._renderedPointCount = -1;
+            this._renderedPointTypes = -1;
+            this._renderedPointFreqs = -1;
+            this._renderedPointGains = -1;
+            this._whenMouseOver = (event) => {
+                this._mouseOver = true;
+            };
+            this._whenMouseOut = (event) => {
+                this._mouseOver = false;
+                this._updatePath();
+            };
+            this._whenMousePressed = (event) => {
+                event.preventDefault();
+                this._touchMode = false;
+                const boundingRect = this._svg.getBoundingClientRect();
+                this._mouseX = ((event.clientX || event.pageX) - boundingRect.left) * this._editorWidth / (boundingRect.right - boundingRect.left);
+                this._mouseY = ((event.clientY || event.pageY) - boundingRect.top) * this._editorHeight / (boundingRect.bottom - boundingRect.top);
+                if (isNaN(this._mouseX))
+                    this._mouseX = 0;
+                if (isNaN(this._mouseY))
+                    this._mouseY = 0;
+                this._whenCursorPressed();
+            };
+            this._whenTouchPressed = (event) => {
+                event.preventDefault();
+                this._touchMode = true;
+                const boundingRect = this._svg.getBoundingClientRect();
+                this._mouseX = (event.touches[0].clientX - boundingRect.left) * this._editorWidth / (boundingRect.right - boundingRect.left);
+                this._mouseY = (event.touches[0].clientY - boundingRect.top) * this._editorHeight / (boundingRect.bottom - boundingRect.top);
+                if (isNaN(this._mouseX))
+                    this._mouseX = 0;
+                if (isNaN(this._mouseY))
+                    this._mouseY = 0;
+                this._whenCursorPressed();
+            };
+            this._whenMouseMoved = (event) => {
+                if (this.container.offsetParent == null)
+                    return;
+                const boundingRect = this._svg.getBoundingClientRect();
+                this._mouseX = ((event.clientX || event.pageX) - boundingRect.left) * this._editorWidth / (boundingRect.right - boundingRect.left);
+                this._mouseY = ((event.clientY || event.pageY) - boundingRect.top) * this._editorHeight / (boundingRect.bottom - boundingRect.top);
+                if (isNaN(this._mouseX))
+                    this._mouseX = 0;
+                if (isNaN(this._mouseY))
+                    this._mouseY = 0;
+                if (!this._mouseDown)
+                    this._updateCursor();
+                this._whenCursorMoved();
+            };
+            this._whenTouchMoved = (event) => {
+                if (this.container.offsetParent == null)
+                    return;
+                if (this._mouseDown)
+                    event.preventDefault();
+                const boundingRect = this._svg.getBoundingClientRect();
+                this._mouseX = (event.touches[0].clientX - boundingRect.left) * this._editorWidth / (boundingRect.right - boundingRect.left);
+                this._mouseY = (event.touches[0].clientY - boundingRect.top) * this._editorHeight / (boundingRect.bottom - boundingRect.top);
+                if (isNaN(this._mouseX))
+                    this._mouseX = 0;
+                if (isNaN(this._mouseY))
+                    this._mouseY = 0;
+                if (!this._mouseDown)
+                    this._updateCursor();
+                this._whenCursorMoved();
+            };
+            this._whenCursorReleased = (event) => {
+                if (this.container.offsetParent == null)
+                    return;
+                if (this._mouseDown && this._doc.lastChangeWas(this._dragChange) && this._dragChange != null) {
+                    if (!this._addingPoint && !this._mouseDragging && !this._touchMode) {
+                        if (this._selectedIndex < this._filterSettings.controlPointCount && this._selectedIndex != -1) {
+                            const point = this._filterSettings.controlPoints[this._selectedIndex];
+                            this._doc.record(new ChangeFilterAddPoint(this._doc, this._filterSettings, point, this._selectedIndex, this._useNoteFilter, true));
+                        }
+                    }
+                    else {
+                        this._doc.record(this._dragChange);
+                    }
+                    this._updatePath();
+                }
+                this._dragChange = null;
+                this._mouseDragging = false;
+                this._deletingPoint = false;
+                this._mouseDown = false;
+                this._updateCursor();
+            };
+            this._useNoteFilter = useNoteFilter;
+            this.container.addEventListener("mousedown", this._whenMousePressed);
+            this.container.addEventListener("mouseover", this._whenMouseOver);
+            this.container.addEventListener("mouseout", this._whenMouseOut);
+            document.addEventListener("mousemove", this._whenMouseMoved);
+            document.addEventListener("mouseup", this._whenCursorReleased);
+            this.container.addEventListener("touchstart", this._whenTouchPressed);
+            this.container.addEventListener("touchmove", this._whenTouchMoved);
+            this.container.addEventListener("touchend", this._whenCursorReleased);
+            this.container.addEventListener("touchcancel", this._whenCursorReleased);
+        }
+        _xToFreq(x) {
+            return Config.filterFreqRange * x / this._editorWidth - 0.5;
+        }
+        _freqToX(freq) {
+            return this._editorWidth * (freq + 0.5) / Config.filterFreqRange;
+        }
+        _yToGain(y) {
+            return (Config.filterGainRange - 1) * (1 - (y - .5) / (this._editorHeight - 1));
+        }
+        _gainToY(gain) {
+            return (this._editorHeight - 1) * (1 - gain / (Config.filterGainRange - 1)) + .5;
+        }
+        _whenCursorPressed() {
+            this._mouseDown = true;
+            const sequence = new ChangeSequence();
+            this._dragChange = sequence;
+            this._doc.setProspectiveChange(this._dragChange);
+            this._updateCursor();
+            this._whenCursorMoved();
+        }
+        _updateCursor() {
+            this._freqStart = this._xToFreq(this._mouseX);
+            this._gainStart = this._yToGain(this._mouseY);
+            this._addingPoint = true;
+            this._selectedIndex = -1;
+            let nearestDistance = Number.POSITIVE_INFINITY;
+            for (let i = 0; i < this._filterSettings.controlPointCount; i++) {
+                const point = this._filterSettings.controlPoints[i];
+                const distance = Math.sqrt(Math.pow(this._freqToX(point.freq) - this._mouseX, 2) + Math.pow(this._gainToY(point.gain) - this._mouseY, 2));
+                if ((distance <= 13 || this._filterSettings.controlPointCount >= Config.filterMaxPoints) && distance < nearestDistance) {
+                    nearestDistance = distance;
+                    this._selectedIndex = i;
+                    this._addingPoint = false;
+                }
+            }
+            if (this._addingPoint) {
+                const ratio = this._mouseX / this._editorWidth;
+                if (ratio < 0.2) {
+                    this._addedType = 1;
+                }
+                else if (ratio < 0.8) {
+                    this._addedType = 2;
+                }
+                else {
+                    this._addedType = 0;
+                }
+            }
+        }
+        _whenCursorMoved() {
+            if (this._dragChange != null && this._doc.lastChangeWas(this._dragChange)) {
+                this._dragChange.undo();
+            }
+            else {
+                this._mouseDown = false;
+            }
+            this._dragChange = null;
+            this._deletingPoint = false;
+            if (this._mouseDown) {
+                const sequence = new ChangeSequence();
+                this._dragChange = sequence;
+                this._doc.setProspectiveChange(this._dragChange);
+                if (this._addingPoint) {
+                    const gain = Math.max(0, Math.min(Config.filterGainRange - 1, Math.round(this._yToGain(this._mouseY))));
+                    const freq = this._findNearestFreqSlot(this._filterSettings, this._xToFreq(this._mouseX), -1);
+                    if (freq >= 0 && freq < Config.filterFreqRange) {
+                        const point = new FilterControlPoint();
+                        point.type = this._addedType;
+                        point.freq = freq;
+                        point.gain = gain;
+                        sequence.append(new ChangeFilterAddPoint(this._doc, this._filterSettings, point, this._filterSettings.controlPointCount, this._useNoteFilter));
+                    }
+                    else {
+                        this._deletingPoint = true;
+                    }
+                }
+                else if (this._selectedIndex >= this._filterSettings.controlPointCount || this._selectedIndex == -1) {
+                    this._dragChange = null;
+                    this._mouseDown = false;
+                }
+                else {
+                    const freqDelta = this._xToFreq(this._mouseX) - this._freqStart;
+                    const gainDelta = this._yToGain(this._mouseY) - this._gainStart;
+                    const point = this._filterSettings.controlPoints[this._selectedIndex];
+                    const gain = Math.max(0, Math.min(Config.filterGainRange - 1, Math.round(point.gain + gainDelta)));
+                    const freq = this._findNearestFreqSlot(this._filterSettings, point.freq + freqDelta, this._selectedIndex);
+                    if (Math.round(freqDelta) != 0.0 || Math.round(gainDelta) != 0.0 || freq != point.freq || gain != point.gain) {
+                        this._mouseDragging = true;
+                    }
+                    if (freq >= 0 && freq < Config.filterFreqRange) {
+                        sequence.append(new ChangeFilterMovePoint(this._doc, point, point.freq, freq, point.gain, gain));
+                    }
+                    else {
+                        sequence.append(new ChangeFilterAddPoint(this._doc, this._filterSettings, point, this._selectedIndex, this._useNoteFilter, true));
+                        this._deletingPoint = true;
+                    }
+                }
+            }
+            if (this._mouseDown || this._mouseOver) {
+                this._updatePath();
+            }
+        }
+        _findNearestFreqSlot(filterSettings, targetFreq, ignoreIndex) {
+            const roundedFreq = Math.round(targetFreq);
+            let lowerFreq = roundedFreq;
+            let upperFreq = roundedFreq;
+            let tryingLower = (roundedFreq <= targetFreq);
+            while (true) {
+                let foundConflict = false;
+                const currentFreq = tryingLower ? lowerFreq : upperFreq;
+                for (let i = 0; i < filterSettings.controlPointCount; i++) {
+                    if (i == ignoreIndex)
+                        continue;
+                    if (filterSettings.controlPoints[i].freq == currentFreq) {
+                        foundConflict = true;
+                        break;
+                    }
+                }
+                if (!foundConflict)
+                    return currentFreq;
+                tryingLower = !tryingLower;
+                if (tryingLower)
+                    lowerFreq--;
+                if (!tryingLower)
+                    upperFreq++;
+            }
+        }
+        static _circlePath(cx, cy, radius, reverse = false) {
+            return `M ${cx - radius} ${cy} ` +
+                `a ${radius} ${radius} 0 1 ${reverse ? 1 : 0} ${radius * 2} 0 ` +
+                `a ${radius} ${radius} 0 1 ${reverse ? 1 : 0} ${-radius * 2} 0 `;
+        }
+        _updatePath() {
+            this._highlight.style.display = "none";
+            this._label.textContent = "";
+            let controlPointPath = "";
+            let dottedLinePath = "";
+            for (let i = 0; i < this._filterSettings.controlPointCount; i++) {
+                const point = this._filterSettings.controlPoints[i];
+                const pointX = this._freqToX(point.freq);
+                const pointY = this._gainToY(point.gain);
+                controlPointPath += FilterEditor._circlePath(pointX, pointY, this._pointRadius);
+                if (point.type == 1) {
+                    dottedLinePath += "M " + 0 + " " + pointY + " L " + pointX + " " + pointY + " ";
+                }
+                else if (point.type == 0) {
+                    dottedLinePath += "M " + this._editorWidth + " " + pointY + " L " + pointX + " " + pointY + " ";
+                }
+                if (this._selectedIndex == i && this._mouseOver && !this._mouseDown) {
+                    this._highlight.setAttribute("cx", String(pointX));
+                    this._highlight.setAttribute("cy", String(pointY));
+                    this._highlight.style.display = "";
+                }
+                if ((this._selectedIndex == i || (this._addingPoint && this._mouseDown && i == this._filterSettings.controlPointCount - 1)) && (this._mouseOver || this._mouseDown) && !this._deletingPoint) {
+                    this._label.textContent = (i + 1) + ": " + Config.filterTypeNames[point.type];
+                }
+            }
+            this._controlPointPath.setAttribute("d", controlPointPath);
+            this._dottedLinePath.setAttribute("d", dottedLinePath);
+            if (this._addingPoint && !this._mouseDown && this._mouseOver) {
+                this._label.textContent = "+ " + Config.filterTypeNames[this._addedType];
+            }
+            const standardSampleRate = 44800;
+            const filters = [];
+            for (let i = 0; i < this._filterSettings.controlPointCount; i++) {
+                const point = this._filterSettings.controlPoints[i];
+                const filter = new FilterCoefficients();
+                point.toCoefficients(filter, standardSampleRate);
+                filters.push(filter);
+            }
+            const response = new FrequencyResponse();
+            let responsePath = "M 0 " + this._editorHeight + " ";
+            for (let i = -1; i <= Config.filterFreqRange; i++) {
+                const hz = FilterControlPoint.getHzFromSettingValue(i);
+                const cornerRadiansPerSample = 2.0 * Math.PI * hz / standardSampleRate;
+                const real = Math.cos(cornerRadiansPerSample);
+                const imag = Math.sin(cornerRadiansPerSample);
+                let linearGain = 1.0;
+                for (const filter of filters) {
+                    response.analyzeComplex(filter, real, imag);
+                    linearGain *= response.magnitude();
+                }
+                const gainSetting = Math.log2(linearGain) / Config.filterGainStep + Config.filterGainCenter;
+                const y = this._gainToY(gainSetting);
+                const x = this._freqToX(i);
+                responsePath += "L " + prettyNumber(x) + " " + prettyNumber(y) + " ";
+            }
+            responsePath += "L " + this._editorWidth + " " + this._editorHeight + " L 0 " + this._editorHeight + " z ";
+            this._responsePath.setAttribute("d", responsePath);
+        }
+        render() {
+            const instrument = this._doc.song.channels[this._doc.channel].instruments[this._doc.getCurrentInstrument()];
+            const filterSettings = this._useNoteFilter ? instrument.noteFilter : instrument.eqFilter;
+            if (this._filterSettings != filterSettings) {
+                this._dragChange = null;
+                this._mouseDown = false;
+            }
+            this._filterSettings = filterSettings;
+            if (!this._mouseDown)
+                this._updateCursor();
+            let pointTypes = 0;
+            let pointFreqs = 0;
+            let pointGains = 0;
+            for (let i = 0; i < filterSettings.controlPointCount; i++) {
+                const point = filterSettings.controlPoints[i];
+                pointTypes = pointTypes * 3 + point.type;
+                pointFreqs = pointFreqs * Config.filterFreqRange + point.freq;
+                pointGains = pointGains * Config.filterGainRange + point.gain;
+            }
+            if (this._renderedSelectedIndex != this._selectedIndex ||
+                this._renderedPointCount != filterSettings.controlPointCount ||
+                this._renderedPointTypes != pointTypes ||
+                this._renderedPointFreqs != pointFreqs ||
+                this._renderedPointGains != pointGains) {
+                this._renderedSelectedIndex = this._selectedIndex;
+                this._renderedPointCount = filterSettings.controlPointCount;
+                this._renderedPointTypes = pointTypes;
+                this._renderedPointFreqs = pointFreqs;
+                this._renderedPointGains = pointGains;
+                this._updatePath();
+            }
+        }
+    }
+
     class Box {
         constructor(channel, color) {
             this._text = document.createTextNode("");
@@ -16115,6 +17243,261 @@ var beepbox = (function (exports) {
         }
     }
 
+    class LoopEditor {
+        constructor(_doc) {
+            this._doc = _doc;
+            this._editorHeight = 20;
+            this._startMode = 0;
+            this._endMode = 1;
+            this._bothMode = 2;
+            this._loop = SVG.path({ fill: "none", stroke: ColorConfig.loopAccent, "stroke-width": 4 });
+            this._highlight = SVG.path({ fill: ColorConfig.hoverPreview, "pointer-events": "none" });
+            this._svg = SVG.svg({ style: `touch-action: pan-y; position: absolute;`, height: this._editorHeight }, this._loop, this._highlight);
+            this.container = HTML.div({ class: "loopEditor" }, this._svg);
+            this._barWidth = 32;
+            this._change = null;
+            this._cursor = { startBar: -1, mode: -1 };
+            this._mouseX = 0;
+            this._clientStartX = 0;
+            this._clientStartY = 0;
+            this._startedScrolling = false;
+            this._draggingHorizontally = false;
+            this._mouseDown = false;
+            this._mouseOver = false;
+            this._renderedLoopStart = -1;
+            this._renderedLoopStop = -1;
+            this._renderedBarCount = 0;
+            this._renderedBarWidth = -1;
+            this._whenMouseOver = (event) => {
+                if (this._mouseOver)
+                    return;
+                this._mouseOver = true;
+                this._updatePreview();
+            };
+            this._whenMouseOut = (event) => {
+                if (!this._mouseOver)
+                    return;
+                this._mouseOver = false;
+                this._updatePreview();
+            };
+            this._whenMousePressed = (event) => {
+                event.preventDefault();
+                this._mouseDown = true;
+                const boundingRect = this._svg.getBoundingClientRect();
+                this._mouseX = (event.clientX || event.pageX) - boundingRect.left;
+                this._updateCursorStatus();
+                this._updatePreview();
+                this._whenMouseMoved(event);
+            };
+            this._whenTouchPressed = (event) => {
+                this._mouseDown = true;
+                const boundingRect = this._svg.getBoundingClientRect();
+                this._mouseX = event.touches[0].clientX - boundingRect.left;
+                this._updateCursorStatus();
+                this._updatePreview();
+                this._clientStartX = event.touches[0].clientX;
+                this._clientStartY = event.touches[0].clientY;
+                this._draggingHorizontally = false;
+                this._startedScrolling = false;
+            };
+            this._whenMouseMoved = (event) => {
+                const boundingRect = this._svg.getBoundingClientRect();
+                this._mouseX = (event.clientX || event.pageX) - boundingRect.left;
+                this._whenCursorMoved();
+            };
+            this._whenTouchMoved = (event) => {
+                if (!this._mouseDown)
+                    return;
+                const boundingRect = this._svg.getBoundingClientRect();
+                this._mouseX = event.touches[0].clientX - boundingRect.left;
+                if (!this._draggingHorizontally && !this._startedScrolling) {
+                    if (Math.abs(event.touches[0].clientY - this._clientStartY) > 10) {
+                        this._startedScrolling = true;
+                    }
+                    else if (Math.abs(event.touches[0].clientX - this._clientStartX) > 10) {
+                        this._draggingHorizontally = true;
+                    }
+                }
+                if (this._draggingHorizontally) {
+                    this._whenCursorMoved();
+                    event.preventDefault();
+                }
+            };
+            this._whenTouchReleased = (event) => {
+                event.preventDefault();
+                if (!this._startedScrolling) {
+                    this._whenCursorMoved();
+                    this._mouseOver = false;
+                    this._whenCursorReleased(event);
+                    this._updatePreview();
+                }
+                this._mouseDown = false;
+            };
+            this._whenCursorReleased = (event) => {
+                if (this._change != null)
+                    this._doc.record(this._change);
+                this._change = null;
+                this._mouseDown = false;
+                this._updateCursorStatus();
+                this._render();
+            };
+            this._documentChanged = () => {
+                this._render();
+            };
+            this._updateCursorStatus();
+            this._render();
+            this._doc.notifier.watch(this._documentChanged);
+            this.container.addEventListener("mousedown", this._whenMousePressed);
+            document.addEventListener("mousemove", this._whenMouseMoved);
+            document.addEventListener("mouseup", this._whenCursorReleased);
+            this.container.addEventListener("mouseover", this._whenMouseOver);
+            this.container.addEventListener("mouseout", this._whenMouseOut);
+            this.container.addEventListener("touchstart", this._whenTouchPressed);
+            this.container.addEventListener("touchmove", this._whenTouchMoved);
+            this.container.addEventListener("touchend", this._whenTouchReleased);
+            this.container.addEventListener("touchcancel", this._whenTouchReleased);
+        }
+        _updateCursorStatus() {
+            const bar = this._mouseX / this._barWidth;
+            this._cursor.startBar = bar;
+            if (bar > this._doc.song.loopStart - 0.25 && bar < this._doc.song.loopStart + this._doc.song.loopLength + 0.25) {
+                if (bar - this._doc.song.loopStart < this._doc.song.loopLength * 0.5) {
+                    this._cursor.mode = this._startMode;
+                }
+                else {
+                    this._cursor.mode = this._endMode;
+                }
+            }
+            else {
+                this._cursor.mode = this._bothMode;
+            }
+        }
+        _findEndPoints(middle) {
+            let start = Math.round(middle - this._doc.song.loopLength / 2);
+            let end = start + this._doc.song.loopLength;
+            if (start < 0) {
+                end -= start;
+                start = 0;
+            }
+            if (end > this._doc.song.barCount) {
+                start -= end - this._doc.song.barCount;
+                end = this._doc.song.barCount;
+            }
+            return { start: start, length: end - start };
+        }
+        _whenCursorMoved() {
+            if (this._mouseDown) {
+                let oldStart = this._doc.song.loopStart;
+                let oldEnd = this._doc.song.loopStart + this._doc.song.loopLength;
+                if (this._change != null && this._doc.lastChangeWas(this._change)) {
+                    oldStart = this._change.oldStart;
+                    oldEnd = oldStart + this._change.oldLength;
+                }
+                const bar = this._mouseX / this._barWidth;
+                let start;
+                let end;
+                let temp;
+                if (this._cursor.mode == this._startMode) {
+                    start = oldStart + Math.round(bar - this._cursor.startBar);
+                    end = oldEnd;
+                    if (start < 0)
+                        start = 0;
+                    if (start >= this._doc.song.barCount)
+                        start = this._doc.song.barCount;
+                    if (start == end) {
+                        start = end - 1;
+                    }
+                    else if (start > end) {
+                        temp = start;
+                        start = end;
+                        end = temp;
+                    }
+                    this._change = new ChangeLoop(this._doc, oldStart, oldEnd - oldStart, start, end - start);
+                }
+                else if (this._cursor.mode == this._endMode) {
+                    start = oldStart;
+                    end = oldEnd + Math.round(bar - this._cursor.startBar);
+                    if (end < 0)
+                        end = 0;
+                    if (end >= this._doc.song.barCount)
+                        end = this._doc.song.barCount;
+                    if (end == start) {
+                        end = start + 1;
+                    }
+                    else if (end < start) {
+                        temp = start;
+                        start = end;
+                        end = temp;
+                    }
+                    this._change = new ChangeLoop(this._doc, oldStart, oldEnd - oldStart, start, end - start);
+                }
+                else if (this._cursor.mode == this._bothMode) {
+                    const endPoints = this._findEndPoints(bar);
+                    this._change = new ChangeLoop(this._doc, oldStart, oldEnd - oldStart, endPoints.start, endPoints.length);
+                }
+                this._doc.synth.jumpIntoLoop();
+                if (this._doc.prefs.autoFollow) {
+                    new ChangeChannelBar(this._doc, this._doc.channel, Math.floor(this._doc.synth.playhead), true);
+                }
+                this._doc.setProspectiveChange(this._change);
+            }
+            else {
+                this._updateCursorStatus();
+                this._updatePreview();
+            }
+        }
+        _updatePreview() {
+            const showHighlight = this._mouseOver && !this._mouseDown;
+            this._highlight.style.visibility = showHighlight ? "visible" : "hidden";
+            if (showHighlight) {
+                const radius = this._editorHeight / 2;
+                let highlightStart = (this._doc.song.loopStart) * this._barWidth;
+                let highlightStop = (this._doc.song.loopStart + this._doc.song.loopLength) * this._barWidth;
+                if (this._cursor.mode == this._startMode) {
+                    highlightStop = (this._doc.song.loopStart) * this._barWidth + radius * 2;
+                }
+                else if (this._cursor.mode == this._endMode) {
+                    highlightStart = (this._doc.song.loopStart + this._doc.song.loopLength) * this._barWidth - radius * 2;
+                }
+                else {
+                    const endPoints = this._findEndPoints(this._cursor.startBar);
+                    highlightStart = (endPoints.start) * this._barWidth;
+                    highlightStop = (endPoints.start + endPoints.length) * this._barWidth;
+                }
+                this._highlight.setAttribute("d", `M ${highlightStart + radius} ${4} ` +
+                    `L ${highlightStop - radius} ${4} ` +
+                    `A ${radius - 4} ${radius - 4} ${0} ${0} ${1} ${highlightStop - radius} ${this._editorHeight - 4} ` +
+                    `L ${highlightStart + radius} ${this._editorHeight - 4} ` +
+                    `A ${radius - 4} ${radius - 4} ${0} ${0} ${1} ${highlightStart + radius} ${4} ` +
+                    `z`);
+            }
+        }
+        _render() {
+            this._barWidth = this._doc.getBarWidth();
+            const radius = this._editorHeight / 2;
+            const loopStart = (this._doc.song.loopStart) * this._barWidth;
+            const loopStop = (this._doc.song.loopStart + this._doc.song.loopLength) * this._barWidth;
+            if (this._renderedBarCount != this._doc.song.barCount || this._renderedBarWidth != this._barWidth) {
+                this._renderedBarCount = this._doc.song.barCount;
+                this._renderedBarWidth = this._barWidth;
+                const editorWidth = this._barWidth * this._doc.song.barCount;
+                this.container.style.width = editorWidth + "px";
+                this._svg.setAttribute("width", editorWidth + "");
+            }
+            if (this._renderedLoopStart != loopStart || this._renderedLoopStop != loopStop) {
+                this._renderedLoopStart = loopStart;
+                this._renderedLoopStop = loopStop;
+                this._loop.setAttribute("d", `M ${loopStart + radius} ${2} ` +
+                    `L ${loopStop - radius} ${2} ` +
+                    `A ${radius - 2} ${radius - 2} ${0} ${0} ${1} ${loopStop - radius} ${this._editorHeight - 2} ` +
+                    `L ${loopStart + radius} ${this._editorHeight - 2} ` +
+                    `A ${radius - 2} ${radius - 2} ${0} ${0} ${1} ${loopStart + radius} ${2} ` +
+                    `z`);
+            }
+            this._updatePreview();
+        }
+    }
+
     class SpectrumEditor {
         constructor(_doc, _spectrumIndex) {
             this._doc = _doc;
@@ -16271,6 +17654,169 @@ var beepbox = (function (exports) {
                 this._fill.setAttribute("d", path + "L " + this._editorWidth + " " + prettyNumber(lastHeight) + " L " + this._editorWidth + " " + prettyNumber(this._editorHeight) + " L 0 " + prettyNumber(this._editorHeight) + " z ");
                 this._arrow.setAttribute("d", "M " + this._editorWidth + " " + prettyNumber(lastHeight) + " L " + (this._editorWidth - 4) + " " + prettyNumber(lastHeight - 4) + " L " + (this._editorWidth - 4) + " " + prettyNumber(lastHeight + 4) + " z");
                 this._arrow.style.display = (lastValue > 0) ? "" : "none";
+            }
+            if (this._renderedFifths != this._doc.prefs.showFifth) {
+                this._renderedFifths = this._doc.prefs.showFifth;
+                this._fifths.style.display = this._doc.prefs.showFifth ? "" : "none";
+            }
+        }
+    }
+
+    class HarmonicsEditor {
+        constructor(_doc) {
+            this._doc = _doc;
+            this._editorWidth = 120;
+            this._editorHeight = 26;
+            this._octaves = SVG.svg({ "pointer-events": "none" });
+            this._fifths = SVG.svg({ "pointer-events": "none" });
+            this._curve = SVG.path({ fill: "none", stroke: "currentColor", "stroke-width": 2, "pointer-events": "none" });
+            this._lastControlPoints = [];
+            this._lastControlPointContainer = SVG.svg({ "pointer-events": "none" });
+            this._svg = SVG.svg({ style: `background-color: ${ColorConfig.editorBackground}; touch-action: none; cursor: crosshair;`, width: "100%", height: "100%", viewBox: "0 0 " + this._editorWidth + " " + this._editorHeight, preserveAspectRatio: "none" }, this._octaves, this._fifths, this._curve, this._lastControlPointContainer);
+            this.container = HTML.div({ class: "harmonics", style: "height: 100%;" }, this._svg);
+            this._mouseX = 0;
+            this._mouseY = 0;
+            this._freqPrev = 0;
+            this._ampPrev = 0;
+            this._mouseDown = false;
+            this._change = null;
+            this._renderedPath = "";
+            this._renderedFifths = true;
+            this._whenMousePressed = (event) => {
+                event.preventDefault();
+                this._mouseDown = true;
+                const boundingRect = this._svg.getBoundingClientRect();
+                this._mouseX = ((event.clientX || event.pageX) - boundingRect.left) * this._editorWidth / (boundingRect.right - boundingRect.left);
+                this._mouseY = ((event.clientY || event.pageY) - boundingRect.top) * this._editorHeight / (boundingRect.bottom - boundingRect.top);
+                if (isNaN(this._mouseX))
+                    this._mouseX = 0;
+                if (isNaN(this._mouseY))
+                    this._mouseY = 0;
+                this._freqPrev = this._xToFreq(this._mouseX);
+                this._ampPrev = this._yToAmp(this._mouseY);
+                this._whenCursorMoved();
+            };
+            this._whenTouchPressed = (event) => {
+                event.preventDefault();
+                this._mouseDown = true;
+                const boundingRect = this._svg.getBoundingClientRect();
+                this._mouseX = (event.touches[0].clientX - boundingRect.left) * this._editorWidth / (boundingRect.right - boundingRect.left);
+                this._mouseY = (event.touches[0].clientY - boundingRect.top) * this._editorHeight / (boundingRect.bottom - boundingRect.top);
+                if (isNaN(this._mouseX))
+                    this._mouseX = 0;
+                if (isNaN(this._mouseY))
+                    this._mouseY = 0;
+                this._freqPrev = this._xToFreq(this._mouseX);
+                this._ampPrev = this._yToAmp(this._mouseY);
+                this._whenCursorMoved();
+            };
+            this._whenMouseMoved = (event) => {
+                if (this.container.offsetParent == null)
+                    return;
+                const boundingRect = this._svg.getBoundingClientRect();
+                this._mouseX = ((event.clientX || event.pageX) - boundingRect.left) * this._editorWidth / (boundingRect.right - boundingRect.left);
+                this._mouseY = ((event.clientY || event.pageY) - boundingRect.top) * this._editorHeight / (boundingRect.bottom - boundingRect.top);
+                if (isNaN(this._mouseX))
+                    this._mouseX = 0;
+                if (isNaN(this._mouseY))
+                    this._mouseY = 0;
+                this._whenCursorMoved();
+            };
+            this._whenTouchMoved = (event) => {
+                if (this.container.offsetParent == null)
+                    return;
+                if (!this._mouseDown)
+                    return;
+                event.preventDefault();
+                const boundingRect = this._svg.getBoundingClientRect();
+                this._mouseX = (event.touches[0].clientX - boundingRect.left) * this._editorWidth / (boundingRect.right - boundingRect.left);
+                this._mouseY = (event.touches[0].clientY - boundingRect.top) * this._editorHeight / (boundingRect.bottom - boundingRect.top);
+                if (isNaN(this._mouseX))
+                    this._mouseX = 0;
+                if (isNaN(this._mouseY))
+                    this._mouseY = 0;
+                this._whenCursorMoved();
+            };
+            this._whenCursorReleased = (event) => {
+                if (this._mouseDown) {
+                    this._doc.record(this._change);
+                    this._change = null;
+                }
+                this._mouseDown = false;
+            };
+            for (let i = 1; i <= Config.harmonicsControlPoints; i = i * 2) {
+                this._octaves.appendChild(SVG.rect({ fill: ColorConfig.tonic, x: (i - 0.5) * (this._editorWidth - 8) / (Config.harmonicsControlPoints - 1) - 1, y: 0, width: 2, height: this._editorHeight }));
+            }
+            for (let i = 3; i <= Config.harmonicsControlPoints; i = i * 2) {
+                this._fifths.appendChild(SVG.rect({ fill: ColorConfig.fifthNote, x: (i - 0.5) * (this._editorWidth - 8) / (Config.harmonicsControlPoints - 1) - 1, y: 0, width: 2, height: this._editorHeight }));
+            }
+            for (let i = 0; i < 4; i++) {
+                const rect = SVG.rect({ fill: "currentColor", x: (this._editorWidth - i * 2 - 1), y: 0, width: 1, height: this._editorHeight });
+                this._lastControlPoints.push(rect);
+                this._lastControlPointContainer.appendChild(rect);
+            }
+            this.container.addEventListener("mousedown", this._whenMousePressed);
+            document.addEventListener("mousemove", this._whenMouseMoved);
+            document.addEventListener("mouseup", this._whenCursorReleased);
+            this.container.addEventListener("touchstart", this._whenTouchPressed);
+            this.container.addEventListener("touchmove", this._whenTouchMoved);
+            this.container.addEventListener("touchend", this._whenCursorReleased);
+            this.container.addEventListener("touchcancel", this._whenCursorReleased);
+        }
+        _xToFreq(x) {
+            return (Config.harmonicsControlPoints - 1) * x / (this._editorWidth - 8) - 0.5;
+        }
+        _yToAmp(y) {
+            return Config.harmonicsMax * (1 - y / this._editorHeight);
+        }
+        _whenCursorMoved() {
+            if (this._mouseDown) {
+                const freq = this._xToFreq(this._mouseX);
+                const amp = this._yToAmp(this._mouseY);
+                const instrument = this._doc.song.channels[this._doc.channel].instruments[this._doc.getCurrentInstrument()];
+                const harmonicsWave = instrument.harmonicsWave;
+                if (freq != this._freqPrev) {
+                    const slope = (amp - this._ampPrev) / (freq - this._freqPrev);
+                    const offset = this._ampPrev - this._freqPrev * slope;
+                    const lowerFreq = Math.ceil(Math.min(this._freqPrev, freq));
+                    const upperFreq = Math.floor(Math.max(this._freqPrev, freq));
+                    for (let i = lowerFreq; i <= upperFreq; i++) {
+                        if (i < 0 || i >= Config.harmonicsControlPoints)
+                            continue;
+                        harmonicsWave.harmonics[i] = Math.max(0, Math.min(Config.harmonicsMax, Math.round(i * slope + offset)));
+                    }
+                }
+                harmonicsWave.harmonics[Math.max(0, Math.min(Config.harmonicsControlPoints - 1, Math.round(freq)))] = Math.max(0, Math.min(Config.harmonicsMax, Math.round(amp)));
+                this._freqPrev = freq;
+                this._ampPrev = amp;
+                this._change = new ChangeHarmonics(this._doc, instrument, harmonicsWave);
+                this._doc.setProspectiveChange(this._change);
+            }
+        }
+        render() {
+            const instrument = this._doc.song.channels[this._doc.channel].instruments[this._doc.getCurrentInstrument()];
+            const harmonicsWave = instrument.harmonicsWave;
+            const controlPointToHeight = (point) => {
+                return (1 - (point / Config.harmonicsMax)) * this._editorHeight;
+            };
+            let bottom = prettyNumber(this._editorHeight);
+            let path = "";
+            for (let i = 0; i < Config.harmonicsControlPoints - 1; i++) {
+                if (harmonicsWave.harmonics[i] == 0)
+                    continue;
+                let xPos = prettyNumber((i + 0.5) * (this._editorWidth - 8) / (Config.harmonicsControlPoints - 1));
+                path += "M " + xPos + " " + bottom + " ";
+                path += "L " + xPos + " " + prettyNumber(controlPointToHeight(harmonicsWave.harmonics[i])) + " ";
+            }
+            const lastHeight = controlPointToHeight(harmonicsWave.harmonics[Config.harmonicsControlPoints - 1]);
+            for (let i = 0; i < 4; i++) {
+                const rect = this._lastControlPoints[i];
+                rect.setAttribute("y", prettyNumber(lastHeight));
+                rect.setAttribute("height", prettyNumber(this._editorHeight - lastHeight));
+            }
+            if (this._renderedPath != path) {
+                this._renderedPath = path;
+                this._curve.setAttribute("d", path);
             }
             if (this._renderedFifths != this._doc.prefs.showFifth) {
                 this._renderedFifths = this._doc.prefs.showFifth;
@@ -19309,8 +20855,22 @@ You should be redirected to the song at:<br /><br />
     }
     function buildPresetOptions(isNoise) {
         const menu = select();
-        menu.appendChild(optgroup({ label: "Edit" }, option({ value: "copyInstrument" }, "Copy Instrument (⇧C)"), option({ value: "pasteInstrument" }, "Paste Instrument (⇧V)")));
+        menu.appendChild(optgroup({ label: "Edit" }, option({ value: "copyInstrument" }, "Copy Instrument (⇧C)"), option({ value: "pasteInstrument" }, "Paste Instrument (⇧V)"), option({ value: "randomPreset" }, "Random Preset (R)"), option({ value: "randomGenerated" }, "Random Generated (⇧R)")));
         const customTypeGroup = optgroup({ label: EditorConfig.presetCategories[0].name });
+        if (isNoise) {
+            customTypeGroup.appendChild(option({ value: 2 }, EditorConfig.valueToPreset(2).name));
+            customTypeGroup.appendChild(option({ value: 3 }, EditorConfig.valueToPreset(3).name));
+            customTypeGroup.appendChild(option({ value: 4 }, EditorConfig.valueToPreset(4).name));
+        }
+        else {
+            customTypeGroup.appendChild(option({ value: 0 }, EditorConfig.valueToPreset(0).name));
+            customTypeGroup.appendChild(option({ value: 6 }, EditorConfig.valueToPreset(6).name));
+            customTypeGroup.appendChild(option({ value: 8 }, EditorConfig.valueToPreset(8).name));
+            customTypeGroup.appendChild(option({ value: 5 }, EditorConfig.valueToPreset(5).name));
+            customTypeGroup.appendChild(option({ value: 7 }, EditorConfig.valueToPreset(7).name));
+            customTypeGroup.appendChild(option({ value: 3 }, EditorConfig.valueToPreset(3).name));
+            customTypeGroup.appendChild(option({ value: 1 }, EditorConfig.valueToPreset(1).name));
+        }
         menu.appendChild(customTypeGroup);
         for (let categoryIndex = 1; categoryIndex < EditorConfig.presetCategories.length; categoryIndex++) {
             const category = EditorConfig.presetCategories[categoryIndex];
@@ -19370,6 +20930,7 @@ You should be redirected to the song at:<br /><br />
             this._patternEditorNext = new PatternEditor(this.doc, false, 1);
             this._muteEditor = new MuteEditor(this.doc);
             this._trackEditor = new TrackEditor(this.doc);
+            this._loopEditor = new LoopEditor(this.doc);
             this._octaveScrollBar = new OctaveScrollBar(this.doc);
             this._piano = new Piano(this.doc);
             this._playButton = button({ class: "playButton", type: "button", title: "Play (Space)" }, span("Play"));
@@ -19386,9 +20947,19 @@ You should be redirected to the song at:<br /><br />
             this._keySelect = buildOptions(select(), Config.keys.map(key => key.name).reverse());
             this._tempoSlider = new Slider(input({ style: "margin: 0; width: 4em; flex-grow: 1; vertical-align: middle;", type: "range", min: "0", max: "14", value: "7", step: "1" }), this.doc, (oldValue, newValue) => new ChangeTempo(this.doc, oldValue, Math.round(120.0 * Math.pow(2.0, (-4.0 + newValue) / 9.0))));
             this._tempoStepper = input({ style: "width: 3em; margin-left: 0.4em; vertical-align: middle;", type: "number", step: "1" });
+            this._chorusSlider = new Slider(input({ style: "margin: 0;", type: "range", min: "0", max: Config.chorusRange - 1, value: "0", step: "1" }), this.doc, (oldValue, newValue) => new ChangeChorus(this.doc, oldValue, newValue));
+            this._chorusRow = div({ class: "selectRow" }, span({ class: "tip", onclick: () => this._openPrompt("chorus") }, "Chorus:"), this._chorusSlider.input);
+            this._reverbSlider = new Slider(input({ style: "margin: 0;", type: "range", min: "0", max: Config.reverbRange - 1, value: "0", step: "1" }), this.doc, (oldValue, newValue) => new ChangeReverb(this.doc, oldValue, newValue));
+            this._reverbRow = div({ class: "selectRow" }, span({ class: "tip", onclick: () => this._openPrompt("reverb") }, "Reverb:"), this._reverbSlider.input);
+            this._echoSustainSlider = new Slider(input({ style: "margin: 0;", type: "range", min: "0", max: Config.echoSustainRange - 1, value: "0", step: "1" }), this.doc, (oldValue, newValue) => new ChangeEchoSustain(this.doc, oldValue, newValue));
+            this._echoSustainRow = div({ class: "selectRow" }, span({ class: "tip", onclick: () => this._openPrompt("echoSustain") }, "Echo:"), this._echoSustainSlider.input);
+            this._echoDelaySlider = new Slider(input({ style: "margin: 0;", type: "range", min: "0", max: Config.echoDelayRange - 1, value: "0", step: "1" }), this.doc, (oldValue, newValue) => new ChangeEchoDelay(this.doc, oldValue, newValue));
+            this._echoDelayRow = div({ class: "selectRow" }, span({ class: "tip", onclick: () => this._openPrompt("echoDelay") }, "Echo Delay:"), this._echoDelaySlider.input);
             this._rhythmSelect = buildOptions(select(), Config.rhythms.map(rhythm => rhythm.name));
             this._pitchedPresetSelect = buildPresetOptions(false);
             this._drumPresetSelect = buildPresetOptions(true);
+            this._algorithmSelect = buildOptions(select(), Config.algorithms.map(algorithm => algorithm.name));
+            this._algorithmSelectRow = div({ class: "selectRow" }, span({ class: "tip", onclick: () => this._openPrompt("algorithm") }, "Algorithm:"), div({ class: "selectContainer" }, this._algorithmSelect));
             this._instrumentButtons = [];
             this._instrumentAddButton = button({ type: "button", class: "add-instrument last-button" });
             this._instrumentRemoveButton = button({ type: "button", class: "remove-instrument" });
@@ -19399,17 +20970,72 @@ You should be redirected to the song at:<br /><br />
             this._instrumentCopyPasteRow = div({ class: "instrumentCopyPasteRow", style: "display: none;" }, this._instrumentCopyButton, this._instrumentPasteButton);
             this._instrumentVolumeSlider = new Slider(input({ style: "margin: 0;", type: "range", min: -(Config.volumeRange - 1), max: "0", value: "0", step: "1" }), this.doc, (oldValue, newValue) => new ChangeVolume(this.doc, oldValue, -newValue));
             this._instrumentVolumeSliderRow = div({ class: "selectRow" }, span({ class: "tip", onclick: () => this._openPrompt("instrumentVolume") }, "Volume:"), this._instrumentVolumeSlider.input);
+            this._panSlider = new Slider(input({ style: "margin: 0;", type: "range", min: "0", max: Config.panMax, value: Config.panCenter, step: "1" }), this.doc, (oldValue, newValue) => new ChangePan(this.doc, oldValue, newValue));
+            this._panSliderRow = div({ class: "selectRow" }, span({ class: "tip", onclick: () => this._openPrompt("pan") }, "Panning:"), this._panSlider.input);
+            this._chipWaveSelect = buildOptions(select(), Config.chipWaves.map(wave => wave.name));
+            this._chipNoiseSelect = buildOptions(select(), Config.chipNoises.map(wave => wave.name));
+            this._chipWaveSelectRow = div({ class: "selectRow" }, span({ class: "tip", onclick: () => this._openPrompt("chipWave") }, "Wave:"), div({ class: "selectContainer" }, this._chipWaveSelect));
+            this._chipNoiseSelectRow = div({ class: "selectRow" }, span({ class: "tip", onclick: () => this._openPrompt("chipNoise") }, "Noise:"), div({ class: "selectContainer" }, this._chipNoiseSelect));
+            this._fadeInOutEditor = new FadeInOutEditor(this.doc);
+            this._fadeInOutRow = div({ class: "selectRow" }, span({ class: "tip", onclick: () => this._openPrompt("fadeInOut") }, "Fade In/Out:"), this._fadeInOutEditor.container);
+            this._transitionSelect = buildOptions(select(), Config.transitions.map(transition => transition.name));
+            this._transitionRow = div({ class: "selectRow" }, span({ class: "tip", onclick: () => this._openPrompt("transition") }, "Transition:"), div({ class: "selectContainer" }, this._transitionSelect));
             this._effectsSelect = select(option({ selected: true, disabled: true, hidden: false }));
+            this._eqFilterEditor = new FilterEditor(this.doc);
+            this._eqFilterRow = div({ class: "selectRow" }, span({ class: "tip", onclick: () => this._openPrompt("eqFilter") }, "EQ Filter:"), this._eqFilterEditor.container);
+            this._noteFilterEditor = new FilterEditor(this.doc, true);
+            this._noteFilterRow = div({ class: "selectRow" }, span({ class: "tip", onclick: () => this._openPrompt("noteFilter") }, "Note Filter:"), this._noteFilterEditor.container);
+            this._supersawDynamismSlider = new Slider(input({ style: "margin: 0;", type: "range", min: "0", max: Config.supersawDynamismMax, value: "0", step: "1" }), this.doc, (oldValue, newValue) => new ChangeSupersawDynamism(this.doc, oldValue, newValue));
+            this._supersawDynamismRow = div({ class: "selectRow" }, span({ class: "tip", onclick: () => this._openPrompt("supersawDynamism") }, "Dynamism:"), this._supersawDynamismSlider.input);
+            this._supersawSpreadSlider = new Slider(input({ style: "margin: 0;", type: "range", min: "0", max: Config.supersawSpreadMax, value: "0", step: "1" }), this.doc, (oldValue, newValue) => new ChangeSupersawSpread(this.doc, oldValue, newValue));
+            this._supersawSpreadRow = div({ class: "selectRow" }, span({ class: "tip", onclick: () => this._openPrompt("supersawSpread") }, "Spread:"), this._supersawSpreadSlider.input);
+            this._supersawShapeSlider = new Slider(input({ style: "margin: 0;", type: "range", min: "0", max: Config.supersawShapeMax, value: "0", step: "1" }), this.doc, (oldValue, newValue) => new ChangeSupersawShape(this.doc, oldValue, newValue));
+            this._supersawShapeRow = div({ class: "selectRow" }, span({ class: "tip", onclick: () => this._openPrompt("supersawShape") }, "Saw↔Pulse:"), this._supersawShapeSlider.input);
+            this._pulseWidthSlider = new Slider(input({ style: "margin: 0;", type: "range", min: "0", max: Config.pulseWidthRange - 1, value: "0", step: "1" }), this.doc, (oldValue, newValue) => new ChangePulseWidth(this.doc, oldValue, newValue));
+            this._pulseWidthRow = div({ class: "selectRow" }, span({ class: "tip", onclick: () => this._openPrompt("pulseWidth") }, "Pulse Width:"), this._pulseWidthSlider.input);
+            this._pitchShiftSlider = new Slider(input({ style: "margin: 0;", type: "range", min: "0", max: Config.pitchShiftRange - 1, value: "0", step: "1" }), this.doc, (oldValue, newValue) => new ChangePitchShift(this.doc, oldValue, newValue));
+            this._pitchShiftTonicMarkers = [div({ class: "pitchShiftMarker", style: { color: ColorConfig.tonic } }), div({ class: "pitchShiftMarker", style: { color: ColorConfig.tonic, left: "50%" } }), div({ class: "pitchShiftMarker", style: { color: ColorConfig.tonic, left: "100%" } })];
+            this._pitchShiftFifthMarkers = [div({ class: "pitchShiftMarker", style: { color: ColorConfig.fifthNote, left: (100 * 7 / 24) + "%" } }), div({ class: "pitchShiftMarker", style: { color: ColorConfig.fifthNote, left: (100 * 19 / 24) + "%" } })];
+            this._pitchShiftMarkerContainer = div({ style: "display: flex; position: relative;" }, this._pitchShiftSlider.input, div({ class: "pitchShiftMarkerContainer" }, this._pitchShiftTonicMarkers, this._pitchShiftFifthMarkers));
+            this._pitchShiftRow = div({ class: "selectRow" }, span({ class: "tip", onclick: () => this._openPrompt("pitchShift") }, "Pitch Shift:"), this._pitchShiftMarkerContainer);
+            this._detuneSlider = new Slider(input({ style: "margin: 0;", type: "range", min: "0", max: Config.detuneMax, value: "0", step: "1" }), this.doc, (oldValue, newValue) => new ChangeDetune(this.doc, oldValue, newValue));
+            this._detuneRow = div({ class: "selectRow" }, span({ class: "tip", onclick: () => this._openPrompt("detune") }, "Detune:"), this._detuneSlider.input);
+            this._distortionSlider = new Slider(input({ style: "margin: 0;", type: "range", min: "0", max: Config.distortionRange - 1, value: "0", step: "1" }), this.doc, (oldValue, newValue) => new ChangeDistortion(this.doc, oldValue, newValue));
+            this._distortionRow = div({ class: "selectRow" }, span({ class: "tip", onclick: () => this._openPrompt("distortion") }, "Distortion:"), this._distortionSlider.input);
+            this._bitcrusherQuantizationSlider = new Slider(input({ style: "margin: 0;", type: "range", min: "0", max: Config.bitcrusherQuantizationRange - 1, value: "0", step: "1" }), this.doc, (oldValue, newValue) => new ChangeBitcrusherQuantization(this.doc, oldValue, newValue));
+            this._bitcrusherQuantizationRow = div({ class: "selectRow" }, span({ class: "tip", onclick: () => this._openPrompt("bitcrusherQuantization") }, "Bit Crush:"), this._bitcrusherQuantizationSlider.input);
+            this._bitcrusherFreqSlider = new Slider(input({ style: "margin: 0;", type: "range", min: "0", max: Config.bitcrusherFreqRange - 1, value: "0", step: "1" }), this.doc, (oldValue, newValue) => new ChangeBitcrusherFreq(this.doc, oldValue, newValue));
+            this._bitcrusherFreqRow = div({ class: "selectRow" }, span({ class: "tip", onclick: () => this._openPrompt("bitcrusherFreq") }, "Freq Crush:"), this._bitcrusherFreqSlider.input);
+            this._stringSustainSlider = new Slider(input({ style: "margin: 0;", type: "range", min: "0", max: Config.stringSustainRange - 1, value: "0", step: "1" }), this.doc, (oldValue, newValue) => new ChangeStringSustain(this.doc, oldValue, newValue));
+            this._stringSustainLabel = span({ class: "tip", onclick: () => this._openPrompt("stringSustain") }, "Sustain:");
+            this._stringSustainRow = div({ class: "selectRow" }, this._stringSustainLabel, this._stringSustainSlider.input);
+            this._unisonSelect = buildOptions(select(), Config.unisons.map(unison => unison.name));
+            this._unisonSelectRow = div({ class: "selectRow" }, span({ class: "tip", onclick: () => this._openPrompt("unison") }, "Unison:"), div({ class: "selectContainer" }, this._unisonSelect));
+            this._chordSelect = buildOptions(select(), Config.chords.map(chord => chord.name));
+            this._chordSelectRow = div({ class: "selectRow" }, span({ class: "tip", onclick: () => this._openPrompt("chords") }, "Chords:"), div({ class: "selectContainer" }, this._chordSelect));
+            this._vibratoSelect = buildOptions(select(), Config.vibratos.map(vibrato => vibrato.name));
+            this._vibratoSelectRow = div({ class: "selectRow" }, span({ class: "tip", onclick: () => this._openPrompt("vibrato") }, "Vibrato:"), div({ class: "selectContainer" }, this._vibratoSelect));
             this._phaseModGroup = div({ class: "editor-controls" });
+            this._feedbackTypeSelect = buildOptions(select(), Config.feedbacks.map(feedback => feedback.name));
+            this._feedbackRow1 = div({ class: "selectRow" }, span({ class: "tip", onclick: () => this._openPrompt("feedbackType") }, "Feedback:"), div({ class: "selectContainer" }, this._feedbackTypeSelect));
+            this._spectrumEditor = new SpectrumEditor(this.doc, null);
+            this._spectrumRow = div({ class: "selectRow" }, span({ class: "tip", onclick: () => this._openPrompt("spectrum") }, "Spectrum:"), this._spectrumEditor.container);
+            this._harmonicsEditor = new HarmonicsEditor(this.doc);
+            this._harmonicsRow = div({ class: "selectRow" }, span({ class: "tip", onclick: () => this._openPrompt("harmonics") }, "Harmonics:"), this._harmonicsEditor.container);
+            this._envelopeEditor = new EnvelopeEditor(this.doc);
             this._drumsetGroup = div({ class: "editor-controls" });
+            this._feedbackAmplitudeSlider = new Slider(input({ type: "range", min: "0", max: Config.operatorAmplitudeMax, value: "0", step: "1", title: "Feedback Amplitude" }), this.doc, (oldValue, newValue) => new ChangeFeedbackAmplitude(this.doc, oldValue, newValue));
+            this._feedbackRow2 = div({ class: "selectRow" }, span({ class: "tip", onclick: () => this._openPrompt("feedbackVolume") }, "Fdback Vol:"), this._feedbackAmplitudeSlider.input);
+            this._customizeInstrumentButton = button({ type: "button", class: "customize-instrument" }, "Customize Instrument");
             this._addEnvelopeButton = button({ type: "button", class: "add-envelope" });
-            this._instrumentSettingsGroup = div({ class: "editor-controls" }, div({ style: `margin: 3px 0; text-align: center; color: ${ColorConfig.secondaryText};` }, "Instrument Settings"), this._instrumentsButtonRow, this._instrumentCopyPasteRow, this._instrumentVolumeSliderRow, div({ class: "selectRow" }, span({ class: "tip", onclick: () => this._openPrompt("instrumentType") }, "Type:"), div({ class: "selectContainer" }, this._pitchedPresetSelect, this._drumPresetSelect)));
+            this._customInstrumentSettingsGroup = div({ class: "editor-controls" }, this._eqFilterRow, this._fadeInOutRow, this._chipWaveSelectRow, this._chipNoiseSelectRow, this._algorithmSelectRow, this._phaseModGroup, this._feedbackRow1, this._feedbackRow2, this._spectrumRow, this._harmonicsRow, this._drumsetGroup, this._supersawDynamismRow, this._supersawSpreadRow, this._supersawShapeRow, this._pulseWidthRow, this._stringSustainRow, this._unisonSelectRow, div({ style: `margin: 2px 0; margin-left: 2em; display: flex; align-items: center;` }, span({ style: `flex-grow: 1; text-align: center;` }, span({ class: "tip", onclick: () => this._openPrompt("effects") }, "Effects")), div({ class: "effects-menu" }, this._effectsSelect)), this._transitionRow, this._chordSelectRow, this._pitchShiftRow, this._detuneRow, this._vibratoSelectRow, this._noteFilterRow, this._distortionRow, this._bitcrusherQuantizationRow, this._bitcrusherFreqRow, this._panSliderRow, this._chorusRow, this._echoSustainRow, this._echoDelayRow, this._reverbRow, div({ style: `margin: 2px 0; margin-left: 2em; display: flex; align-items: center;` }, span({ style: `flex-grow: 1; text-align: center;` }, span({ class: "tip", onclick: () => this._openPrompt("envelopes") }, "Envelopes")), this._addEnvelopeButton), this._envelopeEditor.container);
+            this._instrumentSettingsGroup = div({ class: "editor-controls" }, div({ style: `margin: 3px 0; text-align: center; color: ${ColorConfig.secondaryText};` }, "Instrument Settings"), this._instrumentsButtonRow, this._instrumentCopyPasteRow, this._instrumentVolumeSliderRow, div({ class: "selectRow" }, span({ class: "tip", onclick: () => this._openPrompt("instrumentType") }, "Type:"), div({ class: "selectContainer" }, this._pitchedPresetSelect, this._drumPresetSelect)), this._customizeInstrumentButton, this._customInstrumentSettingsGroup);
             this._promptContainer = div({ class: "promptContainer", style: "display: none;" });
             this._zoomInButton = button({ class: "zoomInButton", type: "button", title: "Zoom In" });
             this._zoomOutButton = button({ class: "zoomOutButton", type: "button", title: "Zoom Out" });
             this._patternEditorRow = div({ style: "flex: 1; height: 100%; display: flex; overflow: hidden; justify-content: center;" }, this._patternEditorPrev.container, this._patternEditor.container, this._patternEditorNext.container);
             this._patternArea = div({ class: "pattern-area" }, this._piano.container, this._patternEditorRow, this._octaveScrollBar.container, this._zoomInButton, this._zoomOutButton);
-            this._trackContainer = div({ class: "trackContainer" }, this._trackEditor.container);
+            this._trackContainer = div({ class: "trackContainer" }, this._trackEditor.container, this._loopEditor.container);
             this._trackVisibleArea = div({ style: "position: absolute; width: 100%; height: 100%; pointer-events: none;" });
             this._trackAndMuteContainer = div({ class: "trackAndMuteContainer prefers-big-scrollbars" }, this._muteEditor.container, this._trackContainer, this._trackVisibleArea);
             this._barScrollBar = new BarScrollBar(this.doc);
@@ -19550,6 +21176,224 @@ You should be redirected to the song at:<br /><br />
                 else {
                     this._instrumentCopyPasteRow.style.display = "none";
                 }
+                if (!prefs.alwaysShowSettings && instrument.preset != instrument.type) {
+                    this._customizeInstrumentButton.style.display = "";
+                    this._customInstrumentSettingsGroup.style.display = "none";
+                }
+                else {
+                    this._customizeInstrumentButton.style.display = "none";
+                    this._customInstrumentSettingsGroup.style.display = "";
+                    if (instrument.type == 2) {
+                        this._chipNoiseSelectRow.style.display = "";
+                        setSelectedValue(this._chipNoiseSelect, instrument.chipNoise);
+                    }
+                    else {
+                        this._chipNoiseSelectRow.style.display = "none";
+                    }
+                    if (instrument.type == 3) {
+                        this._spectrumRow.style.display = "";
+                        this._spectrumEditor.render();
+                    }
+                    else {
+                        this._spectrumRow.style.display = "none";
+                    }
+                    if (instrument.type == 5 || instrument.type == 7) {
+                        this._harmonicsRow.style.display = "";
+                        this._harmonicsEditor.render();
+                    }
+                    else {
+                        this._harmonicsRow.style.display = "none";
+                    }
+                    if (instrument.type == 7) {
+                        this._stringSustainRow.style.display = "";
+                        this._stringSustainSlider.updateValue(instrument.stringSustain);
+                        this._stringSustainLabel.textContent = Config.enableAcousticSustain ? "Sustain (" + Config.sustainTypeNames[instrument.stringSustainType].substring(0, 1).toUpperCase() + "):" : "Sustain:";
+                    }
+                    else {
+                        this._stringSustainRow.style.display = "none";
+                    }
+                    if (instrument.type == 4) {
+                        this._drumsetGroup.style.display = "";
+                        this._fadeInOutRow.style.display = "none";
+                        for (let i = 0; i < Config.drumCount; i++) {
+                            setSelectedValue(this._drumsetEnvelopeSelects[i], instrument.drumsetEnvelopes[i]);
+                            this._drumsetSpectrumEditors[i].render();
+                        }
+                    }
+                    else {
+                        this._drumsetGroup.style.display = "none";
+                        this._fadeInOutRow.style.display = "";
+                        this._fadeInOutEditor.render();
+                    }
+                    if (instrument.type == 0) {
+                        this._chipWaveSelectRow.style.display = "";
+                        setSelectedValue(this._chipWaveSelect, instrument.chipWave);
+                    }
+                    else {
+                        this._chipWaveSelectRow.style.display = "none";
+                    }
+                    if (instrument.type == 1) {
+                        this._algorithmSelectRow.style.display = "";
+                        this._phaseModGroup.style.display = "";
+                        this._feedbackRow1.style.display = "";
+                        this._feedbackRow2.style.display = "";
+                        setSelectedValue(this._algorithmSelect, instrument.algorithm);
+                        setSelectedValue(this._feedbackTypeSelect, instrument.feedbackType);
+                        this._feedbackAmplitudeSlider.updateValue(instrument.feedbackAmplitude);
+                        for (let i = 0; i < Config.operatorCount; i++) {
+                            const isCarrier = (i < Config.algorithms[instrument.algorithm].carrierCount);
+                            this._operatorRows[i].style.color = isCarrier ? ColorConfig.primaryText : "";
+                            setSelectedValue(this._operatorFrequencySelects[i], instrument.operators[i].frequency);
+                            this._operatorAmplitudeSliders[i].updateValue(instrument.operators[i].amplitude);
+                            const operatorName = (isCarrier ? "Voice " : "Modulator ") + (i + 1);
+                            this._operatorFrequencySelects[i].title = operatorName + " Frequency";
+                            this._operatorAmplitudeSliders[i].input.title = operatorName + (isCarrier ? " Volume" : " Amplitude");
+                        }
+                    }
+                    else {
+                        this._algorithmSelectRow.style.display = "none";
+                        this._phaseModGroup.style.display = "none";
+                        this._feedbackRow1.style.display = "none";
+                        this._feedbackRow2.style.display = "none";
+                    }
+                    if (instrument.type == 8) {
+                        this._supersawDynamismRow.style.display = "";
+                        this._supersawSpreadRow.style.display = "";
+                        this._supersawShapeRow.style.display = "";
+                        this._supersawDynamismSlider.updateValue(instrument.supersawDynamism);
+                        this._supersawSpreadSlider.updateValue(instrument.supersawSpread);
+                        this._supersawShapeSlider.updateValue(instrument.supersawShape);
+                    }
+                    else {
+                        this._supersawDynamismRow.style.display = "none";
+                        this._supersawSpreadRow.style.display = "none";
+                        this._supersawShapeRow.style.display = "none";
+                    }
+                    if (instrument.type == 6 || instrument.type == 8) {
+                        this._pulseWidthRow.style.display = "";
+                        this._pulseWidthSlider.input.title = prettyNumber(getPulseWidthRatio(instrument.pulseWidth) * 100) + "%";
+                        this._pulseWidthSlider.updateValue(instrument.pulseWidth);
+                    }
+                    else {
+                        this._pulseWidthRow.style.display = "none";
+                    }
+                    if (effectsIncludeTransition(instrument.effects)) {
+                        this._transitionRow.style.display = "";
+                        setSelectedValue(this._transitionSelect, instrument.transition);
+                    }
+                    else {
+                        this._transitionRow.style.display = "none";
+                    }
+                    if (effectsIncludeChord(instrument.effects)) {
+                        this._chordSelectRow.style.display = "";
+                        setSelectedValue(this._chordSelect, instrument.chord);
+                    }
+                    else {
+                        this._chordSelectRow.style.display = "none";
+                    }
+                    if (effectsIncludePitchShift(instrument.effects)) {
+                        this._pitchShiftRow.style.display = "";
+                        this._pitchShiftSlider.updateValue(instrument.pitchShift);
+                        this._pitchShiftSlider.input.title = (instrument.pitchShift - Config.pitchShiftCenter) + " semitone(s)";
+                        for (const marker of this._pitchShiftFifthMarkers) {
+                            marker.style.display = prefs.showFifth ? "" : "none";
+                        }
+                    }
+                    else {
+                        this._pitchShiftRow.style.display = "none";
+                    }
+                    if (effectsIncludeDetune(instrument.effects)) {
+                        this._detuneRow.style.display = "";
+                        this._detuneSlider.updateValue(instrument.detune);
+                        this._detuneSlider.input.title = (Synth.detuneToCents(instrument.detune - Config.detuneCenter)) + " cent(s)";
+                    }
+                    else {
+                        this._detuneRow.style.display = "none";
+                    }
+                    if (effectsIncludeVibrato(instrument.effects)) {
+                        this._vibratoSelectRow.style.display = "";
+                        setSelectedValue(this._vibratoSelect, instrument.vibrato);
+                    }
+                    else {
+                        this._vibratoSelectRow.style.display = "none";
+                    }
+                    if (effectsIncludeNoteFilter(instrument.effects)) {
+                        this._noteFilterRow.style.display = "";
+                        this._noteFilterEditor.render();
+                    }
+                    else {
+                        this._noteFilterRow.style.display = "none";
+                    }
+                    if (effectsIncludeDistortion(instrument.effects)) {
+                        this._distortionRow.style.display = "";
+                        this._distortionSlider.updateValue(instrument.distortion);
+                    }
+                    else {
+                        this._distortionRow.style.display = "none";
+                    }
+                    if (effectsIncludeBitcrusher(instrument.effects)) {
+                        this._bitcrusherQuantizationRow.style.display = "";
+                        this._bitcrusherFreqRow.style.display = "";
+                        this._bitcrusherQuantizationSlider.updateValue(instrument.bitcrusherQuantization);
+                        this._bitcrusherFreqSlider.updateValue(instrument.bitcrusherFreq);
+                    }
+                    else {
+                        this._bitcrusherQuantizationRow.style.display = "none";
+                        this._bitcrusherFreqRow.style.display = "none";
+                    }
+                    if (effectsIncludePanning(instrument.effects)) {
+                        this._panSliderRow.style.display = "";
+                        this._panSlider.updateValue(instrument.pan);
+                    }
+                    else {
+                        this._panSliderRow.style.display = "none";
+                    }
+                    if (effectsIncludeChorus(instrument.effects)) {
+                        this._chorusRow.style.display = "";
+                        this._chorusSlider.updateValue(instrument.chorus);
+                    }
+                    else {
+                        this._chorusRow.style.display = "none";
+                    }
+                    if (effectsIncludeEcho(instrument.effects)) {
+                        this._echoSustainRow.style.display = "";
+                        this._echoSustainSlider.updateValue(instrument.echoSustain);
+                        this._echoDelayRow.style.display = "";
+                        this._echoDelaySlider.updateValue(instrument.echoDelay);
+                        this._echoDelaySlider.input.title = (Math.round((instrument.echoDelay + 1) * Config.echoDelayStepTicks / (Config.ticksPerPart * Config.partsPerBeat) * 1000) / 1000) + " beat(s)";
+                    }
+                    else {
+                        this._echoSustainRow.style.display = "none";
+                        this._echoDelayRow.style.display = "none";
+                    }
+                    if (effectsIncludeReverb(instrument.effects)) {
+                        this._reverbRow.style.display = "";
+                        this._reverbSlider.updateValue(instrument.reverb);
+                    }
+                    else {
+                        this._reverbRow.style.display = "none";
+                    }
+                    if (instrument.type == 0 || instrument.type == 5 || instrument.type == 7) {
+                        this._unisonSelectRow.style.display = "";
+                        setSelectedValue(this._unisonSelect, instrument.unison);
+                    }
+                    else {
+                        this._unisonSelectRow.style.display = "none";
+                    }
+                    this._envelopeEditor.render();
+                }
+                for (let chordIndex = 0; chordIndex < Config.chords.length; chordIndex++) {
+                    let hidden = (!Config.instrumentTypeHasSpecialInterval[instrument.type] && Config.chords[chordIndex].customInterval);
+                    const option = this._chordSelect.children[chordIndex];
+                    if (hidden) {
+                        if (!option.hasAttribute("hidden")) {
+                            option.setAttribute("hidden", "");
+                        }
+                    }
+                    else {
+                        option.removeAttribute("hidden");
+                    }
+                }
                 if (this.doc.song.layeredInstruments || this.doc.song.patternInstruments) {
                     this._instrumentsButtonRow.style.display = "";
                     this._instrumentsButtonBar.style.setProperty("--text-color-lit", colors.primaryNote);
@@ -19618,6 +21462,7 @@ You should be redirected to the song at:<br /><br />
                     this._instrumentsButtonRow.style.display = "none";
                 }
                 this._instrumentSettingsGroup.style.color = colors.primaryNote;
+                this._eqFilterEditor.render();
                 this._instrumentVolumeSlider.updateValue(-instrument.volume);
                 this._addEnvelopeButton.disabled = (instrument.envelopeCount >= Config.maxEnvelopeCount);
                 this._volumeSlider.value = String(prefs.volume);
@@ -19663,6 +21508,7 @@ You should be redirected to the song at:<br /><br />
                     this._octaveScrollBar.container.style.pointerEvents = "";
                     this._octaveScrollBar.container.style.opacity = "";
                     this._trackContainer.style.pointerEvents = "";
+                    this._loopEditor.container.style.opacity = "";
                     this._instrumentSettingsArea.style.pointerEvents = "";
                     this._instrumentSettingsArea.style.opacity = "";
                     this._menuArea.style.pointerEvents = "";
@@ -19677,6 +21523,7 @@ You should be redirected to the song at:<br /><br />
                         this._octaveScrollBar.container.style.pointerEvents = "none";
                         this._octaveScrollBar.container.style.opacity = "0.5";
                         this._trackContainer.style.pointerEvents = "none";
+                        this._loopEditor.container.style.opacity = "0.5";
                         this._instrumentSettingsArea.style.pointerEvents = "none";
                         this._instrumentSettingsArea.style.opacity = "0.5";
                         this._menuArea.style.pointerEvents = "none";
@@ -20252,6 +22099,12 @@ You should be redirected to the song at:<br /><br />
             this._whenSetDrumPreset = () => {
                 this._setPreset(this._drumPresetSelect.value);
             };
+            this._whenSetFeedbackType = () => {
+                this.doc.record(new ChangeFeedbackType(this.doc, this._feedbackTypeSelect.selectedIndex));
+            };
+            this._whenSetAlgorithm = () => {
+                this.doc.record(new ChangeAlgorithm(this.doc, this._algorithmSelect.selectedIndex));
+            };
             this._whenSelectInstrument = (event) => {
                 if (event.target == this._instrumentAddButton) {
                     this.doc.record(new ChangeAddChannelInstrument(this.doc));
@@ -20267,6 +22120,18 @@ You should be redirected to the song at:<br /><br />
                 }
                 this._refocusStage();
             };
+            this._whenCustomizePressed = () => {
+                this.doc.record(new ChangeCustomizeInstrument(this.doc));
+            };
+            this._whenSetChipWave = () => {
+                this.doc.record(new ChangeChipWave(this.doc, this._chipWaveSelect.selectedIndex));
+            };
+            this._whenSetNoiseWave = () => {
+                this.doc.record(new ChangeNoiseWave(this.doc, this._chipNoiseSelect.selectedIndex));
+            };
+            this._whenSetTransition = () => {
+                this.doc.record(new ChangeTransition(this.doc, this._transitionSelect.selectedIndex));
+            };
             this._whenSetEffects = () => {
                 const instrument = this.doc.song.channels[this.doc.channel].instruments[this.doc.getCurrentInstrument()];
                 const oldValue = instrument.effects;
@@ -20276,6 +22141,15 @@ You should be redirected to the song at:<br /><br />
                 if (instrument.effects > oldValue) {
                     this.doc.addedEffect = true;
                 }
+            };
+            this._whenSetVibrato = () => {
+                this.doc.record(new ChangeVibrato(this.doc, this._vibratoSelect.selectedIndex));
+            };
+            this._whenSetUnison = () => {
+                this.doc.record(new ChangeUnison(this.doc, this._unisonSelect.selectedIndex));
+            };
+            this._whenSetChord = () => {
+                this.doc.record(new ChangeChord(this.doc, this._chordSelect.selectedIndex));
             };
             this._addNewEnvelope = () => {
                 this.doc.record(new ChangeAddEnvelope(this.doc));
@@ -20494,10 +22368,19 @@ You should be redirected to the song at:<br /><br />
             this._rhythmSelect.addEventListener("change", this._whenSetRhythm);
             this._pitchedPresetSelect.addEventListener("change", this._whenSetPitchedPreset);
             this._drumPresetSelect.addEventListener("change", this._whenSetDrumPreset);
+            this._algorithmSelect.addEventListener("change", this._whenSetAlgorithm);
             this._instrumentsButtonBar.addEventListener("click", this._whenSelectInstrument);
             this._instrumentCopyButton.addEventListener("click", this._copyInstrument);
             this._instrumentPasteButton.addEventListener("click", this._pasteInstrument);
+            this._customizeInstrumentButton.addEventListener("click", this._whenCustomizePressed);
+            this._feedbackTypeSelect.addEventListener("change", this._whenSetFeedbackType);
+            this._chipWaveSelect.addEventListener("change", this._whenSetChipWave);
+            this._chipNoiseSelect.addEventListener("change", this._whenSetNoiseWave);
+            this._transitionSelect.addEventListener("change", this._whenSetTransition);
             this._effectsSelect.addEventListener("change", this._whenSetEffects);
+            this._unisonSelect.addEventListener("change", this._whenSetUnison);
+            this._chordSelect.addEventListener("change", this._whenSetChord);
+            this._vibratoSelect.addEventListener("change", this._whenSetVibrato);
             this._playButton.addEventListener("click", this._togglePlay);
             this._pauseButton.addEventListener("click", this._togglePlay);
             this._recordButton.addEventListener("click", this._toggleRecord);
@@ -20521,6 +22404,11 @@ You should be redirected to the song at:<br /><br />
             this._zoomOutButton.addEventListener("click", this._zoomOut);
             this._patternArea.addEventListener("mousedown", this._refocusStage);
             this._trackArea.addEventListener("mousedown", this._refocusStage);
+            this._fadeInOutEditor.container.addEventListener("mousedown", this._refocusStage);
+            this._spectrumEditor.container.addEventListener("mousedown", this._refocusStage);
+            this._eqFilterEditor.container.addEventListener("mousedown", this._refocusStage);
+            this._noteFilterEditor.container.addEventListener("mousedown", this._refocusStage);
+            this._harmonicsEditor.container.addEventListener("mousedown", this._refocusStage);
             this._tempoStepper.addEventListener("keydown", this._tempoStepperCaptureNumberKeys, false);
             this._addEnvelopeButton.addEventListener("click", this._addNewEnvelope);
             this._patternArea.addEventListener("contextmenu", this._disableCtrlContextMenu);

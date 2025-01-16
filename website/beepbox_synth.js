@@ -279,7 +279,7 @@ var beepbox = (function (exports) {
     Config.supersawSpreadMax = 12;
     Config.supersawShapeMax = 6;
     Config.pitchChannelCountMin = 1;
-    Config.pitchChannelCountMax = 2;
+    Config.pitchChannelCountMax = 3;
     Config.noiseChannelCountMin = 0;
     Config.noiseChannelCountMax = 1;
     Config.noiseInterval = 6;
@@ -2605,7 +2605,7 @@ var beepbox = (function (exports) {
                 this.channels.length = this.getChannelCount();
             }
         }
-        toBase64String() {
+        toRawBase64String() {
             let bits;
             let buffer = [];
             buffer.push(base64IntToCharCode[Song._latestVersion]);
@@ -2929,7 +2929,7 @@ var beepbox = (function (exports) {
                 legacyIndex = 0;
             return Config.envelopes[clamp(0, Config.envelopes.length, legacyIndex)];
         }
-        fromBase64String(compressed) {
+        fromRawBase64String(compressed) {
             if (compressed == null || compressed == "") {
                 this.initToDefault(true);
                 return;
@@ -4222,6 +4222,38 @@ var beepbox = (function (exports) {
             Array.prototype.push.apply(this.channels, newPitchChannels);
             Array.prototype.push.apply(this.channels, newNoiseChannels);
         }
+        toBase64String(upload = null) {
+            let code = this.toRawBase64String();
+            if (upload !== null && upload !== void 0 ? upload : false) {
+                const request = new XMLHttpRequest();
+                request.open("POST", "https://" + Song.restDbHost + "/doots.json", false);
+                request.setRequestHeader("Content-Type", "application/json");
+                request.send(JSON.stringify({
+                    "date": (new Date()).toISOString(),
+                    "name": "Untitled",
+                    "saved": false,
+                    "data": "#" + code,
+                }));
+                if (request.status !== 200 || request.responseText === "null") {
+                    throw new Error("Song upload failed.");
+                }
+                code = "DB" + JSON.parse(request.responseText)["name"];
+            }
+            return code;
+        }
+        fromBase64String(code) {
+            const regex = /^#?DB/;
+            if (regex.test(code)) {
+                const request = new XMLHttpRequest();
+                request.open("GET", "https://" + Song.restDbHost + "/doots/" + code.replace(regex, '') + ".json", false);
+                request.send(null);
+                if (request.status !== 200 || request.responseText === "null") {
+                    throw new Error("Song download failed.");
+                }
+                code = JSON.parse(request.responseText)["data"];
+            }
+            this.fromRawBase64String(code);
+        }
         getPattern(channelIndex, bar) {
             if (bar < 0 || bar >= this.barCount)
                 return null;
@@ -4240,6 +4272,7 @@ var beepbox = (function (exports) {
     Song._format = "YipBox";
     Song._oldestVersion = 2;
     Song._latestVersion = 9;
+    Song.restDbHost = "yipboxdb-default-rtdb.europe-west1.firebasedatabase.app";
     class PickedString {
         constructor() {
             this.delayLine = null;
