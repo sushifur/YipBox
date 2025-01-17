@@ -32,7 +32,7 @@ export class EditorConfig {
 	public static readonly ctrlName: string = EditorConfig.isOnMac ? "command" : "control";
 
 	public static readonly presetCategories: DictionaryArray<PresetCategory> = toNameMap([
-		/*{
+		{
 			name: "Custom Instruments", presets: <DictionaryArray<Preset>>toNameMap([
 				{ name: "chip wave", customType: InstrumentType.chip },
 				{ name: "FM (expert)", customType: InstrumentType.fm },
@@ -44,7 +44,7 @@ export class EditorConfig {
 				{ name: "picked string", customType: InstrumentType.pickedString },
 				{ name: "supersaw", customType: InstrumentType.supersaw },
 			])
-		},*/
+		},
 		{name: "Retro Presets", presets: <DictionaryArray<Preset>> toNameMap([
 			{name: "square wave",      midiProgram:  80, settings: {"type":"chip","eqFilter":[],"effects":[],"transition":"interrupt","fadeInSeconds":0,"fadeOutTicks":-1,"chord":"arpeggio","wave":"square","unison":"none","envelopes":[]}},
 			{name: "triangle wave",    midiProgram:  71, settings: {"type":"chip","eqFilter":[],"effects":[],"transition":"interrupt","fadeInSeconds":0,"fadeOutTicks":-1,"chord":"arpeggio","wave":"triangle","unison":"none","envelopes":[]}},

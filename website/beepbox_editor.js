@@ -523,6 +523,19 @@ var beepbox = (function (exports) {
     EditorConfig.ctrlSymbol = EditorConfig.isOnMac ? "⌘" : "Ctrl+";
     EditorConfig.ctrlName = EditorConfig.isOnMac ? "command" : "control";
     EditorConfig.presetCategories = toNameMap([
+        {
+            name: "Custom Instruments", presets: toNameMap([
+                { name: "chip wave", customType: 0 },
+                { name: "FM (expert)", customType: 1 },
+                { name: "basic noise", customType: 2 },
+                { name: "spectrum", customType: 3 },
+                { name: "drumset", customType: 4 },
+                { name: "harmonics", customType: 5 },
+                { name: "pulse width", customType: 6 },
+                { name: "picked string", customType: 7 },
+                { name: "supersaw", customType: 8 },
+            ])
+        },
         { name: "Retro Presets", presets: toNameMap([
                 { name: "square wave", midiProgram: 80, settings: { "type": "chip", "eqFilter": [], "effects": [], "transition": "interrupt", "fadeInSeconds": 0, "fadeOutTicks": -1, "chord": "arpeggio", "wave": "square", "unison": "none", "envelopes": [] } },
                 { name: "triangle wave", midiProgram: 71, settings: { "type": "chip", "eqFilter": [], "effects": [], "transition": "interrupt", "fadeInSeconds": 0, "fadeOutTicks": -1, "chord": "arpeggio", "wave": "triangle", "unison": "none", "envelopes": [] } },
