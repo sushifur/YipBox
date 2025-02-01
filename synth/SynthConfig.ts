@@ -263,10 +263,10 @@ export class Config {
 	public static readonly beatsPerBarMin: number = 3;
 	public static readonly beatsPerBarMax: number = 16;
 	public static readonly barCountMin: number = 1;
-	public static readonly barCountMax: number = 12;
+	public static readonly barCountMax: number = 24;
 	public static readonly instrumentCountMin: number = 1;
-	public static readonly layeredInstrumentCountMax: number = 3;
-	public static readonly patternInstrumentCountMax: number = 10;
+	public static readonly layeredInstrumentCountMax: number = 1;
+	public static readonly patternInstrumentCountMax: number = 24;
 	public static readonly partsPerBeat: number = 24;
 	public static readonly ticksPerPart: number = 2;
 	public static readonly rhythms: DictionaryArray<Rhythm> = toNameMap([
