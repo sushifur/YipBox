@@ -263,10 +263,10 @@ export class Config {
 	public static readonly beatsPerBarMin: number = 3;
 	public static readonly beatsPerBarMax: number = 16;
 	public static readonly barCountMin: number = 1;
-	public static readonly barCountMax: number = 24;
+	public static readonly barCountMax: number = 128;
 	public static readonly instrumentCountMin: number = 1;
 	public static readonly layeredInstrumentCountMax: number = 1;
-	public static readonly patternInstrumentCountMax: number = 24;
+	public static readonly patternInstrumentCountMax: number = 128;
 	public static readonly partsPerBeat: number = 24;
 	public static readonly ticksPerPart: number = 2;
 	public static readonly rhythms: DictionaryArray<Rhythm> = toNameMap([
@@ -473,9 +473,9 @@ export class Config {
 	public static readonly supersawSpreadMax: number = 12;
 	public static readonly supersawShapeMax: number = 6;
 	public static readonly pitchChannelCountMin: number = 1;
-	public static readonly pitchChannelCountMax: number = 6;
+	public static readonly pitchChannelCountMax: number = 12;
 	public static readonly noiseChannelCountMin: number = 0;
-	public static readonly noiseChannelCountMax: number = 2;
+	public static readonly noiseChannelCountMax: number = 3;
 	public static readonly noiseInterval: number = 6;
 	public static readonly pitchesPerOctave: number = 12; // TODO: Use this for converting pitch to frequency.
 	public static readonly drumCount: number = 12;
